@@ -29,7 +29,7 @@ var allowed = []schema.GroupVersionKind{
 	gvk.Deployment,
 	gvk.Pod,
 	gvk.Job,
-	gvk.ExtReplicaSet,
+	gvk.AppReplicaSet,
 	gvk.ReplicationController,
 	gvk.StatefulSet,
 	gvk.Ingress,

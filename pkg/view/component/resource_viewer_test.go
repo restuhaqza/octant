@@ -64,7 +64,7 @@ func Test_ResourceViewer_Marshal(t *testing.T) {
 						},
 						"8682460a-29b5-11e9-b356-42010a8000e5": Node{
 							Name:       "nginx-deployment-56c74bb7cd",
-							APIVersion: "extensions/v1beta1",
+							APIVersion: "apps/v1",
 							Kind:       "ReplicaSet",
 							Status:     "ok",
 							Path:       NewLink("", "nginx-deployment-56c74bb7cd", "/overview/namespace/default/workloads/replica-sets/nginx-deployment-56c74bb7cd"),

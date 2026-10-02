@@ -45,7 +45,7 @@ func TestHandler(t *testing.T) {
 	replicaSet2.SetOwnerReferences(testutil.ToOwnerReferences(t, deployment))
 	replicaSet2Unstructured := testutil.ToUnstructured(t, replicaSet2)
 
-	replicaSet3 := testutil.CreateExtReplicaSet("replica-set-3")
+	replicaSet3 := testutil.CreateAppReplicaSet("replica-set-3")
 	replicaSet3.SetOwnerReferences(testutil.ToOwnerReferences(t, deployment))
 	replicaSet3.Spec.Replicas = pointer.Int32Ptr(1)
 	replicaSet3Unstructured := testutil.ToUnstructured(t, replicaSet3)
@@ -204,7 +204,7 @@ func TestHandler(t *testing.T) {
 		},
 		string(replicaSet3.UID): {
 			Name:       replicaSet3.Name,
-			APIVersion: "extensions/v1beta1",
+			APIVersion: "apps/v1",
 			Kind:       replicaSet3.Kind,
 			Status:     component.NodeStatusOK,
 			Path:       objectPath(t, replicaSet3),

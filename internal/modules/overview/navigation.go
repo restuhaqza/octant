@@ -39,7 +39,7 @@ func workloadEntries(ctx context.Context, prefix, namespace string, objectStore 
 	neh.Add("Pods", "pods",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.Pod), objectStore))
 	neh.Add("Replica Sets", "replica-sets",
-		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ExtReplicaSet), objectStore))
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.AppReplicaSet), objectStore))
 	neh.Add("Replication Controllers", "replication-controllers",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ReplicationController), objectStore))
 	neh.Add("Stateful Sets", "stateful-sets",

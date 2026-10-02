@@ -17,9 +17,8 @@ import (
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
-	batchv1beta1 "k8s.io/api/batch/v1beta1"
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/api/extensions/v1beta1"
 	networkingv1 "k8s.io/api/networking/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -302,7 +301,6 @@ var allowed = []schema.GroupVersionKind{
 	gvk.Deployment,
 	gvk.Pod,
 	gvk.Job,
-	gvk.ExtReplicaSet,
 	gvk.ReplicationController,
 	gvk.StatefulSet,
 	gvk.HorizontalPodAutoscaler,
@@ -965,15 +963,13 @@ func (osq *ObjectStoreQueryer) getSelector(object runtime.Object) (*metav1.Label
 		return t.Spec.Selector, nil
 	case *appsv1.StatefulSet:
 		return t.Spec.Selector, nil
-	case *batchv1beta1.CronJob:
+	case *batchv1.CronJob:
 		return nil, nil
 	case *corev1.ReplicationController:
 		selector := &metav1.LabelSelector{
 			MatchLabels: t.Spec.Selector,
 		}
 		return selector, nil
-	case *v1beta1.ReplicaSet:
-		return t.Spec.Selector, nil
 	case *appsv1.ReplicaSet:
 		return t.Spec.Selector, nil
 	case *appsv1.Deployment:

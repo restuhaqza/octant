@@ -70,7 +70,7 @@
     },
     "8682460a-29b5-11e9-b356-42010a8000e5": {
       "name": "nginx-deployment-56c74bb7cd",
-      "apiVersion": "extensions/v1beta1",
+      "apiVersion": "apps/v1",
       "kind": "ReplicaSet",
       "status": "ok",
       "path": {
