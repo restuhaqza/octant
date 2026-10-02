@@ -37,3 +37,7 @@ gomock_reflect_*
 
 # vim undo files
 *.un~
+
+# subagent-driven-development workspace
+/.sdd/
+/plans/
