@@ -31,6 +31,8 @@ func AddHandlers(p Handler) error {
 		DeploymentListHandler,
 		HorizontalPodAutoscalerHandler,
 		HorizontalPodAutoscalerListHandler,
+		HorizontalPodAutoscalerV2Handler,
+		HorizontalPodAutoscalerV2ListHandler,
 		IngressListHandler,
 		IngressHandler,
 		JobListHandler,
