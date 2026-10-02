@@ -150,7 +150,7 @@ func objectTabsFactory(
 	object runtime.Object,
 	descriptors []Tab, options Options) TabsFactory {
 	return func() ([]Tab, error) {
-		list := append(descriptors)
+		list := descriptors
 		pluginList, err := pluginTabsFactory(ctx, object, options)
 		if err != nil {
 			return nil, fmt.Errorf("generate plugin tabs: %w", err)

@@ -3,6 +3,7 @@ package manifest
 import (
 	"context"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -51,7 +52,7 @@ func Test_GetImageManifest(t *testing.T) {
 			manifestPath: "alpine_manifest.json",
 			configPath:   "alpine_config.json",
 			hostOS:       "windows",
-			error:        "error parsing manifest for image docker://alpine:3.14.0: choosing image instance: no image found in manifest list for architecture amd64, variant \"\", OS windows",
+			error:        "error parsing manifest for image docker://alpine:3.14.0: choosing image instance: no image found in manifest list for architecture " + runtime.GOARCH + ", variant \"\", OS windows",
 		},
 	}
 	mc := NewManifestConfiguration()

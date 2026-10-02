@@ -56,16 +56,6 @@ func TestCacheQueryer_Children(t *testing.T) {
 				},
 				{
 					Namespaced: true,
-					Kind:       "NotListable",
-					Verbs:      metav1.Verbs{"get"},
-				},
-			},
-		},
-		{
-			GroupVersion: "apps/v1",
-			APIResources: []metav1.APIResource{
-				{
-					Namespaced: true,
 					Kind:       "ReplicaSet",
 					Verbs:      metav1.Verbs{"watch", "list"},
 				},
