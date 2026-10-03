@@ -18,6 +18,7 @@ var (
 	navPathLookup = map[string]string{
 		"Workloads":                    "workloads",
 		"Discovery and Load Balancing": "discovery-and-load-balancing",
+		"Gateway API":                  "gateway-api",
 		"Config and Storage":           "config-and-storage",
 		"Custom Resources":             "custom-resources",
 		"RBAC":                         "rbac",
@@ -67,6 +68,24 @@ func discoAndLBEntries(ctx context.Context, prefix, namespace string, objectStor
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.Service), objectStore))
 	neh.Add("Network Policies", "network-policies",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.NetworkPolicy), objectStore))
+
+	children, err := neh.Generate(prefix, namespace, "")
+	if err != nil {
+		return nil, false, err
+	}
+
+	return children, false, nil
+}
+
+func gatewayEntries(ctx context.Context, prefix, namespace string, objectStore store.Store, _ bool) ([]navigation.Navigation, bool, error) {
+	neh := navigation.EntriesHelper{}
+
+	neh.Add("Gateways", "gateways",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.Gateway), objectStore))
+	neh.Add("HTTP Routes", "httproutes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.HTTPRoute), objectStore))
+	neh.Add("GRPC Routes", "grpcroutes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.GRPCRoute), objectStore))
 
 	children, err := neh.Generate(prefix, namespace, "")
 	if err != nil {

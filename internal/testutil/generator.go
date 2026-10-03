@@ -30,6 +30,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 	metricsv1beta1 "k8s.io/metrics/pkg/apis/metrics/v1beta1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	"github.com/vmware-tanzu/octant/internal/conversion"
 	"github.com/vmware-tanzu/octant/internal/gvk"
@@ -497,6 +498,17 @@ func CreateStorageClass(name string) *storagev1.StorageClass {
 	}
 }
 
+// CreateGatewayClass creates a gateway class.
+func CreateGatewayClass(name string) *gatewayv1.GatewayClass {
+	return &gatewayv1.GatewayClass{
+		TypeMeta:   genTypeMeta(gvk.GatewayClass),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: gatewayv1.GatewayClassSpec{
+			ControllerName: "example.com/controller",
+		},
+	}
+}
+
 // CreatePodDisruptionBudget creates a pod disruption budget.
 func CreatePodDisruptionBudget(name string) *policyv1.PodDisruptionBudget {
 	maxUnavailable := intstr.FromInt(1)
@@ -601,6 +613,17 @@ func CreateIngressClass(name string) *networkingv1.IngressClass {
 	}
 }
 
+// CreateGateway creates a gateway.
+func CreateGateway(name string) *gatewayv1.Gateway {
+	return &gatewayv1.Gateway{
+		TypeMeta:   genTypeMeta(gvk.Gateway),
+		ObjectMeta: genObjectMeta(name, true),
+		Spec: gatewayv1.GatewaySpec{
+			GatewayClassName: "gateway-class",
+		},
+	}
+}
+
 // CreateCSIDriver creates a CSI driver.
 func CreateCSIDriver(name string) *storagev1.CSIDriver {
 	return &storagev1.CSIDriver{
@@ -609,6 +632,22 @@ func CreateCSIDriver(name string) *storagev1.CSIDriver {
 		Spec: storagev1.CSIDriverSpec{
 			AttachRequired: conversion.PtrBool(true),
 		},
+	}
+}
+
+// CreateHTTPRoute creates an http route.
+func CreateHTTPRoute(name string) *gatewayv1.HTTPRoute {
+	return &gatewayv1.HTTPRoute{
+		TypeMeta:   genTypeMeta(gvk.HTTPRoute),
+		ObjectMeta: genObjectMeta(name, true),
+	}
+}
+
+// CreateGRPCRoute creates a grpc route.
+func CreateGRPCRoute(name string) *gatewayv1.GRPCRoute {
+	return &gatewayv1.GRPCRoute{
+		TypeMeta:   genTypeMeta(gvk.GRPCRoute),
+		ObjectMeta: genObjectMeta(name, true),
 	}
 }
 

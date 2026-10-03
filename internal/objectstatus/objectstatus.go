@@ -35,21 +35,23 @@ var (
 	// TODO: expose this as a setting via preferences - https://github.com/vmware-tanzu/octant/discussions/2694
 	terminatingThreshold = time.Minute * 5
 	defaultStatusLookup  = statusLookup{
-		{apiVersion: "batch/v1", kind: "CronJob"}:                     cronJob,
-		{apiVersion: "apps/v1", kind: "DaemonSet"}:                    daemonSet,
-		{apiVersion: "apps/v1", kind: "Deployment"}:                   deploymentAppsV1,
-		{apiVersion: "apps/v1", kind: "ReplicaSet"}:                   replicaSetAppsV1,
-		{apiVersion: "apps/v1", kind: "StatefulSet"}:                  statefulSet,
-		{apiVersion: "batch/v1", kind: "Job"}:                         runJobStatus,
-		{apiVersion: "v1", kind: "Pod"}:                               pod,
-		{apiVersion: "v1", kind: "ReplicationController"}:             replicationController,
-		{apiVersion: "v1", kind: "Service"}:                           service,
-		{apiVersion: "v1", kind: "PersistentVolume"}:                  persistentVolume,
-		{apiVersion: "v1", kind: "PersistentVolumeClaim"}:             persistentVolumeClaim,
-		{apiVersion: "v1", kind: "ResourceQuota"}:                     resourceQuota,
-		{apiVersion: "policy/v1", kind: "PodDisruptionBudget"}:        podDisruptionBudget,
-		{apiVersion: "networking.k8s.io/v1", kind: "Ingress"}:         runIngressStatus,
-		{apiVersion: "apiregistration.k8s.io/v1", kind: "APIService"}: apiService,
+		{apiVersion: "batch/v1", kind: "CronJob"}:                       cronJob,
+		{apiVersion: "apps/v1", kind: "DaemonSet"}:                      daemonSet,
+		{apiVersion: "apps/v1", kind: "Deployment"}:                     deploymentAppsV1,
+		{apiVersion: "apps/v1", kind: "ReplicaSet"}:                     replicaSetAppsV1,
+		{apiVersion: "apps/v1", kind: "StatefulSet"}:                    statefulSet,
+		{apiVersion: "batch/v1", kind: "Job"}:                           runJobStatus,
+		{apiVersion: "v1", kind: "Pod"}:                                 pod,
+		{apiVersion: "v1", kind: "ReplicationController"}:               replicationController,
+		{apiVersion: "v1", kind: "Service"}:                             service,
+		{apiVersion: "v1", kind: "PersistentVolume"}:                    persistentVolume,
+		{apiVersion: "v1", kind: "PersistentVolumeClaim"}:               persistentVolumeClaim,
+		{apiVersion: "v1", kind: "ResourceQuota"}:                       resourceQuota,
+		{apiVersion: "policy/v1", kind: "PodDisruptionBudget"}:          podDisruptionBudget,
+		{apiVersion: "networking.k8s.io/v1", kind: "Ingress"}:           runIngressStatus,
+		{apiVersion: "gateway.networking.k8s.io/v1", kind: "Gateway"}:   gateway,
+		{apiVersion: "gateway.networking.k8s.io/v1", kind: "HTTPRoute"}: httpRoute,
+		{apiVersion: "apiregistration.k8s.io/v1", kind: "APIService"}:   apiService,
 	}
 )
 

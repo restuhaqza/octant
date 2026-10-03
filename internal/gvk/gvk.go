@@ -28,8 +28,12 @@ var (
 	Deployment                     = schema.GroupVersionKind{Group: "apps", Version: "v1", Kind: "Deployment"}
 	Event                          = schema.GroupVersionKind{Version: "v1", Kind: "Event"}
 	FlowSchema                     = schema.GroupVersionKind{Group: "flowcontrol.apiserver.k8s.io", Version: "v1", Kind: "FlowSchema"}
+	Gateway                        = schema.GroupVersionKind{Group: "gateway.networking.k8s.io", Version: "v1", Kind: "Gateway"}
+	GatewayClass                   = schema.GroupVersionKind{Group: "gateway.networking.k8s.io", Version: "v1", Kind: "GatewayClass"}
+	GRPCRoute                      = schema.GroupVersionKind{Group: "gateway.networking.k8s.io", Version: "v1", Kind: "GRPCRoute"}
 	HorizontalPodAutoscaler        = schema.GroupVersionKind{Group: "autoscaling", Version: "v1", Kind: "HorizontalPodAutoscaler"}
 	HorizontalPodAutoscalerV2      = schema.GroupVersionKind{Group: "autoscaling", Version: "v2", Kind: "HorizontalPodAutoscaler"}
+	HTTPRoute                      = schema.GroupVersionKind{Group: "gateway.networking.k8s.io", Version: "v1", Kind: "HTTPRoute"}
 	Ingress                        = schema.GroupVersionKind{Group: "networking.k8s.io", Version: "v1", Kind: "Ingress"}
 	IngressClass                   = schema.GroupVersionKind{Group: "networking.k8s.io", Version: "v1", Kind: "IngressClass"}
 	Job                            = schema.GroupVersionKind{Group: "batch", Version: "v1", Kind: "Job"}

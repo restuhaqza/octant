@@ -34,6 +34,9 @@ var (
 		gvk.StatefulSet,
 		gvk.HorizontalPodAutoscaler,
 		gvk.HorizontalPodAutoscalerV2,
+		gvk.Gateway,
+		gvk.HTTPRoute,
+		gvk.GRPCRoute,
 		gvk.Ingress,
 		gvk.Service,
 		gvk.NetworkPolicy,
@@ -87,6 +90,12 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/config-and-storage/service-accounts"
 	case (apiVersion == "autoscaling/v1" || apiVersion == "autoscaling/v2") && kind == "HorizontalPodAutoscaler":
 		p = "/discovery-and-load-balancing/horizontal-pod-autoscalers"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "Gateway":
+		p = "/gateway-api/gateways"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "HTTPRoute":
+		p = "/gateway-api/httproutes"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "GRPCRoute":
+		p = "/gateway-api/grpcroutes"
 	case apiVersion == "networking.k8s.io/v1" && kind == "Ingress":
 		p = "/discovery-and-load-balancing/ingresses"
 	case apiVersion == "v1" && kind == "Service":
@@ -146,6 +155,12 @@ func gvkReversePath(contentPath, namespace string) (schema.GroupVersionKind, err
 		return gvk.ServiceAccount, nil
 	case reducedPath == "/discovery-and-load-balancing/horizontal-pod-autoscalers":
 		return gvk.HorizontalPodAutoscalerV2, nil
+	case reducedPath == "/gateway-api/gateways":
+		return gvk.Gateway, nil
+	case reducedPath == "/gateway-api/httproutes":
+		return gvk.HTTPRoute, nil
+	case reducedPath == "/gateway-api/grpcroutes":
+		return gvk.GRPCRoute, nil
 	case reducedPath == "/discovery-and-load-balancing/ingresses":
 		return gvk.Ingress, nil
 	case reducedPath == "/discovery-and-load-balancing/services":

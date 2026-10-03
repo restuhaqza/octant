@@ -11,6 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 
 	"github.com/vmware-tanzu/octant/internal/gvk"
 )
@@ -56,6 +57,30 @@ func Test_gvk_path(t *testing.T) {
 			kind:       "HorizontalPodAutoscaler",
 			objectName: "hpa",
 			expected:   path.Join("/overview", "namespace", "default", "discovery-and-load-balancing", "horizontal-pod-autoscalers", "hpa"),
+		},
+		{
+			name:       "gateway",
+			namespace:  "default",
+			apiVersion: "gateway.networking.k8s.io/v1",
+			kind:       "Gateway",
+			objectName: "gateway",
+			expected:   path.Join("/overview", "namespace", "default", "gateway-api", "gateways", "gateway"),
+		},
+		{
+			name:       "http route",
+			namespace:  "default",
+			apiVersion: "gateway.networking.k8s.io/v1",
+			kind:       "HTTPRoute",
+			objectName: "http-route",
+			expected:   path.Join("/overview", "namespace", "default", "gateway-api", "httproutes", "http-route"),
+		},
+		{
+			name:       "grpc route",
+			namespace:  "default",
+			apiVersion: "gateway.networking.k8s.io/v1",
+			kind:       "GRPCRoute",
+			objectName: "grpc-route",
+			expected:   path.Join("/overview", "namespace", "default", "gateway-api", "grpcroutes", "grpc-route"),
 		},
 		{
 			name:       "pod disruption budget",
@@ -129,7 +154,38 @@ func Test_gvk_path(t *testing.T) {
 }
 
 func Test_gvkReversePath(t *testing.T) {
-	got, err := gvkReversePath("overview/namespace/default/discovery-and-load-balancing/horizontal-pod-autoscalers", "default")
-	require.NoError(t, err)
-	assert.Equal(t, gvk.HorizontalPodAutoscalerV2, got)
+	tests := []struct {
+		name        string
+		contentPath string
+		expected    schema.GroupVersionKind
+	}{
+		{
+			name:        "horizontal pod autoscaler",
+			contentPath: "overview/namespace/default/discovery-and-load-balancing/horizontal-pod-autoscalers",
+			expected:    gvk.HorizontalPodAutoscalerV2,
+		},
+		{
+			name:        "gateway",
+			contentPath: "overview/namespace/default/gateway-api/gateways",
+			expected:    gvk.Gateway,
+		},
+		{
+			name:        "http route",
+			contentPath: "overview/namespace/default/gateway-api/httproutes",
+			expected:    gvk.HTTPRoute,
+		},
+		{
+			name:        "grpc route",
+			contentPath: "overview/namespace/default/gateway-api/grpcroutes",
+			expected:    gvk.GRPCRoute,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := gvkReversePath(test.contentPath, "default")
+			require.NoError(t, err)
+			assert.Equal(t, test.expected, got)
+		})
+	}
 }

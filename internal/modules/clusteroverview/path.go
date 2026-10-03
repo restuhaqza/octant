@@ -37,6 +37,7 @@ var (
 		gvk.ValidatingAdmissionPolicy,
 		gvk.VolumeAttachment,
 		gvk.StorageClass,
+		gvk.GatewayClass,
 	}
 )
 
@@ -89,6 +90,8 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/cluster/priority-level-configurations"
 	case apiVersion == "admissionregistration.k8s.io/v1" && kind == "ValidatingAdmissionPolicy":
 		p = "/cluster/validating-admission-policies"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "GatewayClass":
+		p = "/gateway-api/gateway-classes"
 	default:
 		return "", fmt.Errorf("unknown object %s %s", apiVersion, kind)
 	}
@@ -137,6 +140,8 @@ func gvkReversePath(contentPath, _ string) (schema.GroupVersionKind, error) {
 		return gvk.PriorityLevelConfiguration, nil
 	case contentPath == "cluster-overview/cluster/validating-admission-policies":
 		return gvk.ValidatingAdmissionPolicy, nil
+	case contentPath == "cluster-overview/gateway-api/gateway-classes":
+		return gvk.GatewayClass, nil
 	default:
 		return schema.GroupVersionKind{}, errors.Errorf("unknown gvk %s", contentPath)
 	}
