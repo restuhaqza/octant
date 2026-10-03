@@ -95,6 +95,10 @@ func NewDefaultVisitor(dashConfig config.Dash, q queryer.Queryer, options ...Def
 			NewAPIService(dashConfig.ObjectStore()),
 			NewMutatingWebhookConfiguration(dashConfig.ObjectStore()),
 			NewValidatingWebhookConfiguration(dashConfig.ObjectStore()),
+			NewGatewayClass(dashConfig.ObjectStore()),
+			NewGateway(dashConfig.ObjectStore()),
+			NewHTTPRoute(dashConfig.ObjectStore()),
+			NewGRPCRoute(dashConfig.ObjectStore()),
 		},
 		defaultHandler: NewObject(dashConfig, q),
 	}

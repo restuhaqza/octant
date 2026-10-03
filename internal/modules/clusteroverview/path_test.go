@@ -11,6 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/vmware-tanzu/octant/internal/gvk"
 )
 
 func Test_crdPath(t *testing.T) {
@@ -45,6 +47,76 @@ func Test_gvk_path(t *testing.T) {
 			expected:   path.Join("/cluster-overview", "rbac", "cluster-role-bindings", "cluster-role-binding"),
 		},
 		{
+			name:       "GatewayClass",
+			apiVersion: "gateway.networking.k8s.io/v1",
+			kind:       "GatewayClass",
+			objectName: "gateway-class",
+			expected:   path.Join("/cluster-overview", "gateway-api", "gateway-classes", "gateway-class"),
+		},
+		{
+			name:       "PriorityClass",
+			apiVersion: "scheduling.k8s.io/v1",
+			kind:       "PriorityClass",
+			objectName: "priority",
+			expected:   path.Join("/cluster-overview", "workloads", "priority-classes", "priority"),
+		},
+		{
+			name:       "RuntimeClass",
+			apiVersion: "node.k8s.io/v1",
+			kind:       "RuntimeClass",
+			objectName: "runtime",
+			expected:   path.Join("/cluster-overview", "workloads", "runtime-classes", "runtime"),
+		},
+		{
+			name:       "IngressClass",
+			apiVersion: "networking.k8s.io/v1",
+			kind:       "IngressClass",
+			objectName: "ingress",
+			expected:   path.Join("/cluster-overview", "discovery-and-load-balancing", "ingress-classes", "ingress"),
+		},
+		{
+			name:       "CSIDriver",
+			apiVersion: "storage.k8s.io/v1",
+			kind:       "CSIDriver",
+			objectName: "driver",
+			expected:   path.Join("/cluster-overview", "storage", "csi-drivers", "driver"),
+		},
+		{
+			name:       "CSINode",
+			apiVersion: "storage.k8s.io/v1",
+			kind:       "CSINode",
+			objectName: "csi-node",
+			expected:   path.Join("/cluster-overview", "storage", "csi-nodes", "csi-node"),
+		},
+		{
+			name:       "VolumeAttachment",
+			apiVersion: "storage.k8s.io/v1",
+			kind:       "VolumeAttachment",
+			objectName: "attachment",
+			expected:   path.Join("/cluster-overview", "storage", "volume-attachments", "attachment"),
+		},
+		{
+			name:       "FlowSchema",
+			apiVersion: "flowcontrol.apiserver.k8s.io/v1",
+			kind:       "FlowSchema",
+			objectName: "flow",
+			expected:   path.Join("/cluster-overview", "cluster", "flow-schemas", "flow"),
+		},
+		{
+			name:       "PriorityLevelConfiguration",
+			apiVersion: "flowcontrol.apiserver.k8s.io/v1",
+			kind:       "PriorityLevelConfiguration",
+			objectName: "plc",
+			expected:   path.Join("/cluster-overview", "cluster", "priority-level-configurations", "plc"),
+		},
+		{
+			name:       "ValidatingAdmissionPolicy",
+			apiVersion: "admissionregistration.k8s.io/v1",
+			kind:       "ValidatingAdmissionPolicy",
+			objectName: "vap",
+			expected:   path.Join("/cluster-overview", "cluster", "validating-admission-policies", "vap"),
+		},
+		{
 			name:       "unknown",
 			apiVersion: "unknown",
 			kind:       "ClusterRoleBinding",
@@ -65,4 +137,10 @@ func Test_gvk_path(t *testing.T) {
 			assert.Equal(t, test.expected, got)
 		})
 	}
+}
+
+func Test_gvkReversePath(t *testing.T) {
+	got, err := gvkReversePath("cluster-overview/gateway-api/gateway-classes", "")
+	require.NoError(t, err)
+	assert.Equal(t, gvk.GatewayClass, got)
 }

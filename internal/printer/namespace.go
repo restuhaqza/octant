@@ -59,6 +59,9 @@ func NamespaceHandler(ctx context.Context, namespace *corev1.Namespace, options 
 	if err := nh.Status(options); err != nil {
 		return nil, errors.Wrap(err, "print namespace status")
 	}
+	if err := nh.PodSecurity(options); err != nil {
+		return nil, errors.Wrap(err, "print namespace pod security")
+	}
 	if err := nh.ResourceLimits(ctx, options); err != nil {
 		return nil, errors.Wrap(err, "print namespace resource limits")
 	}
@@ -70,6 +73,7 @@ func NamespaceHandler(ctx context.Context, namespace *corev1.Namespace, options 
 
 type namespaceObject interface {
 	Status(options Options) error
+	PodSecurity(options Options) error
 	ResourceQuotas(ctx context.Context, options Options) error
 	ResourceLimits(ctx context.Context, options Options) error
 }
@@ -77,6 +81,7 @@ type namespaceObject interface {
 type namespaceHandler struct {
 	namespace          *corev1.Namespace
 	statusFunc         func(*corev1.Namespace, Options) (*component.Summary, error)
+	podSecurityFunc    func(*corev1.Namespace, Options) (*component.Summary, error)
 	resourceQuotasFunc func(context.Context, *corev1.Namespace, Options) (*component.FlexLayout, error)
 	resourceLimitsFunc func(context.Context, *corev1.Namespace, Options) (*component.Table, error)
 	object             *Object
@@ -96,6 +101,7 @@ func newNamespaceHandler(namespace *corev1.Namespace, object *Object) (*namespac
 	nh := &namespaceHandler{
 		namespace:          namespace,
 		statusFunc:         defaultNamespaceStatus,
+		podSecurityFunc:    defaultNamespacePodSecurity,
 		resourceQuotasFunc: defaultNamespaceResourceQuotas,
 		resourceLimitsFunc: defaultNamespaceResourceLimits,
 		object:             object,
@@ -109,6 +115,21 @@ func (n *namespaceHandler) Status(options Options) error {
 		return err
 	}
 	n.object.RegisterSummary(out)
+	return nil
+}
+
+func (n *namespaceHandler) PodSecurity(options Options) error {
+	out, err := n.podSecurityFunc(n.namespace, options)
+	if err != nil {
+		return err
+	}
+	if out == nil {
+		return nil
+	}
+	n.object.RegisterItems(ItemDescriptor{
+		Width:     component.WidthHalf,
+		Component: out,
+	})
 	return nil
 }
 
@@ -162,6 +183,56 @@ func (n *NamespaceStatus) Create(options Options) (*component.Summary, error) {
 
 func defaultNamespaceStatus(namespace *corev1.Namespace, options Options) (*component.Summary, error) {
 	return NewNamespaceStatus(namespace).Create(options)
+}
+
+// NamespacePodSecurity creates a namespace pod security component from the
+// pod-security.kubernetes.io labels applied to the namespace.
+type NamespacePodSecurity struct {
+	namespace *corev1.Namespace
+}
+
+// NewNamespacePodSecurity creates an instance of NamespacePodSecurity.
+func NewNamespacePodSecurity(namespace *corev1.Namespace) *NamespacePodSecurity {
+	return &NamespacePodSecurity{
+		namespace: namespace,
+	}
+}
+
+// Create creates a namespace pod security summary. It returns nil when the
+// namespace does not define any pod security labels.
+func (n *NamespacePodSecurity) Create(options Options) (*component.Summary, error) {
+	if n == nil || n.namespace == nil {
+		return nil, errors.New("cannot generate pod security for nil namespace")
+	}
+
+	const prefix = "pod-security.kubernetes.io/"
+
+	fields := []struct {
+		header string
+		key    string
+	}{
+		{"Enforce", prefix + "enforce"},
+		{"Enforce Version", prefix + "enforce-version"},
+		{"Audit", prefix + "audit"},
+		{"Warn", prefix + "warn"},
+	}
+
+	sections := component.SummarySections{}
+	for _, field := range fields {
+		if value, ok := n.namespace.Labels[field.key]; ok && value != "" {
+			sections.AddText(field.header, value)
+		}
+	}
+
+	if len(sections) == 0 {
+		return nil, nil
+	}
+
+	return component.NewSummary("Pod Security", sections...), nil
+}
+
+func defaultNamespacePodSecurity(namespace *corev1.Namespace, options Options) (*component.Summary, error) {
+	return NewNamespacePodSecurity(namespace).Create(options)
 }
 
 // NamespaceResourceQuotas creates a namespace resource quota component.

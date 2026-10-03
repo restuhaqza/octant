@@ -21,14 +21,22 @@ var (
 	supportedGVKs = []schema.GroupVersionKind{
 		gvk.AppReplicaSet,
 		gvk.CronJob,
+		gvk.CSIStorageCapacity,
 		gvk.DaemonSet,
 		gvk.Deployment,
 		gvk.Job,
+		gvk.Lease,
+		gvk.LimitRange,
 		gvk.Pod,
+		gvk.PodDisruptionBudget,
 		gvk.ReplicationController,
+		gvk.ResourceQuota,
 		gvk.StatefulSet,
 		gvk.HorizontalPodAutoscaler,
 		gvk.HorizontalPodAutoscalerV2,
+		gvk.Gateway,
+		gvk.HTTPRoute,
+		gvk.GRPCRoute,
 		gvk.Ingress,
 		gvk.Service,
 		gvk.NetworkPolicy,
@@ -82,6 +90,12 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/config-and-storage/service-accounts"
 	case (apiVersion == "autoscaling/v1" || apiVersion == "autoscaling/v2") && kind == "HorizontalPodAutoscaler":
 		p = "/discovery-and-load-balancing/horizontal-pod-autoscalers"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "Gateway":
+		p = "/gateway-api/gateways"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "HTTPRoute":
+		p = "/gateway-api/httproutes"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "GRPCRoute":
+		p = "/gateway-api/grpcroutes"
 	case apiVersion == "networking.k8s.io/v1" && kind == "Ingress":
 		p = "/discovery-and-load-balancing/ingresses"
 	case apiVersion == "v1" && kind == "Service":
@@ -96,6 +110,16 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/events"
 	case apiVersion == "v1" && kind == "Pod":
 		p = "/workloads/pods"
+	case apiVersion == "policy/v1" && kind == "PodDisruptionBudget":
+		p = "/workloads/pod-disruption-budgets"
+	case apiVersion == "v1" && kind == "ResourceQuota":
+		p = "/config-and-storage/resource-quotas"
+	case apiVersion == "v1" && kind == "LimitRange":
+		p = "/config-and-storage/limit-ranges"
+	case apiVersion == "coordination.k8s.io/v1" && kind == "Lease":
+		p = "/config-and-storage/leases"
+	case apiVersion == "storage.k8s.io/v1" && kind == "CSIStorageCapacity":
+		p = "/config-and-storage/csi-storage-capacities"
 	default:
 		return "", errors.Errorf("unknown object %s %s", apiVersion, kind)
 	}
@@ -131,6 +155,12 @@ func gvkReversePath(contentPath, namespace string) (schema.GroupVersionKind, err
 		return gvk.ServiceAccount, nil
 	case reducedPath == "/discovery-and-load-balancing/horizontal-pod-autoscalers":
 		return gvk.HorizontalPodAutoscalerV2, nil
+	case reducedPath == "/gateway-api/gateways":
+		return gvk.Gateway, nil
+	case reducedPath == "/gateway-api/httproutes":
+		return gvk.HTTPRoute, nil
+	case reducedPath == "/gateway-api/grpcroutes":
+		return gvk.GRPCRoute, nil
 	case reducedPath == "/discovery-and-load-balancing/ingresses":
 		return gvk.Ingress, nil
 	case reducedPath == "/discovery-and-load-balancing/services":
@@ -145,6 +175,16 @@ func gvkReversePath(contentPath, namespace string) (schema.GroupVersionKind, err
 		return gvk.Event, nil
 	case reducedPath == "/workloads/pods":
 		return gvk.Pod, nil
+	case reducedPath == "/workloads/pod-disruption-budgets":
+		return gvk.PodDisruptionBudget, nil
+	case reducedPath == "/config-and-storage/resource-quotas":
+		return gvk.ResourceQuota, nil
+	case reducedPath == "/config-and-storage/limit-ranges":
+		return gvk.LimitRange, nil
+	case reducedPath == "/config-and-storage/leases":
+		return gvk.Lease, nil
+	case reducedPath == "/config-and-storage/csi-storage-capacities":
+		return gvk.CSIStorageCapacity, nil
 	default:
 		return schema.GroupVersionKind{}, errors.Errorf("unknown gvk %s", contentPath)
 	}
