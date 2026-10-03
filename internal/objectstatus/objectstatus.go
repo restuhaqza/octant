@@ -46,6 +46,8 @@ var (
 		{apiVersion: "v1", kind: "Service"}:                           service,
 		{apiVersion: "v1", kind: "PersistentVolume"}:                  persistentVolume,
 		{apiVersion: "v1", kind: "PersistentVolumeClaim"}:             persistentVolumeClaim,
+		{apiVersion: "v1", kind: "ResourceQuota"}:                     resourceQuota,
+		{apiVersion: "policy/v1", kind: "PodDisruptionBudget"}:        podDisruptionBudget,
 		{apiVersion: "networking.k8s.io/v1", kind: "Ingress"}:         runIngressStatus,
 		{apiVersion: "apiregistration.k8s.io/v1", kind: "APIService"}: apiService,
 	}

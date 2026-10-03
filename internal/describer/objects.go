@@ -11,9 +11,12 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	batchv1 "k8s.io/api/batch/v1"
+	coordinationv1 "k8s.io/api/coordination/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
+	policyv1 "k8s.io/api/policy/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	storagev1 "k8s.io/api/storage/v1"
 
 	"github.com/vmware-tanzu/octant/pkg/store"
 )
@@ -114,6 +117,14 @@ func initNamespacedOverview() *Section {
 		Titles:         ResourceTitle{List: "Stateful Sets", Object: "Stateful Sets"},
 	})
 
+	workloadsPodDisruptionBudgets := NewResource(ResourceOptions{
+		Path:           "/workloads/pod-disruption-budgets",
+		ObjectStoreKey: store.Key{APIVersion: "policy/v1", Kind: "PodDisruptionBudget"},
+		ListType:       &policyv1.PodDisruptionBudgetList{},
+		ObjectType:     &policyv1.PodDisruptionBudget{},
+		Titles:         ResourceTitle{List: "Pod Disruption Budgets", Object: "Pod Disruption Budget"},
+	})
+
 	workloadsDescriber := NewSection(
 		"/workloads",
 		"Workloads",
@@ -125,6 +136,7 @@ func initNamespacedOverview() *Section {
 		workloadsReplicaSets,
 		workloadsReplicationControllers,
 		workloadsStatefulSets,
+		workloadsPodDisruptionBudgets,
 	)
 
 	dlbHorizontalPodAutoscalers := NewResource(ResourceOptions{
@@ -200,6 +212,38 @@ func initNamespacedOverview() *Section {
 		Titles:         ResourceTitle{List: "Service Accounts", Object: "Service Accounts"},
 	})
 
+	csResourceQuotas := NewResource(ResourceOptions{
+		Path:           "/config-and-storage/resource-quotas",
+		ObjectStoreKey: store.Key{APIVersion: "v1", Kind: "ResourceQuota"},
+		ListType:       &corev1.ResourceQuotaList{},
+		ObjectType:     &corev1.ResourceQuota{},
+		Titles:         ResourceTitle{List: "Resource Quotas", Object: "Resource Quota"},
+	})
+
+	csLimitRanges := NewResource(ResourceOptions{
+		Path:           "/config-and-storage/limit-ranges",
+		ObjectStoreKey: store.Key{APIVersion: "v1", Kind: "LimitRange"},
+		ListType:       &corev1.LimitRangeList{},
+		ObjectType:     &corev1.LimitRange{},
+		Titles:         ResourceTitle{List: "Limit Ranges", Object: "Limit Range"},
+	})
+
+	csLeases := NewResource(ResourceOptions{
+		Path:           "/config-and-storage/leases",
+		ObjectStoreKey: store.Key{APIVersion: "coordination.k8s.io/v1", Kind: "Lease"},
+		ListType:       &coordinationv1.LeaseList{},
+		ObjectType:     &coordinationv1.Lease{},
+		Titles:         ResourceTitle{List: "Leases", Object: "Lease"},
+	})
+
+	csCSIStorageCapacities := NewResource(ResourceOptions{
+		Path:           "/config-and-storage/csi-storage-capacities",
+		ObjectStoreKey: store.Key{APIVersion: "storage.k8s.io/v1", Kind: "CSIStorageCapacity"},
+		ListType:       &storagev1.CSIStorageCapacityList{},
+		ObjectType:     &storagev1.CSIStorageCapacity{},
+		Titles:         ResourceTitle{List: "CSI Storage Capacities", Object: "CSI Storage Capacity"},
+	})
+
 	configAndStorageDescriber := NewSection(
 		"/config-and-storage",
 		"Config and Storage",
@@ -207,6 +251,10 @@ func initNamespacedOverview() *Section {
 		csPVCs,
 		csSecrets,
 		csServiceAccounts,
+		csResourceQuotas,
+		csLimitRanges,
+		csLeases,
+		csCSIStorageCapacities,
 	)
 
 	rbacRoles := NewResource(ResourceOptions{

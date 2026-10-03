@@ -205,36 +205,45 @@ func (co *ClusterOverview) ContentPath() string {
 func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string) ([]navigation.Navigation, error) {
 	navigationEntries := octant.NavigationEntries{
 		Lookup: map[string]string{
-			"Namespaces":                  "namespaces",
-			"Custom Resources":            "custom-resources",
-			"Custom Resource Definitions": "custom-resource-definitions",
-			"RBAC":                        "rbac",
-			"Webhooks":                    "webhooks",
-			"Nodes":                       "nodes",
-			"Storage":                     "storage",
-			"Port Forwards":               "port-forward",
+			"Namespaces":                   "namespaces",
+			"Custom Resources":             "custom-resources",
+			"Custom Resource Definitions":  "custom-resource-definitions",
+			"RBAC":                         "rbac",
+			"Webhooks":                     "webhooks",
+			"Workloads":                    "workloads",
+			"Discovery and Load Balancing": "discovery-and-load-balancing",
+			"Cluster":                      "cluster",
+			"Nodes":                        "nodes",
+			"Storage":                      "storage",
+			"Port Forwards":                "port-forward",
 		},
 		EntriesFuncs: map[string]octant.EntriesFunc{
-			"Cluster Overview":            nil,
-			"Namespaces":                  nil,
-			"Custom Resources":            co.CRDEntries,
-			"Custom Resource Definitions": nil,
-			"RBAC":                        rbacEntries,
-			"Webhooks":                    webhookEntries,
-			"Nodes":                       nil,
-			"Storage":                     storageEntries,
-			"Port Forwards":               nil,
+			"Cluster Overview":             nil,
+			"Namespaces":                   nil,
+			"Custom Resources":             co.CRDEntries,
+			"Custom Resource Definitions":  nil,
+			"RBAC":                         rbacEntries,
+			"Webhooks":                     webhookEntries,
+			"Workloads":                    workloadsEntries,
+			"Discovery and Load Balancing": dlbEntries,
+			"Cluster":                      clusterEntries,
+			"Nodes":                        nil,
+			"Storage":                      storageEntries,
+			"Port Forwards":                nil,
 		},
 		IconMap: map[string]string{
-			"Cluster Overview":            icon.Cluster,
-			"Namespaces":                  icon.Namespaces,
-			"Custom Resources":            icon.CustomResources,
-			"Custom Resource Definitions": icon.CustomResourceDefinition,
-			"RBAC":                        icon.RBAC,
-			"Webhooks":                    icon.Webhooks,
-			"Nodes":                       icon.Nodes,
-			"Storage":                     icon.ConfigAndStorage,
-			"Port Forwards":               icon.PortForwards,
+			"Cluster Overview":             icon.Cluster,
+			"Namespaces":                   icon.Namespaces,
+			"Custom Resources":             icon.CustomResources,
+			"Custom Resource Definitions":  icon.CustomResourceDefinition,
+			"RBAC":                         icon.RBAC,
+			"Webhooks":                     icon.Webhooks,
+			"Workloads":                    icon.Workloads,
+			"Discovery and Load Balancing": icon.DiscoveryAndLoadBalancing,
+			"Cluster":                      icon.Cluster,
+			"Nodes":                        icon.Nodes,
+			"Storage":                      icon.ConfigAndStorage,
+			"Port Forwards":                icon.PortForwards,
 		},
 		Order: []string{
 			"Cluster Overview",
@@ -243,6 +252,9 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 			"Custom Resource Definitions",
 			"RBAC",
 			"Webhooks",
+			"Workloads",
+			"Discovery and Load Balancing",
+			"Cluster",
 			"Nodes",
 			"Storage",
 			"Port Forwards",
@@ -316,6 +328,60 @@ func storageEntries(ctx context.Context, prefix, namespace string, objectStore s
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.PersistentVolume), objectStore))
 	neh.Add("Storage Classes", "storage-classes",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.StorageClass), objectStore))
+	neh.Add("CSI Drivers", "csi-drivers",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.CSIDriver), objectStore))
+	neh.Add("CSI Nodes", "csi-nodes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.CSINode), objectStore))
+	neh.Add("Volume Attachments", "volume-attachments",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.VolumeAttachment), objectStore))
+
+	children, err := neh.Generate(prefix, namespace, "")
+	if err != nil {
+		return nil, false, err
+	}
+
+	return children, false, nil
+}
+
+func workloadsEntries(ctx context.Context, prefix, namespace string, objectStore store.Store, _ bool) ([]navigation.Navigation, bool, error) {
+	neh := navigation.EntriesHelper{}
+
+	neh.Add("Priority Classes", "priority-classes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.PriorityClass), objectStore))
+	neh.Add("Runtime Classes", "runtime-classes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.RuntimeClass), objectStore))
+
+	children, err := neh.Generate(prefix, namespace, "")
+	if err != nil {
+		return nil, false, err
+	}
+
+	return children, false, nil
+}
+
+func dlbEntries(ctx context.Context, prefix, namespace string, objectStore store.Store, _ bool) ([]navigation.Navigation, bool, error) {
+	neh := navigation.EntriesHelper{}
+
+	neh.Add("Ingress Classes", "ingress-classes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.IngressClass), objectStore))
+
+	children, err := neh.Generate(prefix, namespace, "")
+	if err != nil {
+		return nil, false, err
+	}
+
+	return children, false, nil
+}
+
+func clusterEntries(ctx context.Context, prefix, namespace string, objectStore store.Store, _ bool) ([]navigation.Navigation, bool, error) {
+	neh := navigation.EntriesHelper{}
+
+	neh.Add("Flow Schemas", "flow-schemas",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.FlowSchema), objectStore))
+	neh.Add("Priority Level Configurations", "priority-level-configurations",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.PriorityLevelConfiguration), objectStore))
+	neh.Add("Validating Admission Policies", "validating-admission-policies",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ValidatingAdmissionPolicy), objectStore))
 
 	children, err := neh.Generate(prefix, namespace, "")
 	if err != nil {
