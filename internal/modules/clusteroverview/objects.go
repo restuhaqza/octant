@@ -14,6 +14,7 @@ import (
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 
 	"github.com/vmware-tanzu/octant/internal/describer"
+	"github.com/vmware-tanzu/octant/internal/upgradescanner"
 	"github.com/vmware-tanzu/octant/pkg/icon"
 	"github.com/vmware-tanzu/octant/pkg/store"
 )
@@ -138,6 +139,8 @@ var (
 	})
 
 	portForwardDescriber = NewPortForwardListDescriber()
+
+	upgradeScannerDescriber = upgradescanner.NewDescriber()
 
 	apiServerDescriber = describer.NewSection(
 		"/api-server",
