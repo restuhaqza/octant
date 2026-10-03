@@ -20,7 +20,7 @@ import (
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
-	batchv1beta1 "k8s.io/api/batch/v1beta1"
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -41,7 +41,7 @@ import (
 func TestCacheQueryer_Children(t *testing.T) {
 	deployment := testutil.ToUnstructured(t, testutil.CreateDeployment("deployment"))
 
-	rs := testutil.ToUnstructured(t, testutil.CreateExtReplicaSet("rs"))
+	rs := testutil.ToUnstructured(t, testutil.CreateAppReplicaSet("rs"))
 	rs.SetOwnerReferences(testutil.ToOwnerReferences(t, deployment))
 
 	resourceLists := []*metav1.APIResourceList{
@@ -62,7 +62,7 @@ func TestCacheQueryer_Children(t *testing.T) {
 			},
 		},
 		{
-			GroupVersion: "extensions/v1beta1",
+			GroupVersion: "apps/v1",
 			APIResources: []metav1.APIResource{
 				{
 					Namespaced: true,
@@ -1546,7 +1546,7 @@ func TestCacheQueryer_getSelector(t *testing.T) {
 	}{
 		{
 			name:     "cron job",
-			object:   &batchv1beta1.CronJob{},
+			object:   &batchv1.CronJob{},
 			expected: nil,
 		},
 		{
