@@ -1,0 +1,1 @@
+- Prefer `discovery.k8s.io/v1` EndpointSlices when rendering Service endpoints and computing Service status, falling back to the legacy core `v1` Endpoints object when no EndpointSlices exist for the Service.

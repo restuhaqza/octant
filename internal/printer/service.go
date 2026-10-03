@@ -13,6 +13,7 @@ import (
 
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
+	discoveryv1 "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes/scheme"
@@ -404,18 +405,55 @@ func createServiceEndpointsView(ctx context.Context, service *corev1.Service, op
 		return nil, errors.New("service is nil")
 	}
 
-	key := store.Key{
-		Namespace:  service.Namespace,
-		APIVersion: "v1",
-		Kind:       "Endpoints",
-		Name:       service.Name,
-	}
-
 	cols := component.NewTableCols("Target", "IP", "Node Name")
 	table := component.NewTable("Endpoints", "There are no endpoints!", cols)
 
 	if service.Spec.ExternalName != "" {
 		return table, nil
+	}
+
+	endpointSlices, err := listEndpointSlicesForService(ctx, service, o)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(endpointSlices) > 0 {
+		for _, endpointSlice := range endpointSlices {
+			for _, endpoint := range endpointSlice.Endpoints {
+				for _, address := range endpoint.Addresses {
+					row := component.TableRow{}
+
+					var target component.Component = component.NewText("No target")
+					if targetRef := endpoint.TargetRef; targetRef != nil {
+						target, err = options.Link.ForGVK(service.Namespace, "v1", targetRef.Kind,
+							targetRef.Name, targetRef.Name)
+						if err != nil {
+							return nil, err
+						}
+					}
+
+					row["Target"] = target
+					row["IP"] = component.NewText(address)
+
+					nodeName := ""
+					if endpoint.NodeName != nil {
+						nodeName = *endpoint.NodeName
+					}
+					row["Node Name"] = component.NewText(nodeName)
+
+					table.Add(row)
+				}
+			}
+		}
+
+		return table, nil
+	}
+
+	key := store.Key{
+		Namespace:  service.Namespace,
+		APIVersion: "v1",
+		Kind:       "Endpoints",
+		Name:       service.Name,
 	}
 
 	object, err := o.Get(ctx, key)
@@ -459,6 +497,39 @@ func createServiceEndpointsView(ctx context.Context, service *corev1.Service, op
 	}
 
 	return table, nil
+}
+
+// listEndpointSlicesForService lists the discovery.k8s.io/v1 EndpointSlices
+// belonging to a service. EndpointSlices are labelled with the owning service
+// name.
+func listEndpointSlicesForService(ctx context.Context, service *corev1.Service, o store.Store) ([]*discoveryv1.EndpointSlice, error) {
+	if service == nil {
+		return nil, errors.New("service is nil")
+	}
+
+	serviceNameLabel := labels.Set{"kubernetes.io/service-name": service.Name}
+	key := store.Key{
+		Namespace:  service.Namespace,
+		APIVersion: "discovery.k8s.io/v1",
+		Kind:       "EndpointSlice",
+		Selector:   &serviceNameLabel,
+	}
+
+	list, _, err := o.List(ctx, key)
+	if err != nil {
+		return nil, errors.Wrapf(err, "list endpoint slices for service %s", service.Name)
+	}
+
+	var endpointSlices []*discoveryv1.EndpointSlice
+	for i := range list.Items {
+		endpointSlice := &discoveryv1.EndpointSlice{}
+		if err := scheme.Scheme.Convert(&list.Items[i], endpointSlice, 0); err != nil {
+			return nil, errors.Wrap(err, "convert unstructured object to endpoint slice")
+		}
+		endpointSlices = append(endpointSlices, endpointSlice)
+	}
+
+	return endpointSlices, nil
 }
 
 func describePortShort(port corev1.ServicePort) string {
