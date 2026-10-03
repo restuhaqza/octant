@@ -12,9 +12,14 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	batchv1 "k8s.io/api/batch/v1"
+	coordinationv1 "k8s.io/api/coordination/v1"
 	corev1 "k8s.io/api/core/v1"
+	flowcontrolv1 "k8s.io/api/flowcontrol/v1"
 	networkingv1 "k8s.io/api/networking/v1"
+	nodev1 "k8s.io/api/node/v1"
+	policyv1 "k8s.io/api/policy/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	schedulingv1 "k8s.io/api/scheduling/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	apiextv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -504,6 +509,110 @@ func CreateGatewayClass(name string) *gatewayv1.GatewayClass {
 	}
 }
 
+// CreatePodDisruptionBudget creates a pod disruption budget.
+func CreatePodDisruptionBudget(name string) *policyv1.PodDisruptionBudget {
+	maxUnavailable := intstr.FromInt(1)
+
+	return &policyv1.PodDisruptionBudget{
+		TypeMeta:   genTypeMeta(gvk.PodDisruptionBudget),
+		ObjectMeta: genObjectMeta(name, true),
+		Spec: policyv1.PodDisruptionBudgetSpec{
+			MaxUnavailable: &maxUnavailable,
+		},
+	}
+}
+
+// CreateResourceQuota creates a resource quota.
+func CreateResourceQuota(name string) *corev1.ResourceQuota {
+	return &corev1.ResourceQuota{
+		TypeMeta:   genTypeMeta(gvk.ResourceQuota),
+		ObjectMeta: genObjectMeta(name, true),
+		Spec: corev1.ResourceQuotaSpec{
+			Hard: corev1.ResourceList{
+				corev1.ResourceCPU:    resource.MustParse("2"),
+				corev1.ResourceMemory: resource.MustParse("2Gi"),
+			},
+		},
+		Status: corev1.ResourceQuotaStatus{
+			Hard: corev1.ResourceList{
+				corev1.ResourceCPU:    resource.MustParse("2"),
+				corev1.ResourceMemory: resource.MustParse("2Gi"),
+			},
+			Used: corev1.ResourceList{
+				corev1.ResourceCPU:    resource.MustParse("1"),
+				corev1.ResourceMemory: resource.MustParse("1Gi"),
+			},
+		},
+	}
+}
+
+// CreateLimitRange creates a limit range.
+func CreateLimitRange(name string) *corev1.LimitRange {
+	return &corev1.LimitRange{
+		TypeMeta:   genTypeMeta(gvk.LimitRange),
+		ObjectMeta: genObjectMeta(name, true),
+		Spec: corev1.LimitRangeSpec{
+			Limits: []corev1.LimitRangeItem{
+				{
+					Type: corev1.LimitTypeContainer,
+					Default: corev1.ResourceList{
+						corev1.ResourceCPU: resource.MustParse("1"),
+					},
+				},
+			},
+		},
+	}
+}
+
+// CreateLease creates a lease.
+func CreateLease(name string) *coordinationv1.Lease {
+	return &coordinationv1.Lease{
+		TypeMeta:   genTypeMeta(gvk.Lease),
+		ObjectMeta: genObjectMeta(name, true),
+	}
+}
+
+// CreateCSIStorageCapacity creates a CSI storage capacity.
+func CreateCSIStorageCapacity(name string) *storagev1.CSIStorageCapacity {
+	capacity := resource.MustParse("1Gi")
+
+	return &storagev1.CSIStorageCapacity{
+		TypeMeta:         genTypeMeta(gvk.CSIStorageCapacity),
+		ObjectMeta:       genObjectMeta(name, true),
+		StorageClassName: "manual",
+		Capacity:         &capacity,
+	}
+}
+
+// CreatePriorityClass creates a priority class.
+func CreatePriorityClass(name string) *schedulingv1.PriorityClass {
+	return &schedulingv1.PriorityClass{
+		TypeMeta:   genTypeMeta(gvk.PriorityClass),
+		ObjectMeta: genObjectMeta(name, false),
+		Value:      1000,
+	}
+}
+
+// CreateRuntimeClass creates a runtime class.
+func CreateRuntimeClass(name string) *nodev1.RuntimeClass {
+	return &nodev1.RuntimeClass{
+		TypeMeta:   genTypeMeta(gvk.RuntimeClass),
+		ObjectMeta: genObjectMeta(name, false),
+		Handler:    "runsc",
+	}
+}
+
+// CreateIngressClass creates an ingress class.
+func CreateIngressClass(name string) *networkingv1.IngressClass {
+	return &networkingv1.IngressClass{
+		TypeMeta:   genTypeMeta(gvk.IngressClass),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: networkingv1.IngressClassSpec{
+			Controller: "k8s.io/ingress-nginx",
+		},
+	}
+}
+
 // CreateGateway creates a gateway.
 func CreateGateway(name string) *gatewayv1.Gateway {
 	return &gatewayv1.Gateway{
@@ -511,6 +620,17 @@ func CreateGateway(name string) *gatewayv1.Gateway {
 		ObjectMeta: genObjectMeta(name, true),
 		Spec: gatewayv1.GatewaySpec{
 			GatewayClassName: "gateway-class",
+		},
+	}
+}
+
+// CreateCSIDriver creates a CSI driver.
+func CreateCSIDriver(name string) *storagev1.CSIDriver {
+	return &storagev1.CSIDriver{
+		TypeMeta:   genTypeMeta(gvk.CSIDriver),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: storagev1.CSIDriverSpec{
+			AttachRequired: conversion.PtrBool(true),
 		},
 	}
 }
@@ -528,6 +648,75 @@ func CreateGRPCRoute(name string) *gatewayv1.GRPCRoute {
 	return &gatewayv1.GRPCRoute{
 		TypeMeta:   genTypeMeta(gvk.GRPCRoute),
 		ObjectMeta: genObjectMeta(name, true),
+	}
+}
+
+// CreateCSINode creates a CSI node.
+func CreateCSINode(name string) *storagev1.CSINode {
+	return &storagev1.CSINode{
+		TypeMeta:   genTypeMeta(gvk.CSINode),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: storagev1.CSINodeSpec{
+			Drivers: []storagev1.CSINodeDriver{
+				{
+					Name:   "driver",
+					NodeID: "node-id",
+				},
+			},
+		},
+	}
+}
+
+// CreateVolumeAttachment creates a volume attachment.
+func CreateVolumeAttachment(name string) *storagev1.VolumeAttachment {
+	pvName := "pv"
+
+	return &storagev1.VolumeAttachment{
+		TypeMeta:   genTypeMeta(gvk.VolumeAttachment),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: storagev1.VolumeAttachmentSpec{
+			Attacher: "attacher",
+			NodeName: "node",
+			Source: storagev1.VolumeAttachmentSource{
+				PersistentVolumeName: &pvName,
+			},
+		},
+		Status: storagev1.VolumeAttachmentStatus{
+			Attached: true,
+		},
+	}
+}
+
+// CreateFlowSchema creates a flow schema.
+func CreateFlowSchema(name string) *flowcontrolv1.FlowSchema {
+	return &flowcontrolv1.FlowSchema{
+		TypeMeta:   genTypeMeta(gvk.FlowSchema),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: flowcontrolv1.FlowSchemaSpec{
+			PriorityLevelConfiguration: flowcontrolv1.PriorityLevelConfigurationReference{
+				Name: "global-default",
+			},
+			MatchingPrecedence: 1000,
+		},
+	}
+}
+
+// CreatePriorityLevelConfiguration creates a priority level configuration.
+func CreatePriorityLevelConfiguration(name string) *flowcontrolv1.PriorityLevelConfiguration {
+	return &flowcontrolv1.PriorityLevelConfiguration{
+		TypeMeta:   genTypeMeta(gvk.PriorityLevelConfiguration),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: flowcontrolv1.PriorityLevelConfigurationSpec{
+			Type: flowcontrolv1.PriorityLevelEnablementLimited,
+		},
+	}
+}
+
+// CreateValidatingAdmissionPolicy creates a validating admission policy.
+func CreateValidatingAdmissionPolicy(name string) *admissionregistrationv1.ValidatingAdmissionPolicy {
+	return &admissionregistrationv1.ValidatingAdmissionPolicy{
+		TypeMeta:   genTypeMeta(gvk.ValidatingAdmissionPolicy),
+		ObjectMeta: genObjectMeta(name, false),
 	}
 }
 

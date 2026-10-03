@@ -21,11 +21,16 @@ var (
 	supportedGVKs = []schema.GroupVersionKind{
 		gvk.AppReplicaSet,
 		gvk.CronJob,
+		gvk.CSIStorageCapacity,
 		gvk.DaemonSet,
 		gvk.Deployment,
 		gvk.Job,
+		gvk.Lease,
+		gvk.LimitRange,
 		gvk.Pod,
+		gvk.PodDisruptionBudget,
 		gvk.ReplicationController,
+		gvk.ResourceQuota,
 		gvk.StatefulSet,
 		gvk.HorizontalPodAutoscaler,
 		gvk.HorizontalPodAutoscalerV2,
@@ -105,6 +110,16 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/events"
 	case apiVersion == "v1" && kind == "Pod":
 		p = "/workloads/pods"
+	case apiVersion == "policy/v1" && kind == "PodDisruptionBudget":
+		p = "/workloads/pod-disruption-budgets"
+	case apiVersion == "v1" && kind == "ResourceQuota":
+		p = "/config-and-storage/resource-quotas"
+	case apiVersion == "v1" && kind == "LimitRange":
+		p = "/config-and-storage/limit-ranges"
+	case apiVersion == "coordination.k8s.io/v1" && kind == "Lease":
+		p = "/config-and-storage/leases"
+	case apiVersion == "storage.k8s.io/v1" && kind == "CSIStorageCapacity":
+		p = "/config-and-storage/csi-storage-capacities"
 	default:
 		return "", errors.Errorf("unknown object %s %s", apiVersion, kind)
 	}
@@ -160,6 +175,16 @@ func gvkReversePath(contentPath, namespace string) (schema.GroupVersionKind, err
 		return gvk.Event, nil
 	case reducedPath == "/workloads/pods":
 		return gvk.Pod, nil
+	case reducedPath == "/workloads/pod-disruption-budgets":
+		return gvk.PodDisruptionBudget, nil
+	case reducedPath == "/config-and-storage/resource-quotas":
+		return gvk.ResourceQuota, nil
+	case reducedPath == "/config-and-storage/limit-ranges":
+		return gvk.LimitRange, nil
+	case reducedPath == "/config-and-storage/leases":
+		return gvk.Lease, nil
+	case reducedPath == "/config-and-storage/csi-storage-capacities":
+		return gvk.CSIStorageCapacity, nil
 	default:
 		return schema.GroupVersionKind{}, errors.Errorf("unknown gvk %s", contentPath)
 	}

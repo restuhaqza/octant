@@ -45,6 +45,8 @@ func workloadEntries(ctx context.Context, prefix, namespace string, objectStore 
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ReplicationController), objectStore))
 	neh.Add("Stateful Sets", "stateful-sets",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.StatefulSet), objectStore))
+	neh.Add("Pod Disruption Budgets", "pod-disruption-budgets",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.PodDisruptionBudget), objectStore))
 
 	children, err := neh.Generate(prefix, namespace, "")
 
@@ -104,6 +106,14 @@ func configAndStorageEntries(ctx context.Context, prefix, namespace string, obje
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.Secret), objectStore))
 	neh.Add("Service Accounts", "service-accounts",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ServiceAccount), objectStore))
+	neh.Add("Resource Quotas", "resource-quotas",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.ResourceQuota), objectStore))
+	neh.Add("Limit Ranges", "limit-ranges",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.LimitRange), objectStore))
+	neh.Add("Leases", "leases",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.Lease), objectStore))
+	neh.Add("CSI Storage Capacities", "csi-storage-capacities",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.CSIStorageCapacity), objectStore))
 
 	children, err := neh.Generate(prefix, namespace, "")
 	if err != nil {

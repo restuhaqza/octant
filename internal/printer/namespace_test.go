@@ -233,3 +233,33 @@ func Test_createResourceLimitMemoryRow(t *testing.T) {
 	_, _, created = createResourceLimitMemoryRow(cpu)
 	require.False(t, created)
 }
+
+func Test_NamespacePodSecurity(t *testing.T) {
+	namespace := testutil.CreateNamespace("ns")
+	namespace.Labels = map[string]string{
+		"pod-security.kubernetes.io/enforce":         "restricted",
+		"pod-security.kubernetes.io/enforce-version": "latest",
+		"pod-security.kubernetes.io/audit":           "baseline",
+		"pod-security.kubernetes.io/warn":            "baseline",
+	}
+
+	got, err := NewNamespacePodSecurity(namespace).Create(Options{})
+	require.NoError(t, err)
+
+	expected := component.NewSummary("Pod Security", []component.SummarySection{
+		{Header: "Enforce", Content: component.NewText("restricted")},
+		{Header: "Enforce Version", Content: component.NewText("latest")},
+		{Header: "Audit", Content: component.NewText("baseline")},
+		{Header: "Warn", Content: component.NewText("baseline")},
+	}...)
+
+	component.AssertEqual(t, expected, got)
+}
+
+func Test_NamespacePodSecurity_not_configured(t *testing.T) {
+	namespace := testutil.CreateNamespace("ns")
+
+	got, err := NewNamespacePodSecurity(namespace).Create(Options{})
+	require.NoError(t, err)
+	assert.Nil(t, got)
+}
