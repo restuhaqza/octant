@@ -7,12 +7,14 @@ package printer
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	corev1 "k8s.io/api/core/v1"
+	discoveryv1 "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/labels"
@@ -49,7 +51,16 @@ func Test_ServiceListHandler(t *testing.T) {
 			Name:       "service",
 		}).Return(endpoints, nil).AnyTimes()
 
-	labels := map[string]string{
+	slicesSelector := labels.Set{"kubernetes.io/service-name": "service"}
+	tpo.objectStore.EXPECT().
+		List(gomock.Any(), store.Key{
+			Namespace:  "default",
+			APIVersion: "discovery.k8s.io/v1",
+			Kind:       "EndpointSlice",
+			Selector:   &slicesSelector,
+		}).Return(testutil.ToUnstructuredList(t), false, nil).AnyTimes()
+
+	serviceLabels := map[string]string{
 		"foo": "bar",
 	}
 
@@ -68,7 +79,7 @@ func Test_ServiceListHandler(t *testing.T) {
 					CreationTimestamp: metav1.Time{
 						Time: now,
 					},
-					Labels: labels,
+					Labels: serviceLabels,
 				},
 				Spec: corev1.ServiceSpec{
 					Selector: map[string]string{
@@ -110,7 +121,7 @@ func Test_ServiceListHandler(t *testing.T) {
 			genObjectStatus(component.TextStatusWarning, []string{
 				"Service has no endpoint addresses",
 			})),
-		"Labels":      component.NewLabels(labels),
+		"Labels":      component.NewLabels(serviceLabels),
 		"Type":        component.NewText("ClusterIP"),
 		"Cluster IP":  component.NewText("1.2.3.4"),
 		"External IP": component.NewText("8.8.8.8, 8.8.4.4"),
@@ -447,26 +458,196 @@ func Test_createServiceEndpointsView(t *testing.T) {
 		},
 	}
 
-	cases := []struct {
-		name    string
-		service *corev1.Service
-		table   *component.Table
-		rows    component.TableRow
-	}{
-		{
-			name: "endpoint",
-			service: &corev1.Service{
-				ObjectMeta: metav1.ObjectMeta{
-					Namespace: "default",
-					Name:      "service",
+	endpointSlices := []runtime.Object{
+		&discoveryv1.EndpointSlice{
+			TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "service-1",
+				Namespace: "default",
+				Labels:    map[string]string{"kubernetes.io/service-name": "service"},
+			},
+			AddressType: discoveryv1.AddressTypeIPv4,
+			Endpoints: []discoveryv1.Endpoint{
+				{
+					Addresses: []string{"10.1.1.1", "10.1.1.2"},
+					TargetRef: &corev1.ObjectReference{
+						Kind:      "Pod",
+						Name:      "pod-1",
+						Namespace: "default",
+					},
+					NodeName: &nodeName,
+				},
+				{
+					Addresses: []string{"10.1.1.3"},
 				},
 			},
-			table: component.NewTable("Endpoints", "There are no endpoints!", cols),
-			rows: component.TableRow{
-				"Target":    component.NewLink("", "pod", "/pod"),
-				"IP":        component.NewText("10.1.1.1"),
-				"Node Name": component.NewText("node"),
+		},
+		&discoveryv1.EndpointSlice{
+			TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "service-2",
+				Namespace: "default",
+				Labels:    map[string]string{"kubernetes.io/service-name": "service"},
 			},
+			AddressType: discoveryv1.AddressTypeIPv4,
+			Endpoints: []discoveryv1.Endpoint{
+				{
+					Addresses: []string{"10.1.1.4"},
+					TargetRef: &corev1.ObjectReference{
+						Kind:      "Pod",
+						Name:      "pod-2",
+						Namespace: "default",
+					},
+				},
+			},
+		},
+	}
+
+	service := &corev1.Service{
+		ObjectMeta: metav1.ObjectMeta{
+			Namespace: "default",
+			Name:      "service",
+		},
+	}
+
+	ppod1 := component.NewLink("", "pod-1", "/pod-1")
+	ppod2 := component.NewLink("", "pod-2", "/pod-2")
+
+	tableWithRows := func(rows ...component.TableRow) *component.Table {
+		table := component.NewTable("Endpoints", "There are no endpoints!", cols)
+		for _, row := range rows {
+			table.Add(row)
+		}
+		return table
+	}
+
+	cases := []struct {
+		name      string
+		service   *corev1.Service
+		slices    []runtime.Object
+		listErr   error
+		endpoints *corev1.Endpoints
+		expected  *component.Table
+	}{
+		{
+			name:    "endpoint slices",
+			service: service,
+			slices:  endpointSlices,
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
+				},
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.2"),
+					"Node Name": component.NewText("node"),
+				},
+				component.TableRow{
+					"Target":    component.NewText("No target"),
+					"IP":        component.NewText("10.1.1.3"),
+					"Node Name": component.NewText(""),
+				},
+				component.TableRow{
+					"Target":    ppod2,
+					"IP":        component.NewText("10.1.1.4"),
+					"Node Name": component.NewText(""),
+				},
+			),
+		},
+		{
+			name:    "endpoint slices with only not ready endpoints",
+			service: service,
+			slices: []runtime.Object{
+				&discoveryv1.EndpointSlice{
+					TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      "service-1",
+						Namespace: "default",
+						Labels:    map[string]string{"kubernetes.io/service-name": "service"},
+					},
+					AddressType: discoveryv1.AddressTypeIPv4,
+					Endpoints: []discoveryv1.Endpoint{
+						{
+							Addresses: []string{"10.1.1.1", "10.1.1.2"},
+							Conditions: discoveryv1.EndpointConditions{
+								Ready: boolPtr(false),
+							},
+						},
+					},
+				},
+			},
+			expected: tableWithRows(),
+		},
+		{
+			name:    "endpoint slices with mixed readiness",
+			service: service,
+			slices: []runtime.Object{
+				&discoveryv1.EndpointSlice{
+					TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      "service-1",
+						Namespace: "default",
+						Labels:    map[string]string{"kubernetes.io/service-name": "service"},
+					},
+					AddressType: discoveryv1.AddressTypeIPv4,
+					Endpoints: []discoveryv1.Endpoint{
+						{
+							Addresses: []string{"10.1.1.1"},
+							TargetRef: &corev1.ObjectReference{
+								Kind:      "Pod",
+								Name:      "pod-1",
+								Namespace: "default",
+							},
+							NodeName:   &nodeName,
+							Conditions: discoveryv1.EndpointConditions{Ready: boolPtr(true)},
+						},
+						{
+							Addresses:  []string{"10.1.1.2"},
+							Conditions: discoveryv1.EndpointConditions{Ready: boolPtr(false)},
+						},
+					},
+				},
+			},
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
+				},
+			),
+		},
+		{
+			name:      "falls back to core endpoints when listing endpoint slices fails",
+			service:   service,
+			listErr:   errors.New("endpoint slices unavailable"),
+			endpoints: endpoints,
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
+				},
+			),
+		},
+		{
+			name:      "falls back to core endpoints",
+			service:   service,
+			endpoints: endpoints,
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
+				},
+			),
+		},
+		{
+			name:      "no endpoints",
+			service:   service,
+			endpoints: nil,
+			expected:  tableWithRows(),
 		},
 		{
 			name: "externalName",
@@ -479,39 +660,65 @@ func Test_createServiceEndpointsView(t *testing.T) {
 					ExternalName: "test",
 				},
 			},
-			table: component.NewTable("Endpoints", "There are no endpoints!", cols),
+			expected: tableWithRows(),
 		},
 	}
 
 	for _, tc := range cases {
-		controller := gomock.NewController(t)
-		defer controller.Finish()
+		t.Run(tc.name, func(t *testing.T) {
+			controller := gomock.NewController(t)
+			defer controller.Finish()
 
-		tpo := newTestPrinterOptions(controller)
-		printOptions := tpo.ToOptions()
+			tpo := newTestPrinterOptions(controller)
+			printOptions := tpo.ToOptions()
 
-		if tc.service.Spec.ExternalName == "" {
-			key := store.Key{Namespace: "default", APIVersion: "v1", Kind: "Endpoints", Name: "service"}
-			tpo.objectStore.EXPECT().
-				Get(gomock.Any(), gomock.Eq(key)).
-				Return(toUnstructured(t, endpoints), nil)
-
-			podLink := component.NewLink("", "pod", "/pod")
 			tpo.link.EXPECT().
-				ForGVK(gomock.Any(), "v1", "Pod", gomock.Any(), gomock.Any()).
-				Return(podLink, nil).
+				ForGVK(gomock.Any(), "v1", "Pod", "pod-1", gomock.Any()).
+				Return(ppod1, nil).
 				AnyTimes()
-		}
+			tpo.link.EXPECT().
+				ForGVK(gomock.Any(), "v1", "Pod", "pod-2", gomock.Any()).
+				Return(ppod2, nil).
+				AnyTimes()
 
-		ctx := context.Background()
-		got, err := createServiceEndpointsView(ctx, tc.service, printOptions)
-		require.NoError(t, err)
+			if tc.service.Spec.ExternalName == "" {
+				selector := labels.Set{"kubernetes.io/service-name": "service"}
+				slicesKey := store.Key{
+					Namespace:  "default",
+					APIVersion: "discovery.k8s.io/v1",
+					Kind:       "EndpointSlice",
+					Selector:   &selector,
+				}
+				var listed *unstructured.UnstructuredList
+				var listErr error
+				if tc.listErr == nil {
+					listed = testutil.ToUnstructuredList(t, tc.slices...)
+				} else {
+					listErr = tc.listErr
+				}
 
-		if tc.rows != nil {
-			tc.table.Add(tc.rows)
-		}
+				tpo.objectStore.EXPECT().
+					List(gomock.Any(), gomock.Eq(slicesKey)).
+					Return(listed, false, listErr)
 
-		component.AssertEqual(t, tc.table, got)
+				if len(tc.slices) == 0 {
+					key := store.Key{Namespace: "default", APIVersion: "v1", Kind: "Endpoints", Name: "service"}
+					var object *unstructured.Unstructured
+					if tc.endpoints != nil {
+						object = toUnstructured(t, tc.endpoints)
+					}
+					tpo.objectStore.EXPECT().
+						Get(gomock.Any(), gomock.Eq(key)).
+						Return(object, nil)
+				}
+			}
+
+			ctx := context.Background()
+			got, err := createServiceEndpointsView(ctx, tc.service, printOptions)
+			require.NoError(t, err)
+
+			component.AssertEqual(t, tc.expected, got)
+		})
 	}
 }
 
@@ -578,6 +785,10 @@ func Test_describePort(t *testing.T) {
 			assert.Equal(t, tc.expected, got)
 		})
 	}
+}
+
+func boolPtr(b bool) *bool {
+	return &b
 }
 
 func toUnstructured(t *testing.T, object runtime.Object) *unstructured.Unstructured {

@@ -12,6 +12,8 @@ import (
 
 	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
+	discoveryv1 "k8s.io/api/discovery/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/scheme"
 
@@ -31,38 +33,65 @@ func service(ctx context.Context, object runtime.Object, o store.Store, _ link.I
 	}
 
 	if service.Spec.ExternalName == "" {
-		key := store.Key{
-			Namespace:  service.Namespace,
-			APIVersion: "v1",
-			Kind:       "Endpoints",
-			Name:       service.Name,
-		}
+		// Prefer EndpointSlices, but fall back to the legacy core v1
+		// Endpoints object if listing them fails (e.g. the EndpointSlice
+		// informer is unavailable or the API is not served).
+		endpointSlices, err := listEndpointSlicesForService(ctx, service, o)
 
-		endpoints := &corev1.Endpoints{}
+		if err == nil && len(endpointSlices) > 0 {
+			addressCount := 0
 
-		found, err := store.GetAs(ctx, o, key, endpoints)
-		if err != nil {
-			return ObjectStatus{}, errors.Wrapf(err, "get endpoints for service %s", service.Name)
-		}
+			for _, endpointSlice := range endpointSlices {
+				for _, endpoint := range endpointSlice.Endpoints {
+					// Match core v1 Endpoints semantics: only ready
+					// endpoints count. A nil Ready condition is treated as
+					// ready, per EndpointSlice semantics.
+					if endpoint.Conditions.Ready == nil || *endpoint.Conditions.Ready {
+						addressCount += len(endpoint.Addresses)
+					}
+				}
+			}
 
-		if !found {
-			return ObjectStatus{
-				NodeStatus: component.NodeStatusWarning,
-				Details:    []component.Component{component.NewText("Service has no endpoints")},
-			}, nil
-		}
+			if addressCount == 0 {
+				return ObjectStatus{
+					NodeStatus: component.NodeStatusWarning,
+					Details:    []component.Component{component.NewText("Service has no endpoint addresses")},
+				}, nil
+			}
+		} else {
+			key := store.Key{
+				Namespace:  service.Namespace,
+				APIVersion: "v1",
+				Kind:       "Endpoints",
+				Name:       service.Name,
+			}
 
-		addressCount := 0
+			endpoints := &corev1.Endpoints{}
 
-		for _, subset := range endpoints.Subsets {
-			addressCount += len(subset.Addresses)
-		}
+			found, err := store.GetAs(ctx, o, key, endpoints)
+			if err != nil {
+				return ObjectStatus{}, errors.Wrapf(err, "get endpoints for service %s", service.Name)
+			}
 
-		if addressCount == 0 {
-			return ObjectStatus{
-				NodeStatus: component.NodeStatusWarning,
-				Details:    []component.Component{component.NewText("Service has no endpoint addresses")},
-			}, nil
+			if !found {
+				return ObjectStatus{
+					NodeStatus: component.NodeStatusWarning,
+					Details:    []component.Component{component.NewText("Service has no endpoints")},
+				}, nil
+			}
+
+			addressCount := 0
+
+			for _, subset := range endpoints.Subsets {
+				addressCount += len(subset.Addresses)
+			}
+
+			if addressCount == 0 {
+				return ObjectStatus{
+					NodeStatus: component.NodeStatusWarning,
+					Details:    []component.Component{component.NewText("Service has no endpoint addresses")},
+				}, nil
+			}
 		}
 	}
 	properties := []component.Property{{Label: "Type", Value: component.NewText(string(service.Spec.Type))},
@@ -73,4 +102,37 @@ func service(ctx context.Context, object runtime.Object, o store.Store, _ link.I
 		Details:    []component.Component{component.NewText("Service is OK")},
 		Properties: properties,
 	}, nil
+}
+
+// listEndpointSlicesForService lists the discovery.k8s.io/v1 EndpointSlices
+// belonging to a service. EndpointSlices are labelled with the owning service
+// name.
+func listEndpointSlicesForService(ctx context.Context, service *corev1.Service, o store.Store) ([]*discoveryv1.EndpointSlice, error) {
+	if service == nil {
+		return nil, errors.New("service is nil")
+	}
+
+	serviceNameLabel := labels.Set{"kubernetes.io/service-name": service.Name}
+	key := store.Key{
+		Namespace:  service.Namespace,
+		APIVersion: "discovery.k8s.io/v1",
+		Kind:       "EndpointSlice",
+		Selector:   &serviceNameLabel,
+	}
+
+	list, _, err := o.List(ctx, key)
+	if err != nil {
+		return nil, errors.Wrapf(err, "list endpoint slices for service %s", service.Name)
+	}
+
+	var endpointSlices []*discoveryv1.EndpointSlice
+	for i := range list.Items {
+		endpointSlice := &discoveryv1.EndpointSlice{}
+		if err := scheme.Scheme.Convert(&list.Items[i], endpointSlice, 0); err != nil {
+			return nil, errors.Wrap(err, "convert unstructured object to endpoint slice")
+		}
+		endpointSlices = append(endpointSlices, endpointSlice)
+	}
+
+	return endpointSlices, nil
 }
