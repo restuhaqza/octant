@@ -246,6 +246,20 @@ func (co *Overview) Navigation(ctx context.Context, namespace, root string) ([]n
 		},
 	}
 
+	if co.gatewayAPIAvailable() {
+		navigationEntries.EntriesFuncs["Gateway API"] = gatewayEntries
+		navigationEntries.IconMap["Gateway API"] = icon.DiscoveryAndLoadBalancing
+
+		order := make([]string, 0, len(navigationEntries.Order)+1)
+		for _, name := range navigationEntries.Order {
+			order = append(order, name)
+			if name == "Discovery and Load Balancing" {
+				order = append(order, "Gateway API")
+			}
+		}
+		navigationEntries.Order = order
+	}
+
 	objectStore := co.dashConfig.ObjectStore()
 
 	nf := octant.NewNavigationFactory(namespace, root, objectStore, navigationEntries)
@@ -256,6 +270,36 @@ func (co *Overview) Navigation(ctx context.Context, namespace, root string) ([]n
 	}
 
 	return entries, nil
+}
+
+// gatewayAPIAvailable returns true when the Gateway API is served by the cluster.
+func (co *Overview) gatewayAPIAvailable() bool {
+	if co.dashConfig == nil {
+		return false
+	}
+
+	client := co.dashConfig.ClusterClient()
+	if client == nil {
+		return false
+	}
+
+	discoveryClient, err := client.DiscoveryClient()
+	if err != nil {
+		return false
+	}
+
+	resources, err := discoveryClient.ServerResourcesForGroupVersion("gateway.networking.k8s.io/v1")
+	if err != nil {
+		return false
+	}
+
+	for _, resource := range resources.APIResources {
+		if resource.Kind == "Gateway" || resource.Kind == "HTTPRoute" {
+			return true
+		}
+	}
+
+	return false
 }
 
 // Generators allow modules to send events to the frontend.

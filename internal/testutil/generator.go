@@ -25,6 +25,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 	metricsv1beta1 "k8s.io/metrics/pkg/apis/metrics/v1beta1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	"github.com/vmware-tanzu/octant/internal/conversion"
 	"github.com/vmware-tanzu/octant/internal/gvk"
@@ -489,6 +490,44 @@ func CreateStorageClass(name string) *storagev1.StorageClass {
 		TypeMeta:    genTypeMeta(gvk.StorageClass),
 		ObjectMeta:  genObjectMeta(name, true),
 		Provisioner: "manual",
+	}
+}
+
+// CreateGatewayClass creates a gateway class.
+func CreateGatewayClass(name string) *gatewayv1.GatewayClass {
+	return &gatewayv1.GatewayClass{
+		TypeMeta:   genTypeMeta(gvk.GatewayClass),
+		ObjectMeta: genObjectMeta(name, false),
+		Spec: gatewayv1.GatewayClassSpec{
+			ControllerName: "example.com/controller",
+		},
+	}
+}
+
+// CreateGateway creates a gateway.
+func CreateGateway(name string) *gatewayv1.Gateway {
+	return &gatewayv1.Gateway{
+		TypeMeta:   genTypeMeta(gvk.Gateway),
+		ObjectMeta: genObjectMeta(name, true),
+		Spec: gatewayv1.GatewaySpec{
+			GatewayClassName: "gateway-class",
+		},
+	}
+}
+
+// CreateHTTPRoute creates an http route.
+func CreateHTTPRoute(name string) *gatewayv1.HTTPRoute {
+	return &gatewayv1.HTTPRoute{
+		TypeMeta:   genTypeMeta(gvk.HTTPRoute),
+		ObjectMeta: genObjectMeta(name, true),
+	}
+}
+
+// CreateGRPCRoute creates a grpc route.
+func CreateGRPCRoute(name string) *gatewayv1.GRPCRoute {
+	return &gatewayv1.GRPCRoute{
+		TypeMeta:   genTypeMeta(gvk.GRPCRoute),
+		ObjectMeta: genObjectMeta(name, true),
 	}
 }
 

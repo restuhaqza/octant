@@ -11,6 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/vmware-tanzu/octant/internal/gvk"
 )
 
 func Test_crdPath(t *testing.T) {
@@ -45,6 +47,13 @@ func Test_gvk_path(t *testing.T) {
 			expected:   path.Join("/cluster-overview", "rbac", "cluster-role-bindings", "cluster-role-binding"),
 		},
 		{
+			name:       "GatewayClass",
+			apiVersion: "gateway.networking.k8s.io/v1",
+			kind:       "GatewayClass",
+			objectName: "gateway-class",
+			expected:   path.Join("/cluster-overview", "gateway-api", "gateway-classes", "gateway-class"),
+		},
+		{
 			name:       "unknown",
 			apiVersion: "unknown",
 			kind:       "ClusterRoleBinding",
@@ -65,4 +74,10 @@ func Test_gvk_path(t *testing.T) {
 			assert.Equal(t, test.expected, got)
 		})
 	}
+}
+
+func Test_gvkReversePath(t *testing.T) {
+	got, err := gvkReversePath("cluster-overview/gateway-api/gateway-classes", "")
+	require.NoError(t, err)
+	assert.Equal(t, gvk.GatewayClass, got)
 }

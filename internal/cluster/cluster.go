@@ -28,6 +28,7 @@ import (
 	"k8s.io/client-go/restmapper"
 	"k8s.io/client-go/tools/clientcmd"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	internalLog "github.com/vmware-tanzu/octant/internal/log"
 	clusterTypes "github.com/vmware-tanzu/octant/pkg/cluster"
@@ -76,6 +77,7 @@ func newCluster(ctx context.Context, clientConfig clientcmd.ClientConfig, restCl
 	install.Install(scheme.Scheme)
 	_ = admissionregistrationv1.AddToScheme(scheme.Scheme)
 	_ = apiregistrationv1.AddToScheme(scheme.Scheme)
+	_ = gatewayv1.Install(scheme.Scheme)
 
 	kubernetesClient, err := kubernetes.NewForConfig(restClient)
 	if err != nil {

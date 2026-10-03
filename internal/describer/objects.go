@@ -14,6 +14,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	"github.com/vmware-tanzu/octant/pkg/store"
 )
@@ -168,6 +169,38 @@ func initNamespacedOverview() *Section {
 		dlbNetworkPolicies,
 	)
 
+	gatewayAPIGateways := NewResource(ResourceOptions{
+		Path:           "/gateway-api/gateways",
+		ObjectStoreKey: store.Key{APIVersion: "gateway.networking.k8s.io/v1", Kind: "Gateway"},
+		ListType:       &gatewayv1.GatewayList{},
+		ObjectType:     &gatewayv1.Gateway{},
+		Titles:         ResourceTitle{List: "Gateways", Object: "Gateways"},
+	})
+
+	gatewayAPIHTTPRoutes := NewResource(ResourceOptions{
+		Path:           "/gateway-api/httproutes",
+		ObjectStoreKey: store.Key{APIVersion: "gateway.networking.k8s.io/v1", Kind: "HTTPRoute"},
+		ListType:       &gatewayv1.HTTPRouteList{},
+		ObjectType:     &gatewayv1.HTTPRoute{},
+		Titles:         ResourceTitle{List: "HTTP Routes", Object: "HTTP Routes"},
+	})
+
+	gatewayAPIGRPCRoutes := NewResource(ResourceOptions{
+		Path:           "/gateway-api/grpcroutes",
+		ObjectStoreKey: store.Key{APIVersion: "gateway.networking.k8s.io/v1", Kind: "GRPCRoute"},
+		ListType:       &gatewayv1.GRPCRouteList{},
+		ObjectType:     &gatewayv1.GRPCRoute{},
+		Titles:         ResourceTitle{List: "GRPC Routes", Object: "GRPC Routes"},
+	})
+
+	gatewayAPIDescriber := NewSection(
+		"/gateway-api",
+		"Gateway API",
+		gatewayAPIGateways,
+		gatewayAPIHTTPRoutes,
+		gatewayAPIGRPCRoutes,
+	)
+
 	csConfigMaps := NewResource(ResourceOptions{
 		Path:           "/config-and-storage/config-maps",
 		ObjectStoreKey: store.Key{APIVersion: "v1", Kind: "ConfigMap"},
@@ -246,6 +279,7 @@ func initNamespacedOverview() *Section {
 		"Overview",
 		workloadsDescriber,
 		discoveryAndLoadBalancingDescriber,
+		gatewayAPIDescriber,
 		configAndStorageDescriber,
 		NamespacedCRD(),
 		rbacDescriber,

@@ -12,6 +12,7 @@ import (
 	storagev1 "k8s.io/api/storage/v1"
 	apiextv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	"github.com/vmware-tanzu/octant/internal/describer"
 	"github.com/vmware-tanzu/octant/pkg/icon"
@@ -155,6 +156,22 @@ var (
 		IconName:       icon.ApiServer,
 	})
 
+	gatewayAPIGatewayClasses = describer.NewResource(describer.ResourceOptions{
+		Path:           "/gateway-api/gateway-classes",
+		ObjectStoreKey: store.Key{APIVersion: "gateway.networking.k8s.io/v1", Kind: "GatewayClass"},
+		ListType:       &gatewayv1.GatewayClassList{},
+		ObjectType:     &gatewayv1.GatewayClass{},
+		Titles:         describer.ResourceTitle{List: "Gateway Classes", Object: "Gateway Classes"},
+		ClusterWide:    true,
+		IconName:       icon.DiscoveryAndLoadBalancing,
+	})
+
+	gatewayAPIDescriber = describer.NewSection(
+		"/gateway-api",
+		"Gateway API",
+		gatewayAPIGatewayClasses,
+	)
+
 	rootDescriber = describer.NewSection(
 		"/",
 		"Cluster Overview",
@@ -167,5 +184,6 @@ var (
 		storageDescriber,
 		portForwardDescriber,
 		apiServerDescriber,
+		gatewayAPIDescriber,
 	)
 )

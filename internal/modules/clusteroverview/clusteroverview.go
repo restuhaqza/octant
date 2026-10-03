@@ -249,6 +249,13 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 		},
 	}
 
+	if co.gatewayAPIAvailable() {
+		navigationEntries.Lookup["Gateway API"] = "gateway-api"
+		navigationEntries.EntriesFuncs["Gateway API"] = gatewayEntries
+		navigationEntries.IconMap["Gateway API"] = icon.DiscoveryAndLoadBalancing
+		navigationEntries.Order = append(navigationEntries.Order, "Gateway API")
+	}
+
 	objectStore := co.DashConfig.ObjectStore()
 
 	nf := octant.NewNavigationFactory("", root, objectStore, navigationEntries)
@@ -259,6 +266,36 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 	}
 
 	return entries, nil
+}
+
+// gatewayAPIAvailable returns true when the Gateway API is served by the cluster.
+func (co *ClusterOverview) gatewayAPIAvailable() bool {
+	if co.DashConfig == nil {
+		return false
+	}
+
+	client := co.DashConfig.ClusterClient()
+	if client == nil {
+		return false
+	}
+
+	discoveryClient, err := client.DiscoveryClient()
+	if err != nil {
+		return false
+	}
+
+	resources, err := discoveryClient.ServerResourcesForGroupVersion("gateway.networking.k8s.io/v1")
+	if err != nil {
+		return false
+	}
+
+	for _, resource := range resources.APIResources {
+		if resource.Kind == "GatewayClass" {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (co *ClusterOverview) SetNamespace(_ string) error {
@@ -316,6 +353,20 @@ func storageEntries(ctx context.Context, prefix, namespace string, objectStore s
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.PersistentVolume), objectStore))
 	neh.Add("Storage Classes", "storage-classes",
 		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.StorageClass), objectStore))
+
+	children, err := neh.Generate(prefix, namespace, "")
+	if err != nil {
+		return nil, false, err
+	}
+
+	return children, false, nil
+}
+
+func gatewayEntries(ctx context.Context, prefix, namespace string, objectStore store.Store, _ bool) ([]navigation.Navigation, bool, error) {
+	neh := navigation.EntriesHelper{}
+
+	neh.Add("Gateway Classes", "gateway-classes",
+		loading.IsObjectLoading(ctx, namespace, store.KeyFromGroupVersionKind(gvk.GatewayClass), objectStore))
 
 	children, err := neh.Generate(prefix, namespace, "")
 	if err != nil {

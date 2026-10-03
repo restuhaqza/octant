@@ -28,6 +28,7 @@ var (
 		gvk.MutatingWebhookConfiguration,
 		gvk.ValidatingWebhookConfiguration,
 		gvk.StorageClass,
+		gvk.GatewayClass,
 	}
 )
 
@@ -62,6 +63,8 @@ func gvkPath(namespace, apiVersion, kind, name string) (string, error) {
 		p = "/webhooks/validating-webhooks"
 	case apiVersion == "storage.k8s.io/v1" && kind == "StorageClass":
 		p = "/storage/storage-classes"
+	case apiVersion == "gateway.networking.k8s.io/v1" && kind == "GatewayClass":
+		p = "/gateway-api/gateway-classes"
 	default:
 		return "", fmt.Errorf("unknown object %s %s", apiVersion, kind)
 	}
@@ -92,6 +95,8 @@ func gvkReversePath(contentPath, _ string) (schema.GroupVersionKind, error) {
 		return gvk.ValidatingWebhookConfiguration, nil
 	case contentPath == "cluster-overview/storage/storage-classes":
 		return gvk.StorageClass, nil
+	case contentPath == "cluster-overview/gateway-api/gateway-classes":
+		return gvk.GatewayClass, nil
 	default:
 		return schema.GroupVersionKind{}, errors.Errorf("unknown gvk %s", contentPath)
 	}
