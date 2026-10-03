@@ -33,17 +33,22 @@ func service(ctx context.Context, object runtime.Object, o store.Store, _ link.I
 	}
 
 	if service.Spec.ExternalName == "" {
+		// Prefer EndpointSlices, but fall back to the legacy core v1
+		// Endpoints object if listing them fails (e.g. the EndpointSlice
+		// informer is unavailable or the API is not served).
 		endpointSlices, err := listEndpointSlicesForService(ctx, service, o)
-		if err != nil {
-			return ObjectStatus{}, errors.Wrapf(err, "list endpoint slices for service %s", service.Name)
-		}
 
-		if len(endpointSlices) > 0 {
+		if err == nil && len(endpointSlices) > 0 {
 			addressCount := 0
 
 			for _, endpointSlice := range endpointSlices {
 				for _, endpoint := range endpointSlice.Endpoints {
-					addressCount += len(endpoint.Addresses)
+					// Match core v1 Endpoints semantics: only ready
+					// endpoints count. A nil Ready condition is treated as
+					// ready, per EndpointSlice semantics.
+					if endpoint.Conditions.Ready == nil || *endpoint.Conditions.Ready {
+						addressCount += len(endpoint.Addresses)
+					}
 				}
 			}
 

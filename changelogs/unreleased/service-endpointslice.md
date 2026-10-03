@@ -1,1 +1,2 @@
-- Prefer `discovery.k8s.io/v1` EndpointSlices when rendering Service endpoints and computing Service status, falling back to the legacy core `v1` Endpoints object when no EndpointSlices exist for the Service.
+- Prefer `discovery.k8s.io/v1` EndpointSlices when rendering Service endpoints and computing Service status, falling back to the legacy core `v1` Endpoints object when no EndpointSlices exist for the Service or listing them fails.
+- Only ready EndpointSlice endpoints are counted and listed (`Ready == nil` is treated as ready), matching the core `v1` Endpoints semantics of using ready `subsets.Addresses` only.

@@ -7,6 +7,7 @@ package objectstatus
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	linkFake "github.com/vmware-tanzu/octant/internal/link/fake"
@@ -148,6 +149,122 @@ func Test_service(t *testing.T) {
 			expected: ObjectStatus{
 				NodeStatus: component.NodeStatusWarning,
 				Details:    []component.Component{component.NewText("Service has no endpoint addresses")},
+			},
+		},
+		{
+			name: "endpoint slices have only not ready endpoints",
+			init: func(t *testing.T, o *storefake.MockStore) runtime.Object {
+				notReady := false
+				slicesKey := store.Key{
+					Namespace:  "default",
+					APIVersion: "discovery.k8s.io/v1",
+					Kind:       "EndpointSlice",
+					Selector:   &labels.Set{"kubernetes.io/service-name": "stateful"},
+				}
+
+				slices := []runtime.Object{
+					&discoveryv1.EndpointSlice{
+						TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+						ObjectMeta: metav1.ObjectMeta{
+							Name:      "stateful-1",
+							Namespace: "default",
+						},
+						AddressType: discoveryv1.AddressTypeIPv4,
+						Endpoints: []discoveryv1.Endpoint{
+							{
+								Addresses:  []string{"10.1.85.145"},
+								Conditions: discoveryv1.EndpointConditions{Ready: &notReady},
+							},
+						},
+					},
+				}
+
+				o.EXPECT().List(gomock.Any(), gomock.Eq(slicesKey)).
+					Return(testutil.ToUnstructuredList(t, slices...), false, nil)
+
+				return testutil.LoadObjectFromFile(t, "service_ok.yaml")
+			},
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusWarning,
+				Details:    []component.Component{component.NewText("Service has no endpoint addresses")},
+			},
+		},
+		{
+			name: "endpoint slices mixed readiness",
+			init: func(t *testing.T, o *storefake.MockStore) runtime.Object {
+				ready := true
+				notReady := false
+				slicesKey := store.Key{
+					Namespace:  "default",
+					APIVersion: "discovery.k8s.io/v1",
+					Kind:       "EndpointSlice",
+					Selector:   &labels.Set{"kubernetes.io/service-name": "stateful"},
+				}
+
+				slices := []runtime.Object{
+					&discoveryv1.EndpointSlice{
+						TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+						ObjectMeta: metav1.ObjectMeta{
+							Name:      "stateful-1",
+							Namespace: "default",
+						},
+						AddressType: discoveryv1.AddressTypeIPv4,
+						Endpoints: []discoveryv1.Endpoint{
+							{
+								Addresses:  []string{"10.1.85.145"},
+								Conditions: discoveryv1.EndpointConditions{Ready: &ready},
+							},
+							{
+								Addresses:  []string{"10.1.85.146"},
+								Conditions: discoveryv1.EndpointConditions{Ready: &notReady},
+							},
+						},
+					},
+				}
+
+				o.EXPECT().List(gomock.Any(), gomock.Eq(slicesKey)).
+					Return(testutil.ToUnstructuredList(t, slices...), false, nil)
+
+				return testutil.LoadObjectFromFile(t, "service_ok.yaml")
+			},
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusOK,
+				Details:    []component.Component{component.NewText("Service is OK")},
+				Properties: []component.Property{{Label: "Type", Value: component.NewText("ClusterIP")},
+					{Label: "Session Affinity", Value: component.NewText("None")}},
+			},
+		},
+		{
+			name: "falls back to core endpoints when listing endpoint slices fails",
+			init: func(t *testing.T, o *storefake.MockStore) runtime.Object {
+				slicesKey := store.Key{
+					Namespace:  "default",
+					APIVersion: "discovery.k8s.io/v1",
+					Kind:       "EndpointSlice",
+					Selector:   &labels.Set{"kubernetes.io/service-name": "stateful"},
+				}
+				o.EXPECT().List(gomock.Any(), gomock.Eq(slicesKey)).
+					Return(nil, false, errors.New("endpoint slices unavailable"))
+
+				key := store.Key{
+					Namespace:  "default",
+					APIVersion: "v1",
+					Kind:       "Endpoints",
+					Name:       "stateful",
+				}
+
+				endpoints := testutil.LoadObjectFromFile(t, "endpoints_ok.yaml")
+
+				o.EXPECT().Get(gomock.Any(), gomock.Eq(key)).
+					Return(testutil.ToUnstructured(t, endpoints), nil)
+
+				return testutil.LoadObjectFromFile(t, "service_ok.yaml")
+			},
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusOK,
+				Details:    []component.Component{component.NewText("Service is OK")},
+				Properties: []component.Property{{Label: "Type", Value: component.NewText("ClusterIP")},
+					{Label: "Session Affinity", Value: component.NewText("None")}},
 			},
 		},
 		{

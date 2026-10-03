@@ -7,6 +7,7 @@ package printer
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -524,6 +525,7 @@ func Test_createServiceEndpointsView(t *testing.T) {
 		name      string
 		service   *corev1.Service
 		slices    []runtime.Object
+		listErr   error
 		endpoints *corev1.Endpoints
 		expected  *component.Table
 	}{
@@ -551,6 +553,81 @@ func Test_createServiceEndpointsView(t *testing.T) {
 					"Target":    ppod2,
 					"IP":        component.NewText("10.1.1.4"),
 					"Node Name": component.NewText(""),
+				},
+			),
+		},
+		{
+			name:    "endpoint slices with only not ready endpoints",
+			service: service,
+			slices: []runtime.Object{
+				&discoveryv1.EndpointSlice{
+					TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      "service-1",
+						Namespace: "default",
+						Labels:    map[string]string{"kubernetes.io/service-name": "service"},
+					},
+					AddressType: discoveryv1.AddressTypeIPv4,
+					Endpoints: []discoveryv1.Endpoint{
+						{
+							Addresses: []string{"10.1.1.1", "10.1.1.2"},
+							Conditions: discoveryv1.EndpointConditions{
+								Ready: boolPtr(false),
+							},
+						},
+					},
+				},
+			},
+			expected: tableWithRows(),
+		},
+		{
+			name:    "endpoint slices with mixed readiness",
+			service: service,
+			slices: []runtime.Object{
+				&discoveryv1.EndpointSlice{
+					TypeMeta: metav1.TypeMeta{APIVersion: "discovery.k8s.io/v1", Kind: "EndpointSlice"},
+					ObjectMeta: metav1.ObjectMeta{
+						Name:      "service-1",
+						Namespace: "default",
+						Labels:    map[string]string{"kubernetes.io/service-name": "service"},
+					},
+					AddressType: discoveryv1.AddressTypeIPv4,
+					Endpoints: []discoveryv1.Endpoint{
+						{
+							Addresses: []string{"10.1.1.1"},
+							TargetRef: &corev1.ObjectReference{
+								Kind:      "Pod",
+								Name:      "pod-1",
+								Namespace: "default",
+							},
+							NodeName:   &nodeName,
+							Conditions: discoveryv1.EndpointConditions{Ready: boolPtr(true)},
+						},
+						{
+							Addresses:  []string{"10.1.1.2"},
+							Conditions: discoveryv1.EndpointConditions{Ready: boolPtr(false)},
+						},
+					},
+				},
+			},
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
+				},
+			),
+		},
+		{
+			name:      "falls back to core endpoints when listing endpoint slices fails",
+			service:   service,
+			listErr:   errors.New("endpoint slices unavailable"),
+			endpoints: endpoints,
+			expected: tableWithRows(
+				component.TableRow{
+					"Target":    ppod1,
+					"IP":        component.NewText("10.1.1.1"),
+					"Node Name": component.NewText("node"),
 				},
 			),
 		},
@@ -612,9 +689,17 @@ func Test_createServiceEndpointsView(t *testing.T) {
 					Kind:       "EndpointSlice",
 					Selector:   &selector,
 				}
+				var listed *unstructured.UnstructuredList
+				var listErr error
+				if tc.listErr == nil {
+					listed = testutil.ToUnstructuredList(t, tc.slices...)
+				} else {
+					listErr = tc.listErr
+				}
+
 				tpo.objectStore.EXPECT().
 					List(gomock.Any(), gomock.Eq(slicesKey)).
-					Return(testutil.ToUnstructuredList(t, tc.slices...), false, nil)
+					Return(listed, false, listErr)
 
 				if len(tc.slices) == 0 {
 					key := store.Key{Namespace: "default", APIVersion: "v1", Kind: "Endpoints", Name: "service"}
@@ -700,6 +785,10 @@ func Test_describePort(t *testing.T) {
 			assert.Equal(t, tc.expected, got)
 		})
 	}
+}
+
+func boolPtr(b bool) *bool {
+	return &b
 }
 
 func toUnstructured(t *testing.T, object runtime.Object) *unstructured.Unstructured {

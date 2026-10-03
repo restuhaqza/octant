@@ -412,14 +412,21 @@ func createServiceEndpointsView(ctx context.Context, service *corev1.Service, op
 		return table, nil
 	}
 
+	// Prefer EndpointSlices, but fall back to the legacy core v1 Endpoints
+	// object if listing them fails (e.g. the EndpointSlice informer is
+	// unavailable or the API is not served).
 	endpointSlices, err := listEndpointSlicesForService(ctx, service, o)
-	if err != nil {
-		return nil, err
-	}
 
-	if len(endpointSlices) > 0 {
+	if err == nil && len(endpointSlices) > 0 {
 		for _, endpointSlice := range endpointSlices {
 			for _, endpoint := range endpointSlice.Endpoints {
+				// Match core v1 Endpoints semantics: only ready endpoints
+				// are listed. A nil Ready condition is treated as ready, per
+				// EndpointSlice semantics.
+				if endpoint.Conditions.Ready != nil && !*endpoint.Conditions.Ready {
+					continue
+				}
+
 				for _, address := range endpoint.Addresses {
 					row := component.TableRow{}
 
