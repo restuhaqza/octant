@@ -42,7 +42,7 @@ func Test_CronJobTrigger(t *testing.T) {
 
 	key := store.Key{
 		Namespace:  "namespace",
-		APIVersion: "v1beta1",
+		APIVersion: "batch/v1",
 		Kind:       "CronJob",
 		Name:       "cron",
 	}

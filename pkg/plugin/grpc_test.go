@@ -15,7 +15,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
 	"github.com/vmware-tanzu/octant/internal/octant"
@@ -532,9 +531,11 @@ func Test_GRPCServer_Print(t *testing.T) {
 			},
 		}
 
-		m, err := runtime.DefaultUnstructuredConverter.ToUnstructured(object)
+		objectData, err := json.Marshal(object)
 		require.NoError(t, err)
-		u := &unstructured.Unstructured{Object: m}
+
+		u := &unstructured.Unstructured{}
+		require.NoError(t, json.Unmarshal(objectData, &u.Object))
 
 		clientState := ocontext.ClientState{
 			ClientID:  "foo-client",
@@ -549,9 +550,6 @@ func Test_GRPCServer_Print(t *testing.T) {
 				assert.Equal(t, clientState, ps)
 			}).
 			Return(pr, nil)
-
-		objectData, err := json.Marshal(object)
-		require.NoError(t, err)
 
 		ctx := context.Background()
 		objectRequest := &dashboard.ObjectRequest{
@@ -595,9 +593,11 @@ func Test_GRPCServer_ObjectStatus(t *testing.T) {
 			ObjectStatus: status,
 		}
 
-		m, err := runtime.DefaultUnstructuredConverter.ToUnstructured(object)
+		objectData, err := json.Marshal(object)
 		require.NoError(t, err)
-		u := &unstructured.Unstructured{Object: m}
+
+		u := &unstructured.Unstructured{}
+		require.NoError(t, json.Unmarshal(objectData, &u.Object))
 
 		clientState := ocontext.ClientState{
 			ClientID:  "foo-client",
@@ -613,8 +613,6 @@ func Test_GRPCServer_ObjectStatus(t *testing.T) {
 			}).
 			Return(osr, nil)
 
-		objectData, err := json.Marshal(object)
-		require.NoError(t, err)
 		objectRequest := &dashboard.ObjectRequest{
 			Object:      objectData,
 			ClientState: clientStateData,

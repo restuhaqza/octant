@@ -118,7 +118,7 @@ func (tg *TSGen) Reflect(names []string) (*Model, error) {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		log.Printf(stderr.String())
+		log.Print(stderr.String())
 		return nil, fmt.Errorf("run reflect program: %w", err)
 	}
 
