@@ -1,0 +1,1 @@
+- Added a read-only Upgrade & Deprecation Scanner view that finds live objects using Kubernetes API versions removed or deprecated in a selectable target version, with object links to the replacement API, per-group counts, and API-group filtering.

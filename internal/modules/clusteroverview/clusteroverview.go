@@ -71,6 +71,12 @@ func New(ctx context.Context, options Options) (*ClusterOverview, error) {
 	for _, pf := range rootDescriber.PathFilters() {
 		pathMatcher.Register(ctx, pf)
 	}
+	// The upgrade scanner is not a child of rootDescriber: describer.Section
+	// calls Describe on every child, and we do not want to run the scan on the
+	// Cluster Overview landing page. Register its path filters directly.
+	for _, pf := range upgradeScannerDescriber.PathFilters() {
+		pathMatcher.Register(ctx, pf)
+	}
 
 	objectPathConfig := octant.ObjectPathConfig{
 		ModuleName:            "cluster-overview",
@@ -216,6 +222,7 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 			"Nodes":                        "nodes",
 			"Storage":                      "storage",
 			"Port Forwards":                "port-forward",
+			"Upgrade Scanner":              "upgrade-scanner",
 		},
 		EntriesFuncs: map[string]octant.EntriesFunc{
 			"Cluster Overview":             nil,
@@ -230,6 +237,7 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 			"Nodes":                        nil,
 			"Storage":                      storageEntries,
 			"Port Forwards":                nil,
+			"Upgrade Scanner":              nil,
 		},
 		IconMap: map[string]string{
 			"Cluster Overview":             icon.Cluster,
@@ -244,6 +252,7 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 			"Nodes":                        icon.Nodes,
 			"Storage":                      icon.ConfigAndStorage,
 			"Port Forwards":                icon.PortForwards,
+			"Upgrade Scanner":              icon.Cluster,
 		},
 		Order: []string{
 			"Cluster Overview",
@@ -258,6 +267,7 @@ func (co *ClusterOverview) Navigation(ctx context.Context, _ string, root string
 			"Nodes",
 			"Storage",
 			"Port Forwards",
+			"Upgrade Scanner",
 		},
 	}
 

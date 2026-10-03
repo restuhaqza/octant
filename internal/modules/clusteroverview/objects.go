@@ -19,6 +19,7 @@ import (
 	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 
 	"github.com/vmware-tanzu/octant/internal/describer"
+	"github.com/vmware-tanzu/octant/internal/upgradescanner"
 	"github.com/vmware-tanzu/octant/pkg/icon"
 	"github.com/vmware-tanzu/octant/pkg/store"
 )
@@ -257,6 +258,8 @@ var (
 	})
 
 	portForwardDescriber = NewPortForwardListDescriber()
+
+	upgradeScannerDescriber = upgradescanner.NewDescriber()
 
 	apiServerDescriber = describer.NewSection(
 		"/api-server",
