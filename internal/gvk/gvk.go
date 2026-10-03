@@ -20,18 +20,30 @@ var (
 	ClusterRole                    = schema.GroupVersionKind{Group: "rbac.authorization.k8s.io", Version: "v1", Kind: "ClusterRole"}
 	ConfigMap                      = schema.GroupVersionKind{Version: "v1", Kind: "ConfigMap"}
 	CronJob                        = schema.GroupVersionKind{Group: "batch", Version: "v1", Kind: "CronJob"}
+	CSIDriver                      = schema.GroupVersionKind{Group: "storage.k8s.io", Version: "v1", Kind: "CSIDriver"}
+	CSINode                        = schema.GroupVersionKind{Group: "storage.k8s.io", Version: "v1", Kind: "CSINode"}
+	CSIStorageCapacity             = schema.GroupVersionKind{Group: "storage.k8s.io", Version: "v1", Kind: "CSIStorageCapacity"}
 	CustomResourceDefinition       = schema.GroupVersionKind{Group: "apiextensions.k8s.io", Version: "v1", Kind: "CustomResourceDefinition"}
 	DaemonSet                      = schema.GroupVersionKind{Group: "apps", Version: "v1", Kind: "DaemonSet"}
 	Deployment                     = schema.GroupVersionKind{Group: "apps", Version: "v1", Kind: "Deployment"}
 	Event                          = schema.GroupVersionKind{Version: "v1", Kind: "Event"}
+	FlowSchema                     = schema.GroupVersionKind{Group: "flowcontrol.apiserver.k8s.io", Version: "v1", Kind: "FlowSchema"}
 	HorizontalPodAutoscaler        = schema.GroupVersionKind{Group: "autoscaling", Version: "v1", Kind: "HorizontalPodAutoscaler"}
 	HorizontalPodAutoscalerV2      = schema.GroupVersionKind{Group: "autoscaling", Version: "v2", Kind: "HorizontalPodAutoscaler"}
 	Ingress                        = schema.GroupVersionKind{Group: "networking.k8s.io", Version: "v1", Kind: "Ingress"}
+	IngressClass                   = schema.GroupVersionKind{Group: "networking.k8s.io", Version: "v1", Kind: "IngressClass"}
 	Job                            = schema.GroupVersionKind{Group: "batch", Version: "v1", Kind: "Job"}
+	Lease                          = schema.GroupVersionKind{Group: "coordination.k8s.io", Version: "v1", Kind: "Lease"}
+	LimitRange                     = schema.GroupVersionKind{Version: "v1", Kind: "LimitRange"}
 	MutatingWebhookConfiguration   = schema.GroupVersionKind{Group: "admissionregistration.k8s.io", Version: "v1", Kind: "MutatingWebhookConfiguration"}
 	Node                           = schema.GroupVersionKind{Version: "v1", Kind: "Node"}
 	Namespace                      = schema.GroupVersionKind{Version: "v1", Kind: "Namespace"}
 	NetworkPolicy                  = schema.GroupVersionKind{Group: "networking.k8s.io", Version: "v1", Kind: "NetworkPolicy"}
+	PodDisruptionBudget            = schema.GroupVersionKind{Group: "policy", Version: "v1", Kind: "PodDisruptionBudget"}
+	PriorityClass                  = schema.GroupVersionKind{Group: "scheduling.k8s.io", Version: "v1", Kind: "PriorityClass"}
+	PriorityLevelConfiguration     = schema.GroupVersionKind{Group: "flowcontrol.apiserver.k8s.io", Version: "v1", Kind: "PriorityLevelConfiguration"}
+	ResourceQuota                  = schema.GroupVersionKind{Version: "v1", Kind: "ResourceQuota"}
+	RuntimeClass                   = schema.GroupVersionKind{Group: "node.k8s.io", Version: "v1", Kind: "RuntimeClass"}
 	ServiceAccount                 = schema.GroupVersionKind{Version: "v1", Kind: "ServiceAccount"}
 	Secret                         = schema.GroupVersionKind{Version: "v1", Kind: "Secret"}
 	Service                        = schema.GroupVersionKind{Version: "v1", Kind: "Service"}
@@ -43,7 +55,9 @@ var (
 	StatefulSet                    = schema.GroupVersionKind{Group: "apps", Version: "v1", Kind: "StatefulSet"}
 	RoleBinding                    = schema.GroupVersionKind{Group: "rbac.authorization.k8s.io", Version: "v1", Kind: "RoleBinding"}
 	Role                           = schema.GroupVersionKind{Group: "rbac.authorization.k8s.io", Version: "v1", Kind: "Role"}
+	ValidatingAdmissionPolicy      = schema.GroupVersionKind{Group: "admissionregistration.k8s.io", Version: "v1", Kind: "ValidatingAdmissionPolicy"}
 	ValidatingWebhookConfiguration = schema.GroupVersionKind{Group: "admissionregistration.k8s.io", Version: "v1", Kind: "ValidatingWebhookConfiguration"}
+	VolumeAttachment               = schema.GroupVersionKind{Group: "storage.k8s.io", Version: "v1", Kind: "VolumeAttachment"}
 	StorageClass                   = schema.GroupVersionKind{Group: "storage.k8s.io", Version: "v1", Kind: "StorageClass"}
 )
 

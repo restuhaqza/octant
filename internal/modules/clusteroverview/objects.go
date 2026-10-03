@@ -8,7 +8,11 @@ package clusteroverview
 import (
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	corev1 "k8s.io/api/core/v1"
+	flowcontrolv1 "k8s.io/api/flowcontrol/v1"
+	networkingv1 "k8s.io/api/networking/v1"
+	nodev1 "k8s.io/api/node/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	schedulingv1 "k8s.io/api/scheduling/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	apiextv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
@@ -119,11 +123,125 @@ var (
 		IconName:       icon.ClusterOverviewStorageClass,
 	})
 
+	storageCSIDrivers = describer.NewResource(describer.ResourceOptions{
+		Path:           "/storage/csi-drivers",
+		ObjectStoreKey: store.Key{APIVersion: "storage.k8s.io/v1", Kind: "CSIDriver"},
+		ListType:       &storagev1.CSIDriverList{},
+		ObjectType:     &storagev1.CSIDriver{},
+		Titles:         describer.ResourceTitle{List: "CSI Drivers", Object: "CSI Driver"},
+		ClusterWide:    true,
+		IconName:       icon.ConfigAndStorage,
+	})
+
+	storageCSINodes = describer.NewResource(describer.ResourceOptions{
+		Path:           "/storage/csi-nodes",
+		ObjectStoreKey: store.Key{APIVersion: "storage.k8s.io/v1", Kind: "CSINode"},
+		ListType:       &storagev1.CSINodeList{},
+		ObjectType:     &storagev1.CSINode{},
+		Titles:         describer.ResourceTitle{List: "CSI Nodes", Object: "CSI Node"},
+		ClusterWide:    true,
+		IconName:       icon.ConfigAndStorage,
+	})
+
+	storageVolumeAttachments = describer.NewResource(describer.ResourceOptions{
+		Path:           "/storage/volume-attachments",
+		ObjectStoreKey: store.Key{APIVersion: "storage.k8s.io/v1", Kind: "VolumeAttachment"},
+		ListType:       &storagev1.VolumeAttachmentList{},
+		ObjectType:     &storagev1.VolumeAttachment{},
+		Titles:         describer.ResourceTitle{List: "Volume Attachments", Object: "Volume Attachment"},
+		ClusterWide:    true,
+		IconName:       icon.ConfigAndStorage,
+	})
+
 	storageDescriber = describer.NewSection(
 		"/storage",
 		"Storage",
 		storagePersistentVolumeDescriber,
 		storageStorageClassDescriber,
+		storageCSIDrivers,
+		storageCSINodes,
+		storageVolumeAttachments,
+	)
+
+	workloadsPriorityClasses = describer.NewResource(describer.ResourceOptions{
+		Path:           "/workloads/priority-classes",
+		ObjectStoreKey: store.Key{APIVersion: "scheduling.k8s.io/v1", Kind: "PriorityClass"},
+		ListType:       &schedulingv1.PriorityClassList{},
+		ObjectType:     &schedulingv1.PriorityClass{},
+		Titles:         describer.ResourceTitle{List: "Priority Classes", Object: "Priority Class"},
+		ClusterWide:    true,
+		IconName:       icon.Workloads,
+	})
+
+	workloadsRuntimeClasses = describer.NewResource(describer.ResourceOptions{
+		Path:           "/workloads/runtime-classes",
+		ObjectStoreKey: store.Key{APIVersion: "node.k8s.io/v1", Kind: "RuntimeClass"},
+		ListType:       &nodev1.RuntimeClassList{},
+		ObjectType:     &nodev1.RuntimeClass{},
+		Titles:         describer.ResourceTitle{List: "Runtime Classes", Object: "Runtime Class"},
+		ClusterWide:    true,
+		IconName:       icon.Workloads,
+	})
+
+	workloadsDescriber = describer.NewSection(
+		"/workloads",
+		"Workloads",
+		workloadsPriorityClasses,
+		workloadsRuntimeClasses,
+	)
+
+	dlbIngressClasses = describer.NewResource(describer.ResourceOptions{
+		Path:           "/discovery-and-load-balancing/ingress-classes",
+		ObjectStoreKey: store.Key{APIVersion: "networking.k8s.io/v1", Kind: "IngressClass"},
+		ListType:       &networkingv1.IngressClassList{},
+		ObjectType:     &networkingv1.IngressClass{},
+		Titles:         describer.ResourceTitle{List: "Ingress Classes", Object: "Ingress Class"},
+		ClusterWide:    true,
+		IconName:       icon.DiscoveryAndLoadBalancing,
+	})
+
+	dlbDescriber = describer.NewSection(
+		"/discovery-and-load-balancing",
+		"Discovery and Load Balancing",
+		dlbIngressClasses,
+	)
+
+	clusterFlowSchemas = describer.NewResource(describer.ResourceOptions{
+		Path:           "/cluster/flow-schemas",
+		ObjectStoreKey: store.Key{APIVersion: "flowcontrol.apiserver.k8s.io/v1", Kind: "FlowSchema"},
+		ListType:       &flowcontrolv1.FlowSchemaList{},
+		ObjectType:     &flowcontrolv1.FlowSchema{},
+		Titles:         describer.ResourceTitle{List: "Flow Schemas", Object: "Flow Schema"},
+		ClusterWide:    true,
+		IconName:       icon.Cluster,
+	})
+
+	clusterPriorityLevelConfigurations = describer.NewResource(describer.ResourceOptions{
+		Path:           "/cluster/priority-level-configurations",
+		ObjectStoreKey: store.Key{APIVersion: "flowcontrol.apiserver.k8s.io/v1", Kind: "PriorityLevelConfiguration"},
+		ListType:       &flowcontrolv1.PriorityLevelConfigurationList{},
+		ObjectType:     &flowcontrolv1.PriorityLevelConfiguration{},
+		Titles:         describer.ResourceTitle{List: "Priority Level Configurations", Object: "Priority Level Configuration"},
+		ClusterWide:    true,
+		IconName:       icon.Cluster,
+	})
+
+	clusterValidatingAdmissionPolicies = describer.NewResource(describer.ResourceOptions{
+		Path:           "/cluster/validating-admission-policies",
+		ObjectStoreKey: store.Key{APIVersion: "admissionregistration.k8s.io/v1", Kind: "ValidatingAdmissionPolicy"},
+		ListType:       &admissionregistrationv1.ValidatingAdmissionPolicyList{},
+		ObjectType:     &admissionregistrationv1.ValidatingAdmissionPolicy{},
+		Titles:         describer.ResourceTitle{List: "Validating Admission Policies", Object: "Validating Admission Policy"},
+		ClusterWide:    true,
+		IconName:       icon.Webhooks,
+	})
+
+	clusterDescriber = describer.NewSection(
+		"/cluster",
+		"Cluster",
+		clusterFlowSchemas,
+		clusterPriorityLevelConfigurations,
+		clusterValidatingAdmissionPolicies,
 	)
 
 	namespacesDescriber = describer.NewResource(describer.ResourceOptions{
@@ -163,6 +281,9 @@ var (
 		crdsDescriber,
 		rbacDescriber,
 		webhooksDescriber,
+		workloadsDescriber,
+		dlbDescriber,
+		clusterDescriber,
 		nodesDescriber,
 		storageDescriber,
 		portForwardDescriber,
