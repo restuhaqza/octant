@@ -1,0 +1,1 @@
+- Added `autoscaling/v2` HorizontalPodAutoscaler support (list, detail, status, metrics, conditions, and configuration including native scale behavior) and made it the canonical HPA version, while keeping the existing `autoscaling/v1` handlers working.

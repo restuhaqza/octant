@@ -11,6 +11,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/vmware-tanzu/octant/internal/gvk"
 )
 
 func Test_crdPath(t *testing.T) {
@@ -38,6 +40,22 @@ func Test_gvk_path(t *testing.T) {
 			kind:       "Pod",
 			objectName: "pod",
 			expected:   path.Join("/overview", "namespace", "default", "workloads", "pods", "pod"),
+		},
+		{
+			name:       "horizontal pod autoscaler v1",
+			namespace:  "default",
+			apiVersion: "autoscaling/v1",
+			kind:       "HorizontalPodAutoscaler",
+			objectName: "hpa",
+			expected:   path.Join("/overview", "namespace", "default", "discovery-and-load-balancing", "horizontal-pod-autoscalers", "hpa"),
+		},
+		{
+			name:       "horizontal pod autoscaler v2",
+			namespace:  "default",
+			apiVersion: "autoscaling/v2",
+			kind:       "HorizontalPodAutoscaler",
+			objectName: "hpa",
+			expected:   path.Join("/overview", "namespace", "default", "discovery-and-load-balancing", "horizontal-pod-autoscalers", "hpa"),
 		},
 		{
 			name:       "no namespace",
@@ -68,4 +86,10 @@ func Test_gvk_path(t *testing.T) {
 			assert.Equal(t, test.expected, got)
 		})
 	}
+}
+
+func Test_gvkReversePath(t *testing.T) {
+	got, err := gvkReversePath("overview/namespace/default/discovery-and-load-balancing/horizontal-pod-autoscalers", "default")
+	require.NoError(t, err)
+	assert.Equal(t, gvk.HorizontalPodAutoscalerV2, got)
 }
