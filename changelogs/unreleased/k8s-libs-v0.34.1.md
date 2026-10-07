@@ -1,1 +1,0 @@
-- Bumped Kubernetes client libraries (`k8s.io/api`, `k8s.io/apimachinery`, `k8s.io/client-go`, `k8s.io/apiextensions-apiserver`, `k8s.io/kube-aggregator`, `k8s.io/metrics`) to `v0.34.1` and the Go toolchain to 1.24.

@@ -1,1 +1,0 @@
-- Migrated CronJob to the `batch/v1` API group and removed use of the removed `extensions/v1beta1` Deployment and ReplicaSet groups.

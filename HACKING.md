@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Go 1.15 or above](https://golang.org/dl/)
+* [Go 1.24 or above](https://golang.org/dl/)
 * [node 10.15.0 or above](https://nodejs.org/en/)
 * [npm 6.4.1 or above](https://www.npmjs.com/get-npm)
 * [mockgen](https://github.com/golang/mock) - generating go files used for testing
@@ -10,7 +10,7 @@
 
 ## Quick Start
 
-    git clone git@github.com:vmware-tanzu/octant.git
+    git clone git@github.com:restuhaqza/octant.git
     cd octant
     go run build.go go-install      # install Go dependencies.
     export NG_CLI_ANALYTICS=false   # if you want to disable Angular CLI analytics or

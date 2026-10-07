@@ -2,17 +2,21 @@
 
 ## Reporting a Vulnerability
 
-How to Report a Vulnerability
-VMware encourages users who become aware of a security vulnerability in VMware products to contact VMware with details of the vulnerability. VMware has established an email address that should be used for reporting a vulnerability. Please send descriptions of any vulnerabilities found to security@vmware.com. Please include details on the software and hardware configuration of your system so that we can duplicate the issue being reported.
+This project is a community-maintained fork of Octant. Please report security vulnerabilities
+privately to the maintainer rather than in a public issue.
 
- 
+The preferred way to report a vulnerability is through GitHub's private vulnerability reporting
+for this repository:
 
-Note: We encourage use of encrypted email. Our public PGP key is found at https://kb.vmware.com/kb/1055.
+1. Open the [Security tab](https://github.com/restuhaqza/octant/security).
+2. Click **Report a vulnerability**.
+3. Describe the issue, including the affected version and steps to reproduce.
 
- 
+Please include details on the software configuration of your system so we can reproduce the issue.
+We review reports and coordinate fixes and disclosure on a best-effort basis, and ask that you give
+us a reasonable opportunity to investigate and confirm a suspected vulnerability before making it
+public.
 
-VMware hopes that users encountering a new vulnerability will contact us privately as it is in the best interests of our customers that VMware has an opportunity to investigate and confirm a suspected vulnerability before it becomes public knowledge.
-
- 
-
-In the case of vulnerabilities found in third-party software components used in VMware products, please also notify VMware as described above.
+> **Note:** The archived upstream project (`vmware-tanzu/octant`) directed reports to VMware at
+> `security@vmware.com`. That address belongs to the upstream project and is not the contact for
+> this fork.

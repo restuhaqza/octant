@@ -1,5 +1,0 @@
-- Added Gateway API support (`gateway.networking.k8s.io/v1`): Gateways, HTTPRoutes, GRPCRoutes, and (in the cluster overview) GatewayClasses.
-- The Gateway API navigation section and cluster overview entry are only shown when the Gateway API is served by the cluster, and are hidden otherwise.
-- Added list and detail views for Gateways, HTTPRoutes, GRPCRoutes, and GatewayClasses, including status conditions and route parent/backend summaries.
-- Added object status for Gateways and HTTPRoutes based on their status conditions and parent statuses.
-- Added resource viewer edges: HTTPRoutes/GRPCRoutes link to their backend Services and parent Gateways; Gateways link to their GatewayClass; GatewayClasses link to the Gateways that reference them.

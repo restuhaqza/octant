@@ -5,16 +5,16 @@
 We prefer asynchronous to synchronous communication when ever possible. This ensures that all interested parties are able
 to find relevant information even when ideas and information are being exchanged across many timezones. When ever
 synchronous communication is happening, we encourage folks to make best efforts to transfer that information to an
-issue if relevant or send it to the project-octant group. This could be as plain text notes or a link to a recording
-or markdown document for example.
+issue if relevant. This could be as plain text notes or a link to a recording or markdown document for example.
 
-* [project-octant](https://groups.google.com/forum/#!forum/project-octant)
-* [#octant Slack](https://kubernetes.slack.com/app_redirect?channel=CM37M9FCG)
+This fork uses GitHub for all project communication:
 
-### Weekly Community Meeting
-We have a weekly Octant community meeting that is held live (recordings uploaded later). We highly encourage folks
-who are interested in contributing to Octant to attend these meetings. More details on the
- [Octant community page](https://octant.dev/community/).
+* [GitHub issues](https://github.com/restuhaqza/octant/issues)
+* [GitHub discussions](https://github.com/restuhaqza/octant/discussions)
+
+The original upstream project also had a `project-octant` Google group, a `#octant` Slack channel,
+and a weekly community meeting. Those belong to the archived upstream project and are not run by this
+fork; see [Relationship to upstream](README.md#relationship-to-upstream).
 
 ## Tools
 

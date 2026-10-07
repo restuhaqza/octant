@@ -1,13 +1,18 @@
-# VMware has ended active development of this project, this repository will no longer be updated.
+# Octant
 
 ![Logo][octant-logo]
 
-[![Build Status](https://github.com/vmware-tanzu/octant/workflows/preflight-checks/badge.svg)](https://github.com/vmware-tanzu/octant/workflows/preflight-checks/badge.svg)
-![GitHub release](https://img.shields.io/github/release/vmware-tanzu/octant.svg)
+[![Build Status](https://github.com/restuhaqza/octant/actions/workflows/preflight-checks.yaml/badge.svg)](https://github.com/restuhaqza/octant/actions/workflows/preflight-checks.yaml)
+![GitHub release](https://img.shields.io/github/release/restuhaqza/octant.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4142/badge)](https://bestpractices.coreinfrastructure.org/projects/4142)
 
 > A highly extensible platform for developers to better understand the complexity of Kubernetes clusters.
+
+`restuhaqza/octant` is a **community-maintained fork** of Octant. The original project was developed by
+VMware and is now archived at [vmware-tanzu/octant](https://github.com/vmware-tanzu/octant) (final
+upstream release: v0.25.1). This fork continues development from that codebase. It keeps the original
+Apache-2.0 license and credits the original Octant authors — see
+[Relationship to upstream](#relationship-to-upstream).
 
 Octant is a tool for developers to understand how applications run on a Kubernetes cluster. It aims to be part of the developer's toolkit for gaining insight and approaching complexity found in Kubernetes. Octant offers a combination of introspective tooling, cluster navigation, and object management along with a plugin system to further extend its capabilities.
 
@@ -47,72 +52,54 @@ Octant is a tool for developers to understand how applications run on a Kubernet
 
 ## Installation
 
-### Package (Linux only)
-
-1. Download the `.deb` or `.rpm` from the [releases page](https://github.com/vmware-tanzu/octant/releases).
-
-2. Install with either `dpkg -i` or `rpm -i` respectively.
-
-###  Windows
-
-#### Chocolatey
-
-1. Install using chocolatey with the following one-liner:
-
-   ```sh
-   choco install octant --confirm
-   ```
-
-#### Scoop
-
-1. Add the [extras](https://github.com/lukesampson/scoop-extras) bucket.
-
-   ```sh
-   scoop bucket add extras
-   ```
-
-2. Install using scoop.
-
-   ```sh
-   scoop install octant
-   ```
-
-### macOS
-
-#### Homebrew
-
-1. Install using Homebrew with the following one-liner:
-
-   ```sh
-   brew install octant
-   ```
-
 ### Download a Pre-built Binary (Linux, macOS, Windows)
 
-1. Open the [releases page](https://github.com/vmware-tanzu/octant/releases) from a browser and download the latest tarball or zip file.
+Pre-built binaries for this fork are published on the
+[releases page](https://github.com/restuhaqza/octant/releases). Archives are provided for
+`Linux`, `macOS`, and `Windows` on `64bit`, `ARM`, and `ARM64`.
 
-2. Extract the tarball or zip where `X.Y` is the release version:
+1. Download the archive for your platform from the
+   [latest release](https://github.com/restuhaqza/octant/releases/latest).
+
+2. Extract the tarball or zip, where `X.Y` is the release version:
 
     ```sh
-    $ tar -xzvf ~/Downloads/octant_0.X.Y_Linux-64bit.tar.gz
-    octant_0.X.Y_Linux-64bit/README.md
-    octant_0.X.Y_Linux-64bit/octant
+    $ tar -xzvf ~/Downloads/octant_0.X.Y_macOS-64bit.tar.gz
+    octant_0.X.Y_macOS-64bit/README.md
+    octant_0.X.Y_macOS-64bit/octant
     ```
 
 3. Verify it runs:
 
     ```sh
-    $ ./octant_0.X.Y_Linux-64bit/octant version
+    $ ./octant_0.X.Y_macOS-64bit/octant version
     ```
+
+### Build from Source
+
+Requirements: [Go 1.24+](https://golang.org/dl/) and [Node.js](https://nodejs.org/en/).
+
+```sh
+git clone https://github.com/restuhaqza/octant.git
+cd octant
+go run build.go go-install   # install Go dependencies
+go run build.go ci-quick     # build UI, generate UI files, and create the octant binary
+./build/octant               # run the binary you just built
+```
+
+See the [hacking guide](HACKING.md) for the full development setup.
+
+> **Package managers:** `brew install octant`, `choco install octant`, and `scoop install octant`
+> still resolve to the archived upstream project and will install the old v0.25.x build. Use the
+> release binaries above (or build from source) to run this fork.
 
 ## Nightly Builds
 
-Nightly builds of Octant are available for download.
-
-Please note that nightly builds maybe less stable than our tagged releases and are intended to allow early access to
-preview upcoming features and for plugin authors who want access to the latest plugin APIs.
-
-[Browse nightly builds](https://console.cloud.google.com/storage/browser/octant-nightlies)
+Releases of this fork are published as versioned binaries on the
+[releases page](https://github.com/restuhaqza/octant/releases). The upstream project previously
+published nightly builds to a Google Cloud Storage bucket; that pipeline depended on upstream
+infrastructure and is no longer maintained, so nightly builds are not currently produced here.
+Use the latest tagged release instead.
 
 ## Getting Started
 
@@ -126,7 +113,7 @@ Octant should immediately launch your default web browser on `127.0.0.1:7777`.
 
 Octant uses the default web browser on the system to act as the UI client. In the future Octant will ship with a UI.
 
-For setting extra configuration such as what kubeconfig or context to use at startup, refer to the [documentation](https://reference.octant.dev/).
+For setting extra configuration such as what kubeconfig or context to use at startup, refer to the upstream [documentation](https://reference.octant.dev/) (still valid for the plugin API).
 
 ## Supported Versions
 
@@ -142,7 +129,7 @@ Major releases contain breaking changes that are not guaranteed to be backwards 
 
 Version of Octant are compiled against a version of client-go.
 
-Octant follows an `n±1` policy for versions of Kubernetes similar to kubectl. For example, Octant `0.16.0` uses the Kubernetes 1.19 client. So version `0.16.0` can be used with Kubernetes 1.18, 1.19, and 1.20.
+Octant follows an `n±1` policy for versions of Kubernetes similar to kubectl. For example, Octant `0.26.0` uses the Kubernetes 1.34 client. So version `0.26.0` can be used with Kubernetes 1.33, 1.34, and 1.35.
 
 ## Plugins
 
@@ -156,12 +143,29 @@ Documentation for plugin components can be found in the [Plugins section](https:
 
 ## Discussion
 
-Feature requests, bug reports, and enhancements are welcome. Contributors, maintainers, and users are encouraged to collaborate through these communication channels:
+Feature requests, bug reports, and enhancements for this fork are welcome.
 
- - [Kubernetes Slack](http://slack.k8s.io/) in the [#octant](https://kubernetes.slack.com/app_redirect?channel=CM37M9FCG) channel
- - [Twitter](https://twitter.com/projectoctant)
- - [Google group](https://groups.google.com/forum/#!forum/project-octant/)
- - [GitHub issues](https://github.com/vmware-tanzu/octant/issues)
+ - [GitHub issues](https://github.com/restuhaqza/octant/issues) — report bugs or request features here
+ - [GitHub discussions](https://github.com/restuhaqza/octant/discussions) — for questions and longer conversations
+
+The upstream project also used Kubernetes Slack ([#octant](https://kubernetes.slack.com/app_redirect?channel=CM37M9FCG)), a Google group, and Twitter ([@projectoctant](https://twitter.com/projectoctant)); those channels are associated with the archived upstream project and may be inactive.
+
+## Relationship to upstream
+
+This repository is a fork of [vmware-tanzu/octant](https://github.com/vmware-tanzu/octant). VMware
+[archived the original project](https://github.com/vmware-tanzu/octant) after the v0.25.1 release;
+this fork continues from that codebase under the same [Apache-2.0 license](LICENSE) and retains the
+original copyright and NOTICE attribution.
+
+What that means in practice:
+
+* Development and releases happen here, at [restuhaqza/octant](https://github.com/restuhaqza/octant).
+* The Go module path remains `github.com/vmware-tanzu/octant` for compatibility with existing plugin
+  imports; this is intentional and not an indication that upstream is active.
+* Historical changelogs under [`changelogs/`](changelogs/) and blog posts under [`site/`](site/)
+  reference the original project and are preserved as-is for historical accuracy.
+* Plugin API documentation at [reference.octant.dev](https://reference.octant.dev/) is the upstream
+  resource and remains the reference for the plugin API this fork implements.
 
 ## Contributing
 
