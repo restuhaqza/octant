@@ -16,15 +16,24 @@
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
-        "prettier/prettier": "off",
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/directive-selector": "off",
+        "@angular-eslint/no-host-metadata-property": "off",
+        "@angular-eslint/no-output-on-prefix": "off",
+        "@angular-eslint/no-output-native": "off",
+        "@angular-eslint/no-empty-lifecycle-method": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/consistent-type-assertions": "off",
-        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/triple-slash-reference": "off",
         "no-empty": "off"
       }
     },
@@ -35,7 +44,9 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "@angular-eslint/template/eqeqeq": "off"
+      }
     }
   ]
 }
