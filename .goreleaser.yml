@@ -24,9 +24,9 @@ nfpms:
     formats:
       - deb
       - rpm
-    vendor: "VMware"
-    homepage: "https://github.com/vmware-tanzu/octant"
-    maintainer: Octant Maintainers <project-octant@googlegroups.com>
+    vendor: "restuhaqza"
+    homepage: "https://github.com/restuhaqza/octant"
+    maintainer: Restu Muzakir <hi@restuhaqza.dev>
     description: "A highly extensible platform for developers to better understand the complexity of Kubernetes clusters"
     license: "Apache 2.0"
     file_name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"

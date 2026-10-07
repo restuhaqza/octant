@@ -1,15 +1,16 @@
 # See the OWNERS docs at https://go.k8s.io/owners
 
 approvers:
+    - restuhaqza
+
+emeritus_approvers:
     - bryanl
     - GuessWhoSamFoo
     - lenriquez
-    - mklanjsek 
+    - mklanjsek
     - scothis
     - xtreme-vikram-yadav
     - wwitzel3
-
-emeritus_approvers:
     - ipsi
     - mdaverde
     - nanaasiedu

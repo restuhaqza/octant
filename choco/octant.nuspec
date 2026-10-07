@@ -3,21 +3,21 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>octant</id>
-    <version>0.25.1</version>
-    <owners>VMware</owners>
+    <version>0.26.0</version>
+    <owners>restuhaqza</owners>
     <title>Octant</title>
-    <authors>VMware Tanzu</authors>
-    <projectUrl>https://github.com/vmware-tanzu/octant</projectUrl>
-    <packageSourceUrl>https://github.com/vmware-tanzu/octant/blob/master/choco</packageSourceUrl>
+    <authors>The Octant contributors</authors>
+    <projectUrl>https://github.com/restuhaqza/octant</projectUrl>
+    <packageSourceUrl>https://github.com/restuhaqza/octant/tree/master/choco</packageSourceUrl>
     <!-- TODO:
     <iconUrl></iconUrl>
     -->
-    <licenseUrl>https://github.com/vmware-tanzu/octant/blob/master/LICENSE</licenseUrl>
+    <licenseUrl>https://github.com/restuhaqza/octant/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/vmware-tanzu/octant</projectSourceUrl>
-    <docsUrl>https://octant.dev/docs</docsUrl>
-    <mailingListUrl>https://groups.google.com/group/project-octant</mailingListUrl>
-    <bugTrackerUrl>https://github.com/vmware-tanzu/octant/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/restuhaqza/octant</projectSourceUrl>
+    <docsUrl>https://reference.octant.dev/</docsUrl>
+    <mailingListUrl>https://github.com/restuhaqza/octant/discussions</mailingListUrl>
+    <bugTrackerUrl>https://github.com/restuhaqza/octant/issues</bugTrackerUrl>
     <tags>octant kubernetes kubectl heptio dashboard pod tanzu</tags>
     <summary>A highly extensible platform for developers to better understand the complexity of Kubernetes clusters.
 </summary>
@@ -52,7 +52,7 @@ Easily change between namespaces or contexts across different clusters. Multiple
 #### Plugin System
 
 Highly extensible plugin system for users to provide additional functionality through gRPC. Plugin authors can add components on top of existing views.]]></description>
-    <releaseNotes>Release notes are available at https://github.com/vmware-tanzu/octant/releases</releaseNotes>
+    <releaseNotes>Release notes are available at https://github.com/restuhaqza/octant/releases</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

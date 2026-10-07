@@ -111,7 +111,7 @@ Start running Octant:
 
 Octant should immediately launch your default web browser on `127.0.0.1:7777`.
 
-Octant uses the default web browser on the system to act as the UI client. In the future Octant will ship with a UI.
+Octant uses the default web browser on the system to act as the UI client.
 
 For setting extra configuration such as what kubeconfig or context to use at startup, refer to the upstream [documentation](https://reference.octant.dev/) (still valid for the plugin API).
 

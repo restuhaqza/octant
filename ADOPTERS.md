@@ -1,4 +1,9 @@
 # Octant Adopters
+
+> **Note:** This list was inherited from the original (now archived) upstream project and has not
+> been re-verified for this fork. Entries reflect organizations that publicly adopted Octant while
+> upstream development was active.
+
 <a href="https://www.terasky.com" border="0" target="_blank"><img alt="terasky.com" src="site/themes/octant/static/img/adopters/TeraSky-Color.png" height="50"></a>&nbsp; &nbsp; &nbsp; 
 
 

@@ -1,5 +1,5 @@
 {
-  "appId": "com.vmware.tanzu.octant",
+  "appId": "io.github.restuhaqza.octant",
   "productName": "Octant",
   "directories": {
     "output": "release/"

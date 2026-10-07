@@ -1,15 +1,15 @@
 {
   "name": "octant",
-  "description": "Octant is an extensible platform that provides modules that help developers better understand their Kuberenetes resources.",
-  "author": "The Octant Team",
-  "version": "0.25.1",
-  "homepage": "https://octant.dev",
+  "description": "Octant is an extensible platform that provides modules that help developers better understand their Kubernetes resources.",
+  "author": "The Octant contributors",
+  "version": "0.26.0",
+  "homepage": "https://github.com/restuhaqza/octant",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vmware-tanzu/octant.git"
+    "url": "git+https://github.com/restuhaqza/octant.git"
   },
   "bugs": {
-    "url": "https://github.com/vmware-tanzu/octant/issues"
+    "url": "https://github.com/restuhaqza/octant/issues"
   },
   "main": "main.js",
   "scripts": {
