@@ -87,8 +87,12 @@ export class ContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionPreferencesOpened.unsubscribe();
-    this.localKubeConfigPath.unsubscribe();
+    if (this.subscriptionPreferencesOpened) {
+      this.subscriptionPreferencesOpened.unsubscribe();
+    }
+    if (this.localKubeConfigPath) {
+      this.localKubeConfigPath.unsubscribe();
+    }
   }
 
   preferencesChanged(update: any) {

@@ -4,7 +4,7 @@ import {
   NodeSingular,
 } from 'cytoscape';
 import cytoscape from 'cytoscape';
-import { isFunction } from 'rxjs/internal-compatibility';
+import { isFunction } from 'lodash';
 
 export interface OctantLayoutOptions
   extends BaseLayoutOptions,
