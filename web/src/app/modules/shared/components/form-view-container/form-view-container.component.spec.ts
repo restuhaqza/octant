@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FormViewContainerComponent } from './form-view-container.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -49,7 +49,6 @@ describe('FormViewContainerComponent', () => {
           ClrRadioModule,
           ClrCheckboxModule,
         ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [{ provide: FormBuilder, useValue: formBuilder }],
       }).compileComponents();
     })

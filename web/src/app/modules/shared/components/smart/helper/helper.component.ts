@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ClarityIcons, helpIcon } from '@clr/angular';
+import { ClarityIcons, helpIcon } from '@clr/angular/icon';
 import { Subscription } from 'rxjs';
 import { HelperService } from '../../../services/helper/helper.service';
 import { TextView } from '../../../models/content';

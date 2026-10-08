@@ -5,7 +5,7 @@ import {
   checkCircleIcon,
   exclamationCircleIcon,
   infoCircleIcon,
-} from '@clr/angular';
+} from '@clr/angular/icon';
 
 /**
  * Status are statuses known to indicator.

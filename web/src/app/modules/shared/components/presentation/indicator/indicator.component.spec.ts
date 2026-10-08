@@ -5,7 +5,7 @@ import {
   statusLookup,
   iconLookup,
 } from './indicator.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { View } from '../../../models/content';
 
 @Component({
@@ -28,7 +28,6 @@ describe('IndicatorComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [WrapperComponent, IndicatorComponent],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
     })
   );

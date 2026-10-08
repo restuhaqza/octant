@@ -3,8 +3,6 @@
  */
 
 clr-modal {
-  position: absolute;
-
   // Anchor the dialog so it does not move as the number of results update.
   ::ng-deep .modal-dialog {
     position: fixed !important;

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TextComponent } from './components/presentation/text/text.component';
 import { ClarityModule } from '@clr/angular';
-import { ClrIcon } from '@clr/angular/icon';
 import { ClrModalModule } from '@clr/angular/modal';
 import { ClrInputModule } from '@clr/angular/forms/input';
 import { ClrTextareaModule } from '@clr/angular/forms/textarea';
@@ -100,10 +99,8 @@ import { IconComponent } from './components/presentation/icon/icon.component';
 import { FormViewContainerComponent } from './components/form-view-container/form-view-container.component';
 import { SignpostComponent } from './components/presentation/signpost/signpost.component';
 import { JoinPipe } from './pipes/join/join.pipe';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AccordionComponent,
     AlertComponent,
@@ -189,7 +186,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   ],
   imports: [
     ClarityModule,
-    ClrIcon,
     ClrModalModule,
     ClrInputModule,
     ClrTextareaModule,

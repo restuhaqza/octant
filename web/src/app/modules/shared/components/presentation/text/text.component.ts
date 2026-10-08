@@ -7,7 +7,7 @@ import {
   OnInit,
   SecurityContext,
 } from '@angular/core';
-import { ClarityIcons, clipboardIcon } from '@clr/angular';
+import { ClarityIcons, clipboardIcon } from '@clr/angular/icon';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TextView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';

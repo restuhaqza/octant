@@ -87,8 +87,4 @@ export class ModalComponent
     this.actionService.perform(payload);
     this.opened = false;
   }
-
-  toggleModal(): void {
-    this.opened = !this.opened;
-  }
 }

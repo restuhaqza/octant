@@ -15,7 +15,7 @@ import {
   loadTechnologyIconSet,
   loadChartIconSet,
   ClarityIcons,
-} from '@clr/angular';
+} from '@clr/angular/icon';
 import { IconView, Tooltip } from '../../../models/content';
 import { isSvg } from '../../../../../util/isSvg';
 

@@ -4,7 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ClarityIcons, uploadIcon } from '@clr/angular';
+import { ClarityIcons, uploadIcon } from '@clr/angular/icon';
 import { EditorView } from 'src/app/modules/shared/models/content';
 
 @Component({

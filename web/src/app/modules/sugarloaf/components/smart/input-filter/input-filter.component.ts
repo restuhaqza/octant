@@ -13,7 +13,7 @@ import {
   Filter,
   LabelFilterService,
 } from '../../../../shared/services/label-filter/label-filter.service';
-import { ClarityIcons, angleIcon, timesIcon } from '@clr/angular';
+import { ClarityIcons, angleIcon, timesIcon } from '@clr/angular/icon';
 import { Subscription } from 'rxjs';
 
 @Component({

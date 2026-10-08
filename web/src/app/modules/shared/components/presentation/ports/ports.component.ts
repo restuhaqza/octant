@@ -9,7 +9,7 @@ import {
   Output,
   ViewEncapsulation,
 } from '@angular/core';
-import { ClarityIcons, linkIcon } from '@clr/angular';
+import { ClarityIcons, linkIcon } from '@clr/angular/icon';
 import { PortsView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 

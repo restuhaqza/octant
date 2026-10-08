@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ContainerComponent } from './components/smart/container/container.component';
 import { NamespaceComponent } from './components/smart/namespace/namespace.component';
@@ -37,7 +37,6 @@ export class UnstripTrailingSlashLocation extends Location {
 }
 
 @NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     ApplyYAMLComponent,
     ContainerComponent,
