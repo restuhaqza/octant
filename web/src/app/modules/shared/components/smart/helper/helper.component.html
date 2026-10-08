@@ -56,7 +56,7 @@
   clrModalSize="md"
   id="build-modal"
 >
-  <h3 class="modal-title" cds-text="title" cds-first-focus tabindex="-1">Build Information</h3>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Build Information</h3>
   <div class="modal-body">
     <table class="table table-vertical table-noborder">
       <tbody>
@@ -86,7 +86,7 @@
   clrModalSize="lg"
   id="release-modal"
 >
-  <h3 class="modal-title" cds-text="title" cds-first-focus tabindex="-1">Octant Release Information</h3>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Octant Release Information</h3>
   <div class="modal-body">
     <ng-container *ngIf="releaseInfo.config.value; else loading">
       <p class="release-info">
@@ -112,7 +112,7 @@
   clrModalSize="md"
   id="shortcut-modal"
 >
-  <h3 class="modal-title" cds-text="title" cds-first-focus tabindex="-1">Keyboard Shortcuts</h3>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Keyboard Shortcuts</h3>
   <div class="modal-body">
     <clr-stack-view>
       <clr-stack-block
