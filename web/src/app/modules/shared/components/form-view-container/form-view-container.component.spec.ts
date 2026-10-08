@@ -9,6 +9,11 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { ClrInputModule } from '@clr/angular/forms/input';
+import { ClrTextareaModule } from '@clr/angular/forms/textarea';
+import { ClrSelectModule } from '@clr/angular/forms/select';
+import { ClrRadioModule } from '@clr/angular/forms/radio';
+import { ClrCheckboxModule } from '@clr/angular/forms/checkbox';
 import { ActionForm } from '../../models/content';
 import { FormHelper } from '../../models/form-helper';
 
@@ -34,7 +39,15 @@ describe('FormViewContainerComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [TestWrapperComponent, FormViewContainerComponent],
-        imports: [ReactiveFormsModule, FormsModule],
+        imports: [
+          ReactiveFormsModule,
+          FormsModule,
+          ClrInputModule,
+          ClrTextareaModule,
+          ClrSelectModule,
+          ClrRadioModule,
+          ClrCheckboxModule,
+        ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [{ provide: FormBuilder, useValue: formBuilder }],
       }).compileComponents();
@@ -82,8 +95,8 @@ describe('FormViewContainerComponent', () => {
         formBuilder
       );
       fixture.detectChanges();
-      expect(element.querySelector('cds-radio-group')).not.toBeNull();
-      expect(element.querySelector('cds-radio')).not.toBeNull();
+      expect(element.querySelector('clr-radio-container')).not.toBeNull();
+      expect(element.querySelector('clr-radio-wrapper')).not.toBeNull();
     });
 
     it('should create a select and verify is selected', () => {
@@ -121,7 +134,7 @@ describe('FormViewContainerComponent', () => {
         component.formGroup.get(name) as FormArray
       ).getRawValue();
       expect(selected[0]).toEqual('a');
-      expect(element.querySelector('cds-select')).not.toBeNull();
+      expect(element.querySelector('clr-select-container')).not.toBeNull();
     });
 
     it('should create a select and verify is NOT selected', () => {
@@ -159,7 +172,7 @@ describe('FormViewContainerComponent', () => {
         component.formGroup.get(name) as FormArray
       ).getRawValue();
       expect(selected[0]).toEqual(undefined);
-      expect(element.querySelector('cds-select')).not.toBeNull();
+      expect(element.querySelector('clr-select-container')).not.toBeNull();
     });
   });
 });

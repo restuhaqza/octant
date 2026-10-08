@@ -4,6 +4,13 @@ import { TextComponent } from './components/presentation/text/text.component';
 import { ClarityModule } from '@clr/angular';
 import { ClrIcon } from '@clr/angular/icon';
 import { ClrModalModule } from '@clr/angular/modal';
+import { ClrInputModule } from '@clr/angular/forms/input';
+import { ClrTextareaModule } from '@clr/angular/forms/textarea';
+import { ClrSelectModule } from '@clr/angular/forms/select';
+import { ClrRadioModule } from '@clr/angular/forms/radio';
+import { ClrCheckboxModule } from '@clr/angular/forms/checkbox';
+import { ClrFileInputModule } from '@clr/angular/forms/file-input';
+import { ClrAlertModule } from '@clr/angular/emphasis/alert';
 import { TitleComponent } from './components/presentation/title/title.component';
 import { AccordionComponent } from './components/presentation/accordion/accordion.component';
 import { AlertComponent } from './components/presentation/alert/alert.component';
@@ -184,6 +191,13 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     ClarityModule,
     ClrIcon,
     ClrModalModule,
+    ClrInputModule,
+    ClrTextareaModule,
+    ClrSelectModule,
+    ClrRadioModule,
+    ClrCheckboxModule,
+    ClrFileInputModule,
+    ClrAlertModule,
     CommonModule,
     DataModule,
     FormsModule,

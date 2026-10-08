@@ -1,13 +1,13 @@
 .horizontal-layout {
   display: flex;
   align-items: center; // Center label
-  width: 100%; // This is necessary to make sure the width works as expected for in cds-inputs
+  width: 100%; // This is necessary to make sure the width works as expected for in inputs
 
   h6 {
     margin-block-start: 0;
   }
 
-  cds-input {
+  clr-input-container {
     &:not(:first-child){
       margin-left: 1rem;
     }
@@ -17,6 +17,6 @@
   }
 }
 
-cds-input {
+clr-input-container {
   margin-bottom: 1rem;
 }

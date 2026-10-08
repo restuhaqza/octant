@@ -6,6 +6,7 @@ import { ButtonComponent } from '../button/button.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { OctantTooltipComponent } from '../octant-tooltip/octant-tooltip';
+import { ClrAlertModule } from '@clr/angular/emphasis/alert';
 import { windowProvider, WindowToken } from '../../../../../window';
 
 describe('AlertComponent', () => {
@@ -21,6 +22,7 @@ describe('AlertComponent', () => {
           ButtonGroupComponent,
           ButtonComponent,
         ],
+        imports: [ClrAlertModule],
         providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
     })
@@ -63,7 +65,9 @@ describe('AlertComponent', () => {
   });
 
   it('sets the message', () => {
-    const el: DebugElement = fixture.debugElement.query(By.css('cds-alert'));
+    const el: DebugElement = fixture.debugElement.query(
+      By.css('clr-alert .alert-text')
+    );
     expect(el.nativeElement.textContent.trim()).toBe('message');
   });
 
