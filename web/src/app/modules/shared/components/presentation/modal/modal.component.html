@@ -18,11 +18,11 @@
       </ng-container>
     </ng-container>
     <ng-container *ngIf="form?.fields">
-      <cds-button action="outline" (click)="opened = false">Cancel</cds-button>
-      <cds-button (click)="onFormSubmit()">Submit</cds-button>
+      <button type="button" class="btn btn-outline" (click)="opened = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="onFormSubmit()">Submit</button>
     </ng-container>
     <ng-container *ngIf="!buttons && !form?.fields">
-      <cds-button (click)="opened = false">Close</cds-button>
+      <button type="button" class="btn btn-primary" (click)="opened = false">Close</button>
     </ng-container>
   </cds-modal-actions>
 </cds-modal>

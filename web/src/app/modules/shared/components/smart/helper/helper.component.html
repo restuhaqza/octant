@@ -2,7 +2,7 @@
   <clr-dropdown>
     <div cds-layout="horizontal gap:sm">
       <button class="dropdown-button" clrDropdownTrigger>
-        <cds-icon shape="help"></cds-icon>
+        <clr-icon shape="help"></clr-icon>
       </button>
     </div>
     <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
@@ -73,7 +73,7 @@
     </table>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button (click)="toggleBuildInfo()">Close</cds-button>
+    <button type="button" class="btn btn-primary" (click)="toggleBuildInfo()">Close</button>
   </cds-modal-actions>
 </cds-modal>
 
@@ -96,7 +96,7 @@
     </ng-template>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button (click)="toggleReleases()">Close</cds-button>
+    <button type="button" class="btn btn-primary" (click)="toggleReleases()">Close</button>
   </cds-modal-actions>
 </cds-modal>
 
@@ -197,6 +197,6 @@
     </clr-stack-view>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button action="outline" (click)="toggleShortcut()">Close</cds-button>
+    <button type="button" class="btn btn-outline" (click)="toggleShortcut()">Close</button>
   </cds-modal-actions>
 </cds-modal>

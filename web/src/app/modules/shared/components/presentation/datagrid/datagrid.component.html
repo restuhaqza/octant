@@ -83,7 +83,12 @@
     ></div>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button action="outline" (click)="toggleModal()">Cancel</cds-button>
-    <cds-button action="outline" [status]="actionDialogOptions?.type" (click)="acceptModal()">{{ actionDialogOptions?.text }}</cds-button>
+    <button type="button" class="btn btn-outline" (click)="toggleModal()">Cancel</button>
+    <button
+      type="button"
+      class="btn"
+      [ngClass]="actionDialogOptions?.type === 'danger' ? 'btn-outline-danger' : 'btn-outline-primary'"
+      (click)="acceptModal()"
+    >{{ actionDialogOptions?.text }}</button>
   </cds-modal-actions>
 </cds-modal>

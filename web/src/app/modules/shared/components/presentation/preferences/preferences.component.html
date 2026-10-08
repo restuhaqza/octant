@@ -88,9 +88,9 @@
     </form>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button action="outline" (click)="onReset()">Reset</cds-button>
-    <cds-button class="btn-cancel" action="outline" (click)="onCancel()">Cancel</cds-button>
-    <cds-button (click)="onSubmit()">Ok</cds-button>
+    <button type="button" class="btn btn-outline" (click)="onReset()">Reset</button>
+    <button type="button" class="btn btn-outline btn-cancel" (click)="onCancel()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Ok</button>
   </cds-modal-actions>
 </cds-modal>
 

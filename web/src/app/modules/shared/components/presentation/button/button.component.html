@@ -1,12 +1,12 @@
-<cds-button
-  action="{{ style }}"
-  status="{{ status }}"
-  size="{{ size }}"
-  [attr.disabled]="disabled"
-  block="{{ block }}"
-  (click)="onClick(v?.config?.payload, v?.config?.confirmation, v?.config?.modal)">
+<button
+  type="button"
+  class="btn"
+  [ngClass]="buttonClasses"
+  [disabled]="disabled"
+  (click)="onClick(v?.config?.payload, v?.config?.confirmation, v?.config?.modal)"
+>
   {{ v?.config?.name }}
-</cds-button>
+</button>
 
 <app-view-modal *ngIf="modalView" [view]="modalView"></app-view-modal>
 <cds-modal id="confirmation-modal" [closable]="true" [hidden]="true" (closeChange)="toggleModal()">
@@ -17,7 +17,7 @@
     <div [innerHTML]="modalBody" ngPreserveWhitespaces></div>
   </cds-modal-content>
   <cds-modal-actions>
-    <cds-button action="outline" (click)="toggleModal()">Cancel</cds-button>
-    <cds-button (click)="acceptModal()">OK</cds-button>
+    <button type="button" class="btn btn-outline" (click)="toggleModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="acceptModal()">OK</button>
   </cds-modal-actions>
 </cds-modal>

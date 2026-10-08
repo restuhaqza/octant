@@ -5,10 +5,15 @@
   {{ value }}
   <div *ngIf="clipboardValue" class="button-container">
     <div cds-layout="horizontal gap:sm">
-      <cds-icon-button action="flat" ariaLabel="copy-button" (click)="copyToClipboard()">
+      <button
+        type="button"
+        class="btn btn-link btn-icon copy-button"
+        aria-label="copy-button"
+        (click)="copyToClipboard()"
+      >
         <clr-icon shape="clipboard"></clr-icon>
         <ng-container *ngIf="copied">Copied</ng-container>
-      </cds-icon-button>
+      </button>
     </div>
   </div>
 </ng-container>

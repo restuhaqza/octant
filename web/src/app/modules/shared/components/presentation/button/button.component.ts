@@ -76,6 +76,38 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
     }
   }
 
+  /**
+   * Maps the CDS button configuration (`style`/`status`/`size`/`block`) onto
+   * Clarity v18's `.btn` CSS classes.
+   */
+  get buttonClasses(): string {
+    const classes: string[] = [];
+    const status =
+      this.status && this.status !== 'primary' ? `-${this.status}` : '';
+
+    switch (this.style) {
+      case 'solid':
+        classes.push(status ? `btn${status}` : 'btn-primary');
+        break;
+      case 'flat':
+        classes.push(status ? `btn-link${status}` : 'btn-link');
+        break;
+      default:
+        classes.push(status ? `btn-outline${status}` : 'btn-outline');
+        break;
+    }
+
+    if (this.size === 'sm') {
+      classes.push('btn-sm');
+    }
+
+    if (this.block) {
+      classes.push('btn-block');
+    }
+
+    return classes.join(' ');
+  }
+
   onClick(payload: {}, confirmation?: Confirmation, modal?: View) {
     if (modal) {
       this.modalService.openModal();
