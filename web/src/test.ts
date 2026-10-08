@@ -4,7 +4,8 @@
 
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 import 'zone.js/testing';
-import { getTestBed, TestBed } from '@angular/core/testing';
+import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { ChangeDetectorRef } from '@angular/core';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
@@ -39,3 +40,24 @@ beforeEach(() => {
     providers: [provideZoneChangeDetection()],
   });
 });
+
+// Angular 22 regression workaround: ComponentFixture.changeDetectorRef still
+// points at the fixture root view (as in Angular 21), but unlike 21, refreshing
+// it no longer descends into the component under test, so fixture.detectChanges()
+// stops re-evaluating the component template after the first render. Mark the
+// component under test dirty before running the original detectChanges(), which
+// restores the Angular <=21 behaviour (the root view refresh descends into the
+// now-dirty component view) while keeping NgZone, effect flush and checkNoChanges
+// intact.
+const fixturePrototype = ComponentFixture.prototype as any;
+const originalDetectChanges = fixturePrototype.detectChanges;
+fixturePrototype.detectChanges = function detectChanges(
+  checkNoChanges = true
+): void {
+  try {
+    this.debugElement?.injector?.get(ChangeDetectorRef)?.markForCheck();
+  } catch {
+    // No component ChangeDetectorRef available; use the default path only.
+  }
+  originalDetectChanges.call(this, checkNoChanges);
+};

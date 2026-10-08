@@ -8,7 +8,7 @@ This document describes how to setup your development environment to contribute 
 
 ### Dependencies
 
-Our web UI is built on Node.js 20 (see `.nvmrc`) and npm 10. It is generated with [Angular CLI](https://github.com/angular/angular-cli) v21, so you'll want to install and get familiar with that tool to understand how some of our npm scripts work. Here are some of the major libraries we use:
+Our web UI is built on Node.js 24 (see `.nvmrc`) and npm 11. It is generated with [Angular CLI](https://github.com/angular/angular-cli) v22, so you'll want to install and get familiar with that tool to understand how some of our npm scripts work. Here are some of the major libraries we use:
 
 - [Angular v21](http://angular.io)
 - [TypeScript v4.3](https://www.typescriptlang.org/)

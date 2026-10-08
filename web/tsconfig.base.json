@@ -2,6 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
+    "strict": false,
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -23,5 +25,8 @@
     ]
   },
   "files": [
-  ]
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  }
 }

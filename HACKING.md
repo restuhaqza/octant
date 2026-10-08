@@ -3,7 +3,7 @@
 ## Requirements
 
 * [Go 1.24 or above](https://golang.org/dl/)
-* [node 20.19.4 or above](https://nodejs.org/en/) (see `.nvmrc`)
+* [node 24.21.0 or above](https://nodejs.org/en/) (see `.nvmrc`)
 * [npm 10 or above](https://www.npmjs.com/get-npm)
 * [mockgen](https://github.com/golang/mock) - generating go files used for testing
 * [protoc](https://github.com/protocolbuffers/protobuf) - protobuf compiler
