@@ -1,6 +1,19 @@
-<clr-file-input-container>
-  <label>{{ label }}</label>
-  <input #fileInput type="file" clrFileInput [multiple]="multiple" (change)="inputFileChanged($event)" />
-</clr-file-input-container>
-<clr-control-error *ngIf="status === 'error'">{{ statusMessage }}</clr-control-error>
-<clr-control-success *ngIf="status === 'success'">{{ statusMessage }}</clr-control-success>
+<div clrForm [clrLayout]="layout">
+  <div
+    [class.clr-error]="status === 'error'"
+    [class.clr-success]="status === 'success'"
+  >
+    <clr-file-input-container>
+      <label>{{ label }}</label>
+      <input
+        #fileInput
+        type="file"
+        clrFileInput
+        [multiple]="multiple"
+        (change)="inputFileChanged($event)"
+      />
+    </clr-file-input-container>
+    <clr-control-error *ngIf="status === 'error'">{{ statusMessage }}</clr-control-error>
+    <clr-control-success *ngIf="status === 'success'">{{ statusMessage }}</clr-control-success>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 <ng-container *ngFor="let field of form?.fields; trackBy: trackByFn">
   <ng-container *ngIf="field.config.type ==='layout'; else withoutLayout ">
     <div class="horizontal-layout">
-      <h6 *ngIf="field.config.label" slot="label">{{ field.config.label }}</h6>
+      <h6 *ngIf="field.config.label">{{ field.config.label }}</h6>
       <ng-container *ngFor="let f of field.config.configuration.fields; trackBy: trackByFn">
         <ng-container *ngTemplateOutlet="formInputs; context: { field: f }"></ng-container>
       </ng-container>
@@ -29,8 +29,10 @@
           />
           <label>{{ opt.label }}</label>
         </clr-checkbox-wrapper>
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-checkbox-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'radio'">
@@ -40,7 +42,7 @@
           <input
             type="radio"
             clrRadio
-            [attr.name]="field.config.name"
+            [attr.name]="radioGroupName + '-' + field.config.name"
             [formArrayName]="field.config.name"
             [value]="opt.value"
             [checked]="opt.checked"
@@ -48,8 +50,10 @@
           />
           <label>{{ opt.label }}</label>
         </clr-radio-wrapper>
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-radio-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'text'">
@@ -61,8 +65,10 @@
           [formControlName]="field.config.name"
           [placeholder]="field.config.placeholder ? field.config.placeholder : ''"
         />
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'number'">
@@ -73,8 +79,10 @@
           clrInput
           [formControlName]="field.config.name"
         />
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'password'">
@@ -85,8 +93,10 @@
           clrInput
           [formControlName]="field.config.name"
         />
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'select'">
@@ -106,16 +116,20 @@
             {{ opt.label }}
           </option>
         </select>
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-select-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'textarea'">
       <clr-textarea-container [style.width.%]="field.config.width">
         <label>{{ field.config.label }}</label>
         <textarea clrTextarea [formControlName]="field.config.name"></textarea>
-        <clr-control-error *ngIf="isInvalid(field.config.name)">{{ field.config.error }}</clr-control-error>
       </clr-textarea-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'hidden'"></ng-container>
