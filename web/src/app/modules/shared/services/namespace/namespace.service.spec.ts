@@ -9,7 +9,7 @@ import {
   WebsocketService,
 } from '../../../../data/services/websocket/websocket.service';
 import { WebsocketServiceMock } from '../../../../data/services/websocket/mock';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { SharedModule } from '../../shared.module';
 import { EditorComponent } from '../../components/smart/editor/editor.component';
 
@@ -17,7 +17,7 @@ describe('NamespaceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ EditorComponent],
-      imports: [SharedModule, OverlayScrollbarsComponent],
+      imports: [SharedModule, OverlayscrollbarsModule],
       providers: [
         NamespaceService,
         {

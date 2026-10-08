@@ -6,16 +6,13 @@ import { EditorComponent } from '../../components/smart/editor/editor.component'
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { IconService } from './icon.service';
 import { SharedModule } from '../../shared.module';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 
 describe('IconService', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HighlightModule, SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
+        imports: [HighlightModule, SharedModule, OverlayscrollbarsModule],
         declarations: [EditorComponent],
         providers: [
           {

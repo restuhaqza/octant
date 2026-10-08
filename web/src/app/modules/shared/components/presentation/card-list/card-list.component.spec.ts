@@ -3,10 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CardListComponent } from './card-list.component';
 import { CardListView } from '../../../models/content';
 import { SharedModule } from '../../../shared.module';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { IndicatorComponent } from '../indicator/indicator.component';
 
 describe('CardListComponent', () => {
@@ -17,7 +14,7 @@ describe('CardListComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [ IndicatorComponent],
-        imports: [SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
+        imports: [SharedModule, OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

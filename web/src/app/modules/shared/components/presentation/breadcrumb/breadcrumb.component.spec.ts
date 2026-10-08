@@ -7,7 +7,7 @@ import { SharedModule } from '../../../shared.module';
 import { BreadcrumbComponent } from './breadcrumb.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { LinkView, TextView } from '../../../models/content';
 
 describe('BreadcrumbComponent', () => {
@@ -18,7 +18,7 @@ describe('BreadcrumbComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [],
-        imports: [SharedModule, OverlayScrollbarsComponent],
+        imports: [SharedModule, OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

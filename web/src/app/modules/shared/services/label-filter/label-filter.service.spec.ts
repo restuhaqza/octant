@@ -6,17 +6,14 @@ import { inject, TestBed } from '@angular/core/testing';
 import { LabelFilterService } from './label-filter.service';
 import { WebsocketService } from '../../../../data/services/websocket/websocket.service';
 import { WebsocketServiceMock } from '../../../../data/services/websocket/mock';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { EditorComponent } from '../../components/smart/editor/editor.component';
 
 describe('LabelFilterService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ EditorComponent],
-      imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
+      imports: [OverlayscrollbarsModule],
       providers: [
         LabelFilterService,
         {

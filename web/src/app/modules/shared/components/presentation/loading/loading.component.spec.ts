@@ -5,7 +5,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { LoadingComponent } from './loading.component';
 import { SharedModule } from '../../../shared.module';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 
 describe('LoadingComponent', () => {
   let component: LoadingComponent;
@@ -15,7 +15,7 @@ describe('LoadingComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [],
-        imports: [SharedModule, OverlayScrollbarsComponent],
+        imports: [SharedModule, OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

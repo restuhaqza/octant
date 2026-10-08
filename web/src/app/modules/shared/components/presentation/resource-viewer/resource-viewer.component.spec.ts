@@ -5,7 +5,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ResourceViewerComponent } from './resource-viewer.component';
 import { SharedModule } from '../../../shared.module';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { ResourceViewerView } from '../../../models/content';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -18,7 +18,7 @@ describe('ResourceViewerComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [],
-        imports: [SharedModule, OverlayScrollbarsComponent],
+        imports: [SharedModule, OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

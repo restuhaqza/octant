@@ -37,7 +37,7 @@ import { UploaderComponent } from '../uploader/uploader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { windowProvider, WindowToken } from '../../../../../window';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { ApplyYAMLComponent } from '../apply-yaml/apply-yaml.component';
 
 describe('AppComponent', () => {
@@ -62,8 +62,7 @@ describe('AppComponent', () => {
           NgSelectModule,
           ReactiveFormsModule,
           BrowserAnimationsModule,
-          SharedModule,
-         OverlayScrollbarsComponent],
+          SharedModule, OverlayscrollbarsModule],
         declarations: [
           ApplyYAMLComponent,
           ContainerComponent,

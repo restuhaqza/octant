@@ -4,17 +4,14 @@
  */
 
 import { TestBed } from '@angular/core/testing';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { ModalService } from './modal.service';
 
 describe('ModalService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
+      imports: [OverlayscrollbarsModule],
       providers: [ModalService],
     })
   );

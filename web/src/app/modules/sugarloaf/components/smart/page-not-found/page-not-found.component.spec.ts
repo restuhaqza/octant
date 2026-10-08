@@ -3,7 +3,7 @@
 //
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 describe('PageNotFoundComponent', () => {
@@ -14,7 +14,7 @@ describe('PageNotFoundComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PageNotFoundComponent],
-        imports: [OverlayScrollbarsComponent],
+        imports: [ OverlayscrollbarsModule ],
       }).compileComponents();
     })
   );

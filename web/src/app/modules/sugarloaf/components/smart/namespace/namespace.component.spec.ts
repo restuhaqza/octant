@@ -7,10 +7,7 @@ import { NamespaceComponent } from './namespace.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { windowProvider, WindowToken } from '../../../../../window';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 
 describe('NamespaceComponent', () => {
   let component: NamespaceComponent;
@@ -19,7 +16,7 @@ describe('NamespaceComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [NgSelectModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
+        imports: [NgSelectModule, OverlayscrollbarsModule],
         declarations: [NamespaceComponent],
         providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
