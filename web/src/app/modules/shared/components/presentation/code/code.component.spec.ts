@@ -27,17 +27,14 @@ describe('CodeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it(
-    'copy button copies text',
-    waitForAsync(() => {
-      spyOn(component, 'copyToClipboard');
+  it('copy button copies text', async () => {
+    spyOn(component, 'copyToClipboard');
 
-      const button = fixture.debugElement.nativeElement.querySelector('button');
-      button.click();
+    const button = fixture.debugElement.nativeElement.querySelector('button');
+    button.click();
 
-      fixture.whenStable().then(() => {
-        expect(component.copyToClipboard).toHaveBeenCalled();
-      });
-    })
-  );
+    await fixture.whenStable();
+
+    expect(component.copyToClipboard).toHaveBeenCalled();
+  });
 });

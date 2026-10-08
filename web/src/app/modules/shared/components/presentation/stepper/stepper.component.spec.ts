@@ -74,26 +74,21 @@ describe('StepperComponent', () => {
     fixture.detectChanges();
   });
 
-  it(
-    'should submit form after completing each step',
-    waitForAsync(() => {
-      fixture.whenStable().then(() => {
-        let nextButton =
-          fixture.debugElement.nativeElement.querySelector('.next');
-        nextButton.click();
-        fixture.detectChanges();
+  it('should submit form after completing each step', async () => {
+    await fixture.whenStable();
 
-        nextButton =
-          fixture.debugElement.nativeElement.querySelector('.submit');
-        nextButton.click();
-        fixture.detectChanges();
+    let nextButton = fixture.debugElement.nativeElement.querySelector('.next');
+    nextButton.click();
+    fixture.detectChanges();
 
-        verify(
-          mockActionService.perform(
-            deepEqual({ action, 'step 1': {}, 'confirmation step': {} })
-          )
-        ).once();
-      });
-    })
-  );
+    nextButton = fixture.debugElement.nativeElement.querySelector('.submit');
+    nextButton.click();
+    fixture.detectChanges();
+
+    verify(
+      mockActionService.perform(
+        deepEqual({ action, 'step 1': {}, 'confirmation step': {} })
+      )
+    ).once();
+  });
 });

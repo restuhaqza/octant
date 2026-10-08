@@ -52,12 +52,8 @@ describe('FiltersComponent', () => {
     fixture.detectChanges();
   });
 
-  it(
-    'should create',
-    waitForAsync(() => {
-      fixture.whenStable().then(() => {
-        expect(component).toBeTruthy();
-      });
-    })
-  );
+  it('should create', async () => {
+    await fixture.whenStable();
+    expect(component).toBeTruthy();
+  });
 });

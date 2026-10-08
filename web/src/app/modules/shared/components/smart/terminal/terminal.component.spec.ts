@@ -14,7 +14,7 @@ describe('TerminalComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [TerminalComponent],
-        providers: [{ provide: WindowToken, useClass: windowProvider() }],
+        providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
     })
   );
@@ -37,5 +37,9 @@ describe('TerminalComponent', () => {
       },
     } as TerminalView;
     fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
