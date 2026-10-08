@@ -16,7 +16,8 @@ describe('SliderService', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [OverlayScrollbarsComponent, EditorComponent],
+        declarations: [ EditorComponent],
+        imports: [OverlayScrollbarsComponent],
         providers: [OverlayscrollbarsModule],
       });
       service = TestBed.inject(SliderService);

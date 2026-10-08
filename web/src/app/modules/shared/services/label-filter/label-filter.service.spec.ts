@@ -15,8 +15,8 @@ import { EditorComponent } from '../../components/smart/editor/editor.component'
 describe('LabelFilterService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OverlayScrollbarsComponent, EditorComponent],
-      imports: [OverlayscrollbarsModule],
+      declarations: [ EditorComponent],
+      imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
       providers: [
         LabelFilterService,
         {

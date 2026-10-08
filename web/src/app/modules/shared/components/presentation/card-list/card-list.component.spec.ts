@@ -16,8 +16,8 @@ describe('CardListComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [OverlayScrollbarsComponent, IndicatorComponent],
-        imports: [SharedModule, OverlayscrollbarsModule],
+        declarations: [ IndicatorComponent],
+        imports: [SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

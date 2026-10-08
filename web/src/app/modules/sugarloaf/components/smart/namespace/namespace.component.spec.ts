@@ -19,8 +19,8 @@ describe('NamespaceComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [NgSelectModule, OverlayscrollbarsModule],
-        declarations: [NamespaceComponent, OverlayScrollbarsComponent],
+        imports: [NgSelectModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
+        declarations: [NamespaceComponent],
         providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
     })

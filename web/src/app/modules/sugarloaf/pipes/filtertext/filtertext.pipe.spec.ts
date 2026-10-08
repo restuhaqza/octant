@@ -7,7 +7,8 @@ describe('FilterTextPipe', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ApplyYAMLComponent, OverlayScrollbarsComponent],
+        declarations: [ApplyYAMLComponent],
+        imports: [OverlayScrollbarsComponent],
       });
     })
   );

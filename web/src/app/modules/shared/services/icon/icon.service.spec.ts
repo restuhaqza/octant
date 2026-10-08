@@ -15,8 +15,8 @@ describe('IconService', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HighlightModule, SharedModule, OverlayscrollbarsModule],
-        declarations: [EditorComponent, OverlayScrollbarsComponent],
+        imports: [HighlightModule, SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
+        declarations: [EditorComponent],
         providers: [
           {
             provide: HIGHLIGHT_OPTIONS,

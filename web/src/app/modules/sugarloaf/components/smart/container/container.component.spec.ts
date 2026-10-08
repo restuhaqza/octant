@@ -63,7 +63,7 @@ describe('AppComponent', () => {
           ReactiveFormsModule,
           BrowserAnimationsModule,
           SharedModule,
-        ],
+         OverlayScrollbarsComponent],
         declarations: [
           ApplyYAMLComponent,
           ContainerComponent,
@@ -79,9 +79,7 @@ describe('AppComponent', () => {
           FilterTextPipe,
           ThemeSwitchButtonComponent,
           QuickSwitcherComponent,
-          UploaderComponent,
-          OverlayScrollbarsComponent,
-        ],
+          UploaderComponent],
       }).compileComponents();
     })
   );

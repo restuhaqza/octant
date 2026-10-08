@@ -19,9 +19,8 @@ describe('HeptagonComponent', () => {
       TestBed.configureTestingModule({
         declarations: [
           HeptagonComponent,
-          OctantTooltipComponent,
-          OverlayScrollbarsComponent,
-        ],
+          OctantTooltipComponent],
+        imports: [OverlayScrollbarsComponent],
         providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
     })

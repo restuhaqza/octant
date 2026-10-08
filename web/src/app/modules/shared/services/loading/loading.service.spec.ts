@@ -11,7 +11,8 @@ import { LoadingService } from './loading.service';
 describe('LoadingService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      declarations: [ApplyYAMLComponent, OverlayScrollbarsComponent],
+      declarations: [ApplyYAMLComponent],
+        imports: [OverlayScrollbarsComponent],
       providers: [LoadingService],
     })
   );

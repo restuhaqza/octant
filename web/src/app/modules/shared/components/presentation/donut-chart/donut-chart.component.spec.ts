@@ -20,8 +20,8 @@ describe('DonutChartComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [DonutChartComponent, OverlayScrollbarsComponent],
-        imports: [SharedModule, OverlayscrollbarsModule],
+        declarations: [DonutChartComponent],
+        imports: [SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

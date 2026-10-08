@@ -13,8 +13,8 @@ import { ModalService } from './modal.service';
 describe('ModalService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      declarations: [OverlayScrollbarsComponent],
-      imports: [OverlayscrollbarsModule],
+      declarations: [],
+      imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
       providers: [ModalService],
     })
   );

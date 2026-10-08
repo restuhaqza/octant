@@ -37,8 +37,8 @@ describe('CardComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [EditorComponent, OverlayScrollbarsComponent],
-        imports: [SharedModule, OverlayscrollbarsModule],
+        declarations: [EditorComponent],
+        imports: [SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
         providers: [
           { provide: FormBuilder, useValue: formBuilder },
           { provide: ViewService, useValue: viewServiceStub },

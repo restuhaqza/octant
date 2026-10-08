@@ -18,8 +18,8 @@ describe('ObjectStatusComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [OverlayScrollbarsComponent],
-        imports: [SharedModule, OverlayscrollbarsModule],
+        declarations: [],
+        imports: [SharedModule, OverlayscrollbarsModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

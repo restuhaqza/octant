@@ -14,7 +14,8 @@ describe('ThemeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OverlayScrollbarsComponent],
+      declarations: [],
+        imports: [OverlayScrollbarsComponent],
       providers: [ThemeService, OverlayscrollbarsModule, Document],
     });
 

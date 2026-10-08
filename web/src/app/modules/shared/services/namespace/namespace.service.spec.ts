@@ -16,8 +16,8 @@ import { EditorComponent } from '../../components/smart/editor/editor.component'
 describe('NamespaceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OverlayScrollbarsComponent, EditorComponent],
-      imports: [SharedModule],
+      declarations: [ EditorComponent],
+      imports: [SharedModule, OverlayScrollbarsComponent],
       providers: [
         NamespaceService,
         {

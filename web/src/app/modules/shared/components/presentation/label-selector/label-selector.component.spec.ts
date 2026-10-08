@@ -20,10 +20,8 @@ describe('LabelSelectorComponent', () => {
       TestBed.configureTestingModule({
         declarations: [
           LabelSelectorComponent,
-          EditorComponent,
-          OverlayScrollbarsComponent,
-        ],
-        imports: [OverlayscrollbarsModule],
+          EditorComponent],
+        imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

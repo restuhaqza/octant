@@ -34,8 +34,8 @@ describe('FiltersComponent', () => {
       };
 
       TestBed.configureTestingModule({
-        declarations: [ApplyYAMLComponent, OverlayScrollbarsComponent],
-        imports: [SharedModule],
+        declarations: [ApplyYAMLComponent],
+        imports: [SharedModule, OverlayScrollbarsComponent],
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: ActivatedRoute, useValue: activatedRouteStub },

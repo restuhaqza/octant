@@ -17,8 +17,8 @@ describe('NotifierComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [NotifierComponent, OverlayScrollbarsComponent],
-        imports: [OverlayscrollbarsModule],
+        declarations: [NotifierComponent],
+        imports: [OverlayscrollbarsModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

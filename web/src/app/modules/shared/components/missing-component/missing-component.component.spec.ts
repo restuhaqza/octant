@@ -14,10 +14,8 @@ describe('MissingComponentComponent', () => {
       TestBed.configureTestingModule({
         declarations: [
           MissingComponentComponent,
-          ApplyYAMLComponent,
-          OverlayScrollbarsComponent,
-        ],
-        imports: [CommonModule],
+          ApplyYAMLComponent],
+        imports: [CommonModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );

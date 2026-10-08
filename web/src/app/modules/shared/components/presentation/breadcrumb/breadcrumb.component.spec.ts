@@ -17,8 +17,8 @@ describe('BreadcrumbComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [OverlayScrollbarsComponent],
-        imports: [SharedModule],
+        declarations: [],
+        imports: [SharedModule, OverlayScrollbarsComponent],
       }).compileComponents();
     })
   );
