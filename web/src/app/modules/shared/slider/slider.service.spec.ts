@@ -13,8 +13,8 @@ describe('SliderService', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ EditorComponent],
-        imports: [ OverlayscrollbarsModule ],
+        declarations: [EditorComponent],
+        imports: [OverlayscrollbarsModule],
         providers: [OverlayscrollbarsModule],
       });
       service = TestBed.inject(SliderService);

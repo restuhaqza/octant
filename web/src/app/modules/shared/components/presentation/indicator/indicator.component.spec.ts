@@ -56,8 +56,8 @@ describe('IndicatorComponent', () => {
       });
 
       it(`shows ${name} indicator`, () => {
-        const e = element.querySelector(`app-indicator cds-icon`);
-        expect(e.getAttribute('ng-reflect-shape')).toBe(iconLookup[v]);
+        const e = element.querySelector(`app-indicator cds-icon`) as any;
+        expect(e.shape).toBe(iconLookup[v]);
       });
     });
   });

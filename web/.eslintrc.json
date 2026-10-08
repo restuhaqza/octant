@@ -10,8 +10,7 @@
       ],
       "parserOptions": {
         "project": [
-          "src/tsconfig.app.json",
-          "src/tsconfig.spec.json"
+          "tsconfig.eslint.json"
         ],
         "createDefaultProgram": true
       },
@@ -26,6 +25,7 @@
         "@angular-eslint/component-selector": "off",
         "@angular-eslint/directive-selector": "off",
         "@angular-eslint/prefer-standalone": "off",
+        "@angular-eslint/prefer-inject": "off",
         "@angular-eslint/no-host-metadata-property": "off",
         "@angular-eslint/no-output-on-prefix": "off",
         "@angular-eslint/no-output-native": "off",
@@ -36,7 +36,6 @@
         "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/triple-slash-reference": "off",
         "no-empty": "off"
       }

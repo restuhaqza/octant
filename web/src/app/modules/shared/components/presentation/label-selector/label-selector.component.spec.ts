@@ -15,9 +15,7 @@ describe('LabelSelectorComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          LabelSelectorComponent,
-          EditorComponent],
+        declarations: [LabelSelectorComponent, EditorComponent],
         imports: [OverlayscrollbarsModule],
       }).compileComponents();
     })

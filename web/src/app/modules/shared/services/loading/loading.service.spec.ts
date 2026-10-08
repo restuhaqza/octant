@@ -12,7 +12,7 @@ describe('LoadingService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       declarations: [ApplyYAMLComponent],
-        imports: [ OverlayscrollbarsModule ],
+      imports: [OverlayscrollbarsModule],
       providers: [LoadingService],
     })
   );

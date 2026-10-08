@@ -14,7 +14,7 @@ describe('PageNotFoundComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PageNotFoundComponent],
-        imports: [ OverlayscrollbarsModule ],
+        imports: [OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

@@ -12,9 +12,7 @@ describe('MissingComponentComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          MissingComponentComponent,
-          ApplyYAMLComponent],
+        declarations: [MissingComponentComponent, ApplyYAMLComponent],
         imports: [CommonModule, OverlayscrollbarsModule],
       }).compileComponents();
     })

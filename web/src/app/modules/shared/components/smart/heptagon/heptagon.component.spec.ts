@@ -17,10 +17,8 @@ describe('HeptagonComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [
-          HeptagonComponent,
-          OctantTooltipComponent],
-        imports: [ OverlayscrollbarsModule ],
+        declarations: [HeptagonComponent, OctantTooltipComponent],
+        imports: [OverlayscrollbarsModule],
         providers: [{ provide: WindowToken, useFactory: windowProvider }],
       }).compileComponents();
     })

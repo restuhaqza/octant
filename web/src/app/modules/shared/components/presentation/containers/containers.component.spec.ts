@@ -15,7 +15,7 @@ describe('ContainersComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [ContainersComponent],
-        imports: [ OverlayscrollbarsModule ],
+        imports: [OverlayscrollbarsModule],
       }).compileComponents();
     })
   );

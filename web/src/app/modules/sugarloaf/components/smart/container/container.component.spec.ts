@@ -62,7 +62,9 @@ describe('AppComponent', () => {
           NgSelectModule,
           ReactiveFormsModule,
           BrowserAnimationsModule,
-          SharedModule, OverlayscrollbarsModule],
+          SharedModule,
+          OverlayscrollbarsModule,
+        ],
         declarations: [
           ApplyYAMLComponent,
           ContainerComponent,
@@ -78,7 +80,8 @@ describe('AppComponent', () => {
           FilterTextPipe,
           ThemeSwitchButtonComponent,
           QuickSwitcherComponent,
-          UploaderComponent],
+          UploaderComponent,
+        ],
       }).compileComponents();
     })
   );

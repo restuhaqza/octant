@@ -12,7 +12,7 @@ import { EditorComponent } from '../../components/smart/editor/editor.component'
 describe('LabelFilterService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditorComponent],
+      declarations: [EditorComponent],
       imports: [OverlayscrollbarsModule],
       providers: [
         LabelFilterService,
