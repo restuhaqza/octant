@@ -64,3 +64,25 @@ import 'zone.js'; // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+// Clarity 18 ships an Angular `cds-icon` component (ClrIcon) that renders icons
+// in a shadow root. The CDS custom element of the same name is registered
+// transitively (e.g. @cds/core/button/register -> @cds/core/icon/register) and
+// would attach a second shadow root to the same <cds-icon> host, which makes
+// Angular throw "Shadow root cannot be created on a host which already hosts a
+// shadow tree". Ignore that specific registration so Clarity owns the element.
+if (typeof window !== 'undefined' && window.customElements) {
+  const originalDefine = window.customElements.define.bind(
+    window.customElements
+  );
+  window.customElements.define = function (
+    name: string,
+    constructor: CustomElementConstructor,
+    options?: ElementDefinitionOptions
+  ): void {
+    if (name === 'cds-icon') {
+      return;
+    }
+    return originalDefine(name, constructor, options);
+  } as typeof window.customElements.define;
+}

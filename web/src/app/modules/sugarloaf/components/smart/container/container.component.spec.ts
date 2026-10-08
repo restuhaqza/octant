@@ -12,7 +12,7 @@ import {
   waitForAsync,
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ClarityModule, ClrPopoverToggleService } from '@clr/angular';
+import { ClarityModule, ClrPopoverService } from '@clr/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContainerComponent } from './container.component';
@@ -51,7 +51,7 @@ describe('AppComponent', () => {
           { provide: WebsocketService, useClass: WebsocketServiceMock },
           { provide: WindowToken, useFactory: windowProvider },
           { provide: window, useValue: ClarityIcons },
-          ClrPopoverToggleService,
+          ClrPopoverService,
         ],
         imports: [
           BrowserModule,

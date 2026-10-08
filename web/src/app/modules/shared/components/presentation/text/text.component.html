@@ -6,7 +6,7 @@
   <div *ngIf="clipboardValue" class="button-container">
     <div cds-layout="horizontal gap:sm">
       <cds-icon-button action="flat" ariaLabel="copy-button" (click)="copyToClipboard()">
-        <cds-icon shape="clipboard"></cds-icon>
+        <clr-icon shape="clipboard"></clr-icon>
         <ng-container *ngIf="copied">Copied</ng-container>
       </cds-icon-button>
     </div>

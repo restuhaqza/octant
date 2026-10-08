@@ -14,7 +14,7 @@ import { ContentService } from '../content/content.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LoadingService } from '../loading/loading.service';
-import { ClarityIcons } from '@cds/core/icon';
+import { ClarityIcons } from '@clr/angular';
 import { isSvg } from '../../../../util/isSvg';
 
 export type Selection = {

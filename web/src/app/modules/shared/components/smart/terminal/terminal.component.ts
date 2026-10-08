@@ -92,7 +92,7 @@ export class TerminalComponent
       this.term.loadAddon(this.fitAddon);
       this.term.open(this.terminalDiv.nativeElement);
       this.term.focus();
-      this.fitAddon.fit();
+      this.fitTerminal();
     }
 
     super.ngAfterViewInit();
@@ -106,7 +106,7 @@ export class TerminalComponent
           rows: e.rows,
           cols: e.cols,
         });
-        this.fitAddon.fit();
+        this.fitTerminal();
       };
 
       if (timeOut != null) {
@@ -123,7 +123,7 @@ export class TerminalComponent
     this.term.reset();
     this.initStream();
     this.term.focus();
-    this.fitAddon.fit();
+    this.fitTerminal();
   }
 
   initStream() {
@@ -173,6 +173,17 @@ export class TerminalComponent
   }
 
   onResize() {
-    this.fitAddon.fit();
+    this.fitTerminal();
+  }
+
+  private fitTerminal(): void {
+    // xterm's terminal.resize() rejects non-integer dimensions, which the fit
+    // addon can compute when the container is fractional/zero sized (hidden
+    // tabs, tests). Fitting is best-effort, so ignore those failures.
+    try {
+      this.fitAddon.fit();
+    } catch {
+      // no-op
+    }
   }
 }

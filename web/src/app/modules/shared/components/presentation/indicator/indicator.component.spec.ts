@@ -56,8 +56,8 @@ describe('IndicatorComponent', () => {
       });
 
       it(`shows ${name} indicator`, () => {
-        const e = element.querySelector(`app-indicator cds-icon`) as any;
-        expect(e.shape).toBe(iconLookup[v]);
+        const e = element.querySelector(`app-indicator clr-icon`) as any;
+        expect(e.getAttribute('shape')).toBe(iconLookup[v]);
       });
     });
   });
@@ -70,7 +70,7 @@ describe('IndicatorComponent', () => {
     });
 
     it('does not show an indicator', () => {
-      expect(element.querySelector('app-indicator cds-icon')).toBeNull();
+      expect(element.querySelector('app-indicator clr-icon')).toBeNull();
     });
   });
 });

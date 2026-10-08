@@ -10,7 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import '@cds/core/button/register.js';
-import { ClarityIcons, linkIcon } from '@cds/core/icon';
+import { ClarityIcons, linkIcon } from '@clr/angular';
 import { PortsView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 

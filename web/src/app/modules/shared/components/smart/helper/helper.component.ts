@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import '@cds/core/button/register.js';
 import '@cds/core/modal/register';
-import { ClarityIcons, helpIcon } from '@cds/core/icon';
+import { ClarityIcons, helpIcon } from '@clr/angular';
 import { Subscription } from 'rxjs';
 import { HelperService } from '../../../services/helper/helper.service';
 import { TextView } from '../../../models/content';

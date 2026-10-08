@@ -3,8 +3,7 @@
 //
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import '@cds/core/icon/register.js';
-import { ClarityIcons, clusterIcon } from '@cds/core/icon';
+import { ClarityIcons, clusterIcon } from '@clr/angular';
 import {
   ContextDescription,
   KubeContextService,

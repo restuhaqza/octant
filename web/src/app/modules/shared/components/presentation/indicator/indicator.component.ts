@@ -1,12 +1,11 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { View } from '../../../models/content';
-import '@cds/core/icon/register.js';
 import {
   ClarityIcons,
   checkCircleIcon,
   exclamationCircleIcon,
   infoCircleIcon,
-} from '@cds/core/icon';
+} from '@clr/angular';
 
 /**
  * Status are statuses known to indicator.

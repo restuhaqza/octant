@@ -8,6 +8,7 @@ import {
   TestBed,
   waitForAsync,
 } from '@angular/core/testing';
+import { provideZoneChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputFilterComponent } from './input-filter.component';
 import {
@@ -33,7 +34,10 @@ describe('InputFilterComponent', () => {
       TestBed.configureTestingModule({
         imports: [FormsModule],
         declarations: [InputFilterComponent, FilterTextPipe],
-        providers: [{ provide: LabelFilterService, useValue: labelFilterStub }],
+        providers: [
+          provideZoneChangeDetection(),
+          { provide: LabelFilterService, useValue: labelFilterStub },
+        ],
       }).compileComponents();
     })
   );
