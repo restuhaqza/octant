@@ -3,7 +3,11 @@
 //
 import { CommonModule, Location } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Injectable, NgModule } from '@angular/core';
+import {
+  Injectable,
+  NgModule,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/smart/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,6 +38,11 @@ export class UnstripTrailingSlashLocation extends Location {
     AppRoutingModule,
   ],
   providers: [
+    // Angular 20+ defaults to zoneless change detection. Octant still relies on
+    // zone.js (see polyfills.ts) and its components mutate plain (non-signal)
+    // state, so async updates (websocket content, timers) would otherwise not
+    // trigger change detection and the UI would stay stuck on "Loading".
+    provideZoneChangeDetection(),
     {
       provide: Location,
       useClass: UnstripTrailingSlashLocation,
