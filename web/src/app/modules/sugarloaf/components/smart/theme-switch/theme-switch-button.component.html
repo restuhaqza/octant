@@ -5,7 +5,7 @@
       class="btn btn-link btn-inverse btn-collapsed"
       (click)="switchTheme()"
     >
-      <clr-icon [attr.shape]="lightThemeEnabled ? 'moon' : 'sun'"></clr-icon>
+      <clr-icon [shape]="lightThemeEnabled ? 'moon' : 'sun'"></clr-icon>
     </button>
   </ng-container>
   <ng-template #expanded>
@@ -14,7 +14,7 @@
       class="btn btn-link btn-inverse"
       (click)="switchTheme()"
     >
-      <clr-icon [attr.shape]="lightThemeEnabled ? 'moon' : 'sun'"></clr-icon>
+      <clr-icon [shape]="lightThemeEnabled ? 'moon' : 'sun'"></clr-icon>
       {{ lightThemeEnabled ? 'dark' : 'light' }}
     </button>
   </ng-template>

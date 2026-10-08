@@ -24,11 +24,11 @@
           }">
             <div *ngIf="showLabels" class="button-wrapper">
               <div *ngIf="tab.customSvg; else regularIcon">
-                <clr-icon class="icon-nav" [attr.shape]="tab.icon"></clr-icon>
+                <clr-icon class="icon-nav" [shape]="tab.icon"></clr-icon>
               </div>
               <ng-template #regularIcon>
                 <div>
-                  <clr-icon class="icon-nav" [attr.shape]="tab.icon"></clr-icon>
+                  <clr-icon class="icon-nav" [shape]="tab.icon"></clr-icon>
                 </div>
               </ng-template>
               <div class="button-text-wrapper">
@@ -36,7 +36,7 @@
               </div>
             </div>
           <app-octant-tooltip *ngIf="!showLabels" [tooltipText]="tab.title">
-            <clr-icon class="icon-nav" [attr.shape]="tab.icon"></clr-icon>
+            <clr-icon class="icon-nav" [shape]="tab.icon"></clr-icon>
           </app-octant-tooltip>
         </div>
         <ng-template *clrIfActive="i === this.selectedItem.module">
@@ -89,7 +89,7 @@
           (mouseover)="flyoutIndex = i; selectedItem.index = i"
         >
           <clr-icon
-            [attr.shape]="section.iconName | default: 'play'"
+            [shape]="section.iconName | default: 'play'"
             clrVerticalNavIcon
           ></clr-icon>
         </a>
@@ -139,10 +139,10 @@
             [clrVerticalNavGroupExpanded]="shouldExpand(i)"
             (clrVerticalNavGroupExpandedChange)="setNavState($event, i)"
           >
-            <clr-icon *ngIf="section.customSvg; else firstLevelIcon" [attr.shape]="section.iconName" clrVerticalNavIcon></clr-icon>
+            <clr-icon *ngIf="section.customSvg; else firstLevelIcon" [shape]="section.iconName" clrVerticalNavIcon></clr-icon>
             {{ section.title }}
             <ng-template #firstLevelIcon>
-              <clr-icon [attr.shape]="section.iconName | default: 'exclamation-circle'" clrVerticalNavIcon></clr-icon>
+              <clr-icon [shape]="section.iconName | default: 'exclamation-circle'" clrVerticalNavIcon></clr-icon>
             </ng-template>
 
             <clr-vertical-nav-group-children>
@@ -166,11 +166,11 @@
                   [routerLinkActiveOptions]="{ exact: false }"
                   routerLinkActive="active"
                 >
-                  <clr-icon *ngIf="category.customSvg; else secondLevelIcon" [attr.shape]="category.iconName" clrVerticalNavIcon></clr-icon>
+                  <clr-icon *ngIf="category.customSvg; else secondLevelIcon" [shape]="category.iconName" clrVerticalNavIcon></clr-icon>
                   <ng-template #secondLevelIcon>
                     <clr-icon
                       *ngIf="itemIcon(category) as categoryIcon"
-                      [attr.shape]="categoryIcon"
+                      [shape]="categoryIcon"
                       clrVerticalNavIcon
                     ></clr-icon>
                   </ng-template>
@@ -189,7 +189,7 @@
             routerLinkActive="active"
           >
             <clr-icon *ngIf="section.iconName"
-              [attr.shape]="section.iconName"
+              [shape]="section.iconName"
               clrVerticalNavIcon
             ></clr-icon>
             <div class="nav-item-text"

@@ -1,14 +1,14 @@
 <ng-container *ngIf="!tooltip; else hasTooltip">
   <clr-icon
     [style]="iconStyle != '' ? iconStyle : null"
-    [attr.shape]="shape"
-    [attr.size]="size"
-    [attr.direction]="direction"
-    [attr.flip]="flip"
-    [attr.solid]="isSolid ? true: null"
-    [attr.status]="status"
-    [attr.inverse]="isInverse ? true: null"
-    [attr.badge]="badge"
+    [shape]="shape"
+    [size]="size"
+    [direction]="direction"
+    [flip]="flip"
+    [solid]="isSolid ? true: null"
+    [status]="status"
+    [inverse]="isInverse ? true: null"
+    [badge]="badge"
     [attr.aria-label]="label"
   ></clr-icon>
 </ng-container>
@@ -17,14 +17,14 @@
   <a href="javascript:void(0)" role="tooltip" aria-haspopup="true" class="{{ tooltipClass }}">
     <clr-icon
       [style]="iconStyle != '' ? iconStyle : null"
-      [attr.shape]="shape"
-      [attr.size]="size"
-      [attr.direction]="direction"
-      [attr.flip]="flip"
-      [attr.solid]="isSolid ? true: null"
-      [attr.status]="status"
-      [attr.inverse]="isInverse ? true: null"
-      [attr.badge]="badge"
+      [shape]="shape"
+      [size]="size"
+      [direction]="direction"
+      [flip]="flip"
+      [solid]="isSolid ? true: null"
+      [status]="status"
+      [inverse]="isInverse ? true: null"
+      [badge]="badge"
       [attr.aria-label]="label"
     ></clr-icon>
     <span class="tooltip-content">{{ tooltip.message }}</span>
