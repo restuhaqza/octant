@@ -13,9 +13,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.4.1
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20.19.4'
           cache: 'npm'
           cache-dependency-path: 'web/package-lock.json'
       - uses: actions/setup-go@v2
