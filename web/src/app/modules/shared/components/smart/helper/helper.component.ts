@@ -23,6 +23,9 @@ export class HelperComponent implements OnInit, OnDestroy {
       isMarkdown: true,
     },
   };
+  buildInfoOpen = false;
+  releasesOpen = false;
+  shortcutOpen = false;
   private buildInfoSubscription: Subscription;
 
   constructor(private helperService: HelperService) {
@@ -66,8 +69,7 @@ export class HelperComponent implements OnInit, OnDestroy {
 
   toggleReleases(): void {
     this.getReleaseInfo(this.version);
-    const releaseModal = document.getElementById('release-modal');
-    releaseModal.hidden = !releaseModal.hidden;
+    this.releasesOpen = !this.releasesOpen;
   }
 
   showDocs(): void {
@@ -81,13 +83,11 @@ export class HelperComponent implements OnInit, OnDestroy {
   }
 
   toggleBuildInfo(): void {
-    const buildModal = document.getElementById('build-modal');
-    buildModal.hidden = !buildModal.hidden;
+    this.buildInfoOpen = !this.buildInfoOpen;
   }
 
   toggleShortcut(): void {
-    const shortcutModal = document.getElementById('shortcut-modal');
-    shortcutModal.hidden = !shortcutModal.hidden;
+    this.shortcutOpen = !this.shortcutOpen;
   }
 
   @HostListener('window:keydown', ['$event'])

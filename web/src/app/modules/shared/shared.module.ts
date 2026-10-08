@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TextComponent } from './components/presentation/text/text.component';
 import { ClarityModule } from '@clr/angular';
 import { ClrIcon } from '@clr/angular/icon';
+import { ClrModalModule } from '@clr/angular/modal';
 import { TitleComponent } from './components/presentation/title/title.component';
 import { AccordionComponent } from './components/presentation/accordion/accordion.component';
 import { AlertComponent } from './components/presentation/alert/alert.component';
@@ -182,6 +183,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   imports: [
     ClarityModule,
     ClrIcon,
+    ClrModalModule,
     CommonModule,
     DataModule,
     FormsModule,

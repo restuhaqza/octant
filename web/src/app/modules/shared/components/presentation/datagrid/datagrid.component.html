@@ -72,17 +72,15 @@
   </clr-dg-footer>
 </clr-datagrid>
 
-<cds-modal [closable]="true" [hidden]="!isModalOpen" (closeChange)="toggleModal()">
-  <cds-modal-header>
-    <h3 cds-text="title" cds-first-focus>{{ actionDialogOptions?.confirmation?.title }}</h3>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal [(clrModalOpen)]="isModalOpen" [clrModalClosable]="true">
+  <h3 class="modal-title" cds-text="title" cds-first-focus>{{ actionDialogOptions?.confirmation?.title }}</h3>
+  <div class="modal-body">
     <div
       ngPreserveWhitespaces
       [innerHTML]="actionDialogOptions?.confirmation?.body"
     ></div>
-  </cds-modal-content>
-  <cds-modal-actions>
+  </div>
+  <div class="modal-footer">
     <button type="button" class="btn btn-outline" (click)="toggleModal()">Cancel</button>
     <button
       type="button"
@@ -90,5 +88,5 @@
       [ngClass]="actionDialogOptions?.type === 'danger' ? 'btn-outline-danger' : 'btn-outline-primary'"
       (click)="acceptModal()"
     >{{ actionDialogOptions?.text }}</button>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+</clr-modal>

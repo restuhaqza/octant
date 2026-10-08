@@ -35,6 +35,7 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
   block = null;
 
   modalView: View;
+  isConfirmationModalOpen = false;
 
   constructor(
     private actionService: ActionService,
@@ -140,19 +141,18 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
       SecurityContext.HTML,
       parse(confirmation.body)
     );
-    this.toggleModal();
+    this.isConfirmationModalOpen = true;
     this.payload = payload;
   }
 
   private resetModal() {
-    this.toggleModal();
+    this.isConfirmationModalOpen = false;
     this.modalBody = '';
     this.modalTitle = '';
     this.payload = {};
   }
 
   toggleModal(): void {
-    const modal = document.getElementById('confirmation-modal');
-    modal.hidden = !modal.hidden;
+    this.isConfirmationModalOpen = !this.isConfirmationModalOpen;
   }
 }

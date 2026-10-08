@@ -68,11 +68,11 @@ export class PreferencesComponent implements OnChanges {
   }
 
   set isOpen(v: boolean) {
+    if (this.isOpenValue === v) {
+      return;
+    }
     this.isOpenValue = v;
     this.isOpenChange.emit(this.isOpenValue);
-    if (this.isOpenValue) {
-      this.togglePreferences();
-    }
   }
 
   @Input()
@@ -130,7 +130,6 @@ export class PreferencesComponent implements OnChanges {
 
   onCancel() {
     this.isOpen = false;
-    this.togglePreferences();
   }
 
   onDropDownValueChange(event, name) {
@@ -141,19 +140,12 @@ export class PreferencesComponent implements OnChanges {
     if (this.form.valid) {
       this.preferencesChanged.emit(this.form.value);
       this.isOpen = false;
-      this.togglePreferences();
     }
   }
 
   onReset(): void {
     this.reset.emit();
     this.isOpen = false;
-    this.togglePreferences();
-  }
-
-  togglePreferences(): void {
-    const preferencesModal = document.getElementById('preferences-modal');
-    preferencesModal.hidden = !preferencesModal.hidden;
   }
 
   private onValueChanged(update: StringDict) {

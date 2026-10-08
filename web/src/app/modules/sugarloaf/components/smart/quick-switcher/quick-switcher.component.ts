@@ -50,7 +50,7 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
   inputChanged: Subject<string> = new Subject<string>();
 
   activeIndex = 0;
-  styledShadowDom = false;
+  isOpen = false;
 
   private navigationSubscription: Subscription;
   private namespaceSubscription: Subscription;
@@ -220,16 +220,6 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
   }
 
   toggleQuickSwitcher(): void {
-    const qcModal = document.getElementById('quick-switcher-modal');
-    qcModal.hidden = !qcModal.hidden;
-
-    // Add styling to prevent modal from moving as number of results update
-    if (!this.styledShadowDom) {
-      const style = document.createElement('style');
-      style.innerHTML =
-        '.modal-dialog { position: fixed !important; top: 4rem; }';
-      qcModal.shadowRoot.appendChild(style);
-      this.styledShadowDom = true;
-    }
+    this.isOpen = !this.isOpen;
   }
 }

@@ -35,12 +35,12 @@ app-view-card cds-alert-group {
   margin-bottom: 10px;
 }
 
-cds-modal-content app-alert {
+.modal-body app-alert {
   width: 100%;
 }
 
 // TODO: Migrate text to use cds color.
-cds-modal-content app-view-text {
+.modal-body app-view-text {
   color: var(--cds-alias-typography-color-500);
 }
 

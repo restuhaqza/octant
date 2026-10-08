@@ -2,11 +2,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-cds-modal {
-  --animation-duration: 0s;
+clr-modal {
   position: absolute;
 
-  cds-modal-actions {
+  // Anchor the dialog so it does not move as the number of results update.
+  ::ng-deep .modal-dialog {
+    position: fixed !important;
+    top: 4rem;
+  }
+
+  .modal-footer {
     font-size: x-small;
     color: var(--clr-global-font-color);
 
