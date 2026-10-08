@@ -39,6 +39,7 @@ const defaultZoom = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-view-resource-viewer',
   templateUrl: './resource-viewer.component.html',
   styleUrls: ['./resource-viewer.component.scss'],

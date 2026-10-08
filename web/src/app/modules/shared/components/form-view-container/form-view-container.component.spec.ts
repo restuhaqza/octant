@@ -15,6 +15,7 @@ import { CdsModule } from '@cds/angular';
 import '@cds/core/radio/register.js';
 
 @Component({
+  standalone: false,
   template:
     '<app-form-view-container [form]="form" [formGroupContainer]="formGroup"></app-form-view-container>',
 })

@@ -6,6 +6,7 @@ import { ThemeService } from '../../../../shared/services/theme/theme.service';
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-theme-switch-button',
   templateUrl: './theme-switch-button.component.html',
   styleUrls: ['./theme-switch-button.component.scss'],

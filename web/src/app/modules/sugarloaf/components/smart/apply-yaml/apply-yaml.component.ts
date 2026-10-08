@@ -9,6 +9,7 @@ import { ClarityIcons, uploadIcon } from '@cds/core/icon';
 import { EditorView } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-apply-yaml',
   templateUrl: './apply-yaml.component.html',
   styleUrls: ['./apply-yaml.component.scss'],

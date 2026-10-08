@@ -19,6 +19,7 @@ import {
 } from '../../../../shared/services/navigation/navigation.service';
 
 @Component({
+  standalone: false,
   selector: 'app-namespace',
   templateUrl: './namespace.component.html',
   styleUrls: ['./namespace.component.scss'],

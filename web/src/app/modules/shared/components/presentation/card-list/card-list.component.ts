@@ -4,6 +4,7 @@ import { ViewService } from '../../../services/view/view.service';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-card-list',
   templateUrl: './card-list.component.html',
   styleUrls: ['./card-list.component.scss'],

@@ -19,6 +19,7 @@ import { ActionService } from '../../../services/action/action.service';
 import { ModalService } from '../../../services/modal/modal.service';
 
 @Component({
+  standalone: false,
   selector: 'app-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],

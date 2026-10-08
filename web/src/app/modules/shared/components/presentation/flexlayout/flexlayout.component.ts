@@ -12,6 +12,7 @@ import trackByIndex from 'src/app/util/trackBy/trackByIndex';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-flexlayout',
   templateUrl: './flexlayout.component.html',
   styleUrls: ['./flexlayout.component.scss'],

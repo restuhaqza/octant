@@ -16,6 +16,7 @@ const alertLookup = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],

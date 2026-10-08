@@ -6,6 +6,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { LinkView, View } from '../../../models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss'],

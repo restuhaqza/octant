@@ -11,6 +11,7 @@ import {
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-selectors',
   templateUrl: './selectors.component.html',
   styleUrls: ['./selectors.component.scss'],

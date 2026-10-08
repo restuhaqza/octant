@@ -7,6 +7,7 @@ import { HelperService } from '../../../services/helper/helper.service';
 import { TextView } from '../../../models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-helper',
   templateUrl: './helper.component.html',
   styleUrls: ['./helper.component.scss'],

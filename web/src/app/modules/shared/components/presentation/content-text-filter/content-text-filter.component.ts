@@ -13,6 +13,7 @@ import { TableRow } from '../../../models/content';
 import { RelativePipe } from '../../../pipes/relative/relative.pipe';
 
 @Component({
+  standalone: false,
   selector: 'app-content-text-filter',
   templateUrl: './content-text-filter.component.html',
   styleUrls: ['./content-text-filter.component.scss'],

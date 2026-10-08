@@ -7,6 +7,7 @@ import { LabelSelectorView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-label-selector',
   templateUrl: './label-selector.component.html',
   styleUrls: ['./label-selector.component.scss'],

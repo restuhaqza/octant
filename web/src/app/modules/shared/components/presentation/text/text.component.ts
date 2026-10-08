@@ -15,6 +15,7 @@ import { AbstractViewComponent } from '../../abstract-view/abstract-view.compone
 import { parse } from 'marked';
 
 @Component({
+  standalone: false,
   selector: 'app-view-text',
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.scss'],

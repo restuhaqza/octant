@@ -11,6 +11,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],

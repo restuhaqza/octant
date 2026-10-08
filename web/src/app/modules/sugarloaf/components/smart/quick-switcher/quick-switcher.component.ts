@@ -29,6 +29,7 @@ interface Destination {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-quick-switcher',
   templateUrl: './quick-switcher.component.html',
   styleUrls: ['./quick-switcher.component.scss'],

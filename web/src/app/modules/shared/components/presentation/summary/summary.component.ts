@@ -15,6 +15,7 @@ import { ViewService } from '../../../services/view/view.service';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],

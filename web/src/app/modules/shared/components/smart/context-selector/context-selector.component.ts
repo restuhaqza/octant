@@ -12,6 +12,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-context-selector',
   templateUrl: './context-selector.component.html',
   styleUrls: ['./context-selector.component.scss'],

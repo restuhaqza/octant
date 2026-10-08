@@ -38,6 +38,7 @@ import { PreferencesService } from '../../../services/preferences/preferences.se
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-view-datagrid',
   templateUrl: './datagrid.component.html',
   styleUrls: ['./datagrid.component.scss'],

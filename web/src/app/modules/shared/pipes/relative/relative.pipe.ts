@@ -25,6 +25,7 @@ const changeDetectionFrequency = (seconds: number) => {
 };
 
 @Pipe({
+  standalone: false,
   name: 'relative',
   pure: false,
 })

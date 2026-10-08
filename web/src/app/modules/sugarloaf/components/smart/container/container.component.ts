@@ -26,6 +26,7 @@ import {
 } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './container.component.html',
   styleUrls: ['./container.component.scss'],

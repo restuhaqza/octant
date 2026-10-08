@@ -12,6 +12,7 @@ import '@cds/core/select/register.js';
 import { Choice } from '../../models/form-helper';
 
 @Component({
+  standalone: false,
   selector: 'app-form-view-container',
   templateUrl: './form-view-container.component.html',
   styleUrls: ['./form-view-container.component.scss'],

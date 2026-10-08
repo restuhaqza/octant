@@ -22,6 +22,7 @@ interface Choice {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-view-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],

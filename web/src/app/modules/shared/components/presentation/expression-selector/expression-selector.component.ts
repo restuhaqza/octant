@@ -7,6 +7,7 @@ import { ExpressionSelectorView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-expression-selector',
   templateUrl: './expression-selector.component.html',
   styleUrls: ['./expression-selector.component.scss'],

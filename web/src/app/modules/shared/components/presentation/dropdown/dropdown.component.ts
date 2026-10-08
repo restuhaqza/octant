@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
 
 @Component({
+  standalone: false,
   selector: 'app-view-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],

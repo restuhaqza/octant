@@ -8,6 +8,7 @@ import trackByIdentity from 'src/app/util/trackBy/trackByIdentity';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-annotations',
   templateUrl: './annotations.component.html',
   styleUrls: ['./annotations.component.scss'],

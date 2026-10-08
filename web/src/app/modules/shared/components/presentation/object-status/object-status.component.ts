@@ -6,6 +6,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { Node } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-view-object-status',
   templateUrl: './object-status.component.html',
   styleUrls: ['./object-status.component.scss'],

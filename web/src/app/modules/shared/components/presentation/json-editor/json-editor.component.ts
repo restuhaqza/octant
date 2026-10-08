@@ -14,6 +14,7 @@ import JSONEditor from 'jsoneditor';
 import { JSONEditorView } from '../../../models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-view-json',
   templateUrl: 'json-editor.component.html',
   styleUrls: ['./json-editor.component.scss'],

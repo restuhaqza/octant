@@ -3,6 +3,7 @@ import { IFrameView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-iframe',
   templateUrl: './iframe.component.html',
   styleUrls: ['./iframe.component.scss'],

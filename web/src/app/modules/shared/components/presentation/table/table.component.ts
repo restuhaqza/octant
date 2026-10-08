@@ -10,6 +10,7 @@ import { ViewService } from '../../../services/view/view.service';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],

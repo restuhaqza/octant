@@ -30,6 +30,7 @@ export const iconLookup = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-indicator',
   templateUrl: './indicator.component.html',
 })

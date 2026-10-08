@@ -17,6 +17,7 @@ import { ClarityIcons, angleIcon, timesIcon } from '@cds/core/icon';
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-input-filter',
   templateUrl: './input-filter.component.html',
   styleUrls: ['./input-filter.component.scss'],

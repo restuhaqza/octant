@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { WindowToken } from '../../../../../window';
 
 @Component({
+  standalone: false,
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss'],

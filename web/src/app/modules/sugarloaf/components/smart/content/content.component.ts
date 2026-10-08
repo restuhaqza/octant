@@ -25,6 +25,7 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
 import { EventListeners, PartialOptions } from 'overlayscrollbars';
 
 @Component({
+  standalone: false,
   selector: 'app-overview',
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.scss'],

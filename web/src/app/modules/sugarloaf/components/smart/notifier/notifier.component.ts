@@ -12,6 +12,7 @@ import {
 } from 'src/app/modules/shared/notifier/notifier.service';
 
 @Component({
+  standalone: false,
   selector: 'app-notifier',
   templateUrl: './notifier.component.html',
   styleUrls: ['./notifier.component.scss'],

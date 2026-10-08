@@ -10,6 +10,7 @@ import {
 import { default as AnsiUp } from 'ansi_up';
 
 @Pipe({
+  standalone: false,
   name: 'ansipipe',
 })
 export class AnsiPipe implements PipeTransform {

@@ -11,6 +11,7 @@ interface Labels {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-overflow-labels',
   templateUrl: './overflow-labels.component.html',
   styleUrls: ['./overflow-labels.component.scss'],

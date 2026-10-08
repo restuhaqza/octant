@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
 import { View } from '../../../models/content';
 
 @Component({
+  standalone: false,
   template:
     '<app-indicator [status]="status" [detail]="detail"></app-indicator>',
 })

@@ -9,6 +9,7 @@ import { TextComponent } from './text.component';
 import { Status } from '../indicator/indicator.component';
 import { ClarityModule, ClrPopoverToggleService } from '@clr/angular';
 @Component({
+  standalone: false,
   template: '<app-view-text [view]="view"></app-view-text>',
 })
 class TestWrapperComponent {

@@ -15,6 +15,7 @@ import { PortsView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-ports',
   templateUrl: './ports.component.html',
   styleUrls: ['./ports.component.scss'],

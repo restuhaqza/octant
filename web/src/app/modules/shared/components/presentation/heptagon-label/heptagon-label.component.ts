@@ -15,6 +15,7 @@ import { PodStatus } from '../../../models/pod-status';
 import { Point } from '../../../models/point';
 
 @Component({
+  standalone: false,
   selector: '[app-heptagon-label]',
   template: `
     <svg:rect

@@ -8,6 +8,7 @@ import { CodeView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-code',
   templateUrl: './code.component.html',
   styleUrls: ['./code.component.scss'],

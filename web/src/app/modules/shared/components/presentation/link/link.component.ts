@@ -10,6 +10,7 @@ const isUrlExternal = url =>
   url?.indexOf('://') > 0 || url?.indexOf('//') === 0;
 
 @Component({
+  standalone: false,
   selector: 'app-view-link',
   templateUrl: './link.component.html',
   styleUrls: ['./link.component.scss'],

@@ -55,6 +55,7 @@ const elements = (preferences: Preferences): PreferenceElement[] => {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',
   styleUrls: ['./preferences.component.scss'],

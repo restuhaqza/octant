@@ -11,6 +11,7 @@ import { SliderService } from 'src/app/modules/shared/slider/slider.service';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-slider-view',
   templateUrl: './slider-view.component.html',
   styleUrls: ['./slider-view.component.scss'],

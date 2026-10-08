@@ -32,6 +32,7 @@ interface Viewer {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-view-container',
   template: `<ng-container appView></ng-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,

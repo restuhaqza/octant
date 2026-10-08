@@ -5,6 +5,7 @@ import {
 } from '../../../../shared/services/theme/theme.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

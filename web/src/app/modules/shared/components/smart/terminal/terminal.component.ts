@@ -22,6 +22,7 @@ import { WebsocketService } from '../../../../../data/services/websocket/websock
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   encapsulation: ViewEncapsulation.None,
   selector: 'app-terminal',
   styleUrls: ['./terminal.component.scss'],

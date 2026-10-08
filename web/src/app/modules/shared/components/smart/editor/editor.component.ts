@@ -20,6 +20,7 @@ interface Options {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-view-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],

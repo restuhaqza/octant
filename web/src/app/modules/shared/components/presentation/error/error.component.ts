@@ -7,6 +7,7 @@ import { ErrorView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-error',
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.scss'],

@@ -25,6 +25,7 @@ type File = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-view-select-file',
   templateUrl: './select-file.component.html',
 })

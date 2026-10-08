@@ -7,6 +7,7 @@ import { AbstractViewComponent } from '../../abstract-view/abstract-view.compone
 import { TimelineStep, TimelineView } from '../../../models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-view-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss'],

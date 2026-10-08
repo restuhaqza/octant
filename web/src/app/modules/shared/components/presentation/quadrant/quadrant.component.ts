@@ -13,6 +13,7 @@ import { AbstractViewComponent } from '../../abstract-view/abstract-view.compone
 const emptyQuadrantValue = { value: '', label: '' };
 
 @Component({
+  standalone: false,
   selector: 'app-view-quadrant',
   templateUrl: './quadrant.component.html',
   styleUrls: ['./quadrant.component.scss'],
