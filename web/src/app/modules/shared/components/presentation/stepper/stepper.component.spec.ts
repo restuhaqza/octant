@@ -1,9 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StepperComponent } from './stepper.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { StepperView } from '../../../models/content';

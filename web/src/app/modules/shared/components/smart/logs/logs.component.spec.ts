@@ -141,7 +141,7 @@ describe('LogsComponent', () => {
     expect(selectHighlights[0].nativeElement.innerText).toEqual('Just');
   });
 
-  it('forward button should wrap search at bottom', () => {
+  it('forward button should wrap search at bottom', async () => {
     component.containerLogs = [
       {
         timestamp: '2019-05-06T18:50:06.554540433Z',
@@ -165,25 +165,24 @@ describe('LogsComponent', () => {
       By.css('.clr-filter-summary')
     ).nativeElement;
 
-    expect(badgeElement.innerText).toBe('1/2 items');
+    expect(badgeElement.innerText.trim()).toBe('1/2 items');
     nextButton.click();
 
-    fixture.whenStable().then(() => {
-      const offsetSecondElement = getSelectedHighlightTop();
+    await fixture.whenStable();
+    const offsetSecondElement = getSelectedHighlightTop();
 
-      fixture.detectChanges();
-      expect(badgeElement.innerText).toBe('2/2 items');
+    fixture.detectChanges();
+    expect(badgeElement.innerText.trim()).toBe('2/2 items');
 
-      nextButton.click();
-      fixture.detectChanges();
-      expect(getSelectedHighlightTop()).toBeLessThan(offsetSecondElement); // should roll-up to 1st
-      expect(badgeElement.innerText).toBe('1/2 items');
+    nextButton.click();
+    fixture.detectChanges();
+    expect(getSelectedHighlightTop()).toBeLessThan(offsetSecondElement); // should roll-up to 1st
+    expect(badgeElement.innerText.trim()).toBe('1/2 items');
 
-      prevButton.click();
-      fixture.detectChanges();
-      expect(getSelectedHighlightTop()).toBe(offsetSecondElement); // should come back to 2nd
-      expect(badgeElement.innerText).toBe('2/2 items');
-    });
+    prevButton.click();
+    fixture.detectChanges();
+    expect(getSelectedHighlightTop()).toBe(offsetSecondElement); // should come back to 2nd
+    expect(badgeElement.innerText.trim()).toBe('2/2 items');
   });
 
   function getSelectedHighlightTop() {
