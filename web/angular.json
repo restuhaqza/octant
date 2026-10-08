@@ -42,11 +42,6 @@
               "src/favicon.ico",
               "src/assets",
               {
-                "glob": "legacy-clr-ui-dark.min.css",
-                "input": "node_modules/@clr/ui",
-                "output": "assets/css"
-              },
-              {
                 "glob": "clr-ui.min.css",
                 "input": "node_modules/@clr/ui",
                 "output": "assets/css"
@@ -59,7 +54,6 @@
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",
-              "node_modules/@clr/ui/legacy-clr-ui-dark.min.css",
               "node_modules/@clr/ui/clr-ui.min.css",
               "src/styles.scss"
             ],

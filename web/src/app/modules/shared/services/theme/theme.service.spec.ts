@@ -40,12 +40,12 @@ describe('ThemeService', () => {
   it('should load dark theme file correctly', inject(
     [DOCUMENT],
     (document: Document) => {
-      service.loadCSS('assets/css/legacy-clr-ui-dark.min.css');
+      service.loadCSS('assets/css/clr-ui.min.css');
 
       const themeLink = document.getElementById(
         'client-theme'
       ) as HTMLLinkElement;
-      expect(themeLink.href).toContain('assets/css/legacy-clr-ui-dark.min.css');
+      expect(themeLink.href).toContain('assets/css/clr-ui.min.css');
     }
   ));
 });

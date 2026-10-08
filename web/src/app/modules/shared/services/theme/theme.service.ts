@@ -17,7 +17,9 @@ export interface Theme {
  */
 export const darkTheme: Theme = {
   type: 'dark',
-  assetPath: 'assets/css/legacy-clr-ui-dark.min.css',
+  // Clarity 17+ ships a single stylesheet and switches dark via the
+  // `cds-theme="dark"` attribute (applied in loadTheme()), not a separate CSS.
+  assetPath: 'assets/css/clr-ui.min.css',
 };
 
 /**
