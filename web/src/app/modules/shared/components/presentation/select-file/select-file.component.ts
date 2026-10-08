@@ -80,7 +80,10 @@ export class SelectFileComponent
         };
 
         if (this.electronService.isElectron()) {
-          fileMetadata = { ...fileMetadata, ...{ path: file.path } };
+          fileMetadata = {
+            ...fileMetadata,
+            ...{ path: this.electronService.getPathForFile(file) },
+          };
         }
         fileList.push(fileMetadata);
       }
