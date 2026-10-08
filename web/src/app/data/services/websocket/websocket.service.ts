@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   BehaviorSubject,
@@ -60,6 +60,7 @@ export class WebsocketService implements BackendService {
     private electronService: ElectronService,
     notifierService: NotifierService,
     router: Router,
+    private ngZone: NgZone,
     @Inject(WindowToken) private window: Window
   ) {
     this.notifierSession = notifierService.createSession();
@@ -120,14 +121,21 @@ export class WebsocketService implements BackendService {
       )
       .subscribe(
         data => {
-          this.connectSignalID.pipe(take(1)).subscribe(id => {
-            if (id !== '') {
-              this.notifierSession.removeAllSignals();
-              this.connectSignalID.next('');
-            }
-          });
+          // zone.js 0.16 no longer ships the WebSocket patch in its default
+          // bundle, so rxjs/webSocket emissions arrive outside the Angular zone
+          // and would not trigger change detection - the UI stays on
+          // "Loading..." until the next user interaction. Run the handler
+          // inside NgZone so every pushed update repaints.
+          this.ngZone.run(() => {
+            this.connectSignalID.pipe(take(1)).subscribe(id => {
+              if (id !== '') {
+                this.notifierSession.removeAllSignals();
+                this.connectSignalID.next('');
+              }
+            });
 
-          this.parseWebsocketMessage(data);
+            this.parseWebsocketMessage(data);
+          });
         },
         err => console.error(err),
         () => {

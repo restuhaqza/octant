@@ -5,7 +5,9 @@
  */
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  NgZone,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -64,7 +66,9 @@ export class ContentComponent implements OnInit, OnDestroy {
     private router: Router,
     private iconService: IconService,
     private contentService: ContentService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -72,7 +76,13 @@ export class ContentComponent implements OnInit, OnDestroy {
 
     this.contentSubscription = this.contentService.current.subscribe(
       contentResponse => {
-        this.setContent(contentResponse);
+        // zone.js 0.16 dropped the default WebSocket patch, so websocket
+        // emissions land outside the Angular zone; re-enter the zone and mark
+        // the view so the update is actually rendered.
+        this.ngZone.run(() => {
+          this.setContent(contentResponse);
+          this.cdr.markForCheck();
+        });
       }
     );
 
