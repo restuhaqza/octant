@@ -11,7 +11,7 @@ import {
   NavigationChild,
 } from '../../../sugarloaf/models/navigation';
 import { ContentService } from '../content/content.service';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { LoadingService } from '../loading/loading.service';
 import { ClarityIcons } from '@cds/core/icon';
@@ -72,8 +72,8 @@ export class NavigationService {
     });
 
     router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((event: RouterEvent) => {
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(event => {
         this.loadingService.requestComplete.next(false);
         this.activeUrl.next(event.url);
         this.updateLastSelection();

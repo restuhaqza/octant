@@ -22,7 +22,7 @@ import { isEqual } from 'lodash';
 import { Subscription } from 'rxjs';
 import { LoadingService } from 'src/app/modules/shared/services/loading/loading.service';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
-import OverlayScrollbars from 'overlayscrollbars';
+import { EventListeners, PartialOptions } from 'overlayscrollbars';
 
 @Component({
   selector: 'app-overview',
@@ -49,13 +49,13 @@ export class ContentComponent implements OnInit, OnDestroy {
   public showSpinner = false;
   currentPath = '';
   // https://github.com/KingSora/OverlayScrollbars/issues/257
-  options: OverlayScrollbars.Options = {
-    callbacks: {
-      onScroll: () => {
-        this.contentService.setScrollPos(
-          this.contentScrollbar.osInstance().scroll().position.y
-        );
-      },
+  options: PartialOptions = {};
+
+  events: EventListeners = {
+    scroll: instance => {
+      this.contentService.setScrollPos(
+        instance.elements().scrollOffsetElement.scrollTop
+      );
     },
   };
 

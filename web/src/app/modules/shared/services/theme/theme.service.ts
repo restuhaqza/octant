@@ -17,7 +17,7 @@ export interface Theme {
  */
 export const darkTheme: Theme = {
   type: 'dark',
-  assetPath: 'assets/css/clr-ui-dark.min.css',
+  assetPath: 'assets/css/legacy-clr-ui-dark.min.css',
 };
 
 /**
