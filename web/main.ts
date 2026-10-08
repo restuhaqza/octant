@@ -70,8 +70,7 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       webSecurity: false,
       allowRunningInsecureContent: true,
-      contextIsolation: false, // false if you want to run 2e2 test with Spectron
-      enableRemoteModule: true, // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+      contextIsolation: false, // renderer runs with Node integration (legacy desktop shell)
     },
   };
 
@@ -123,9 +122,9 @@ function createWindow(): BrowserWindow {
   }
 );
 
-  win.webContents.on('new-window', (event, url: string) => {
-    event.preventDefault();
+  win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
+    return { action: 'deny' };
   });
 
   win.on('close', event => {
