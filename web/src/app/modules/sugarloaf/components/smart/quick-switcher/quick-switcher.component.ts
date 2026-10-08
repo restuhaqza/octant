@@ -8,7 +8,6 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import '@cds/core/modal/register.js';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Navigation, NavigationChild } from '../../../models/navigation';

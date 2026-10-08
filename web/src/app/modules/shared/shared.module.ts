@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TextComponent } from './components/presentation/text/text.component';
 import { ClarityModule } from '@clr/angular';
-import { CdsModule } from '@cds/angular';
 import { TitleComponent } from './components/presentation/title/title.component';
 import { AccordionComponent } from './components/presentation/accordion/accordion.component';
 import { AlertComponent } from './components/presentation/alert/alert.component';
@@ -181,7 +180,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   ],
   imports: [
     ClarityModule,
-    CdsModule,
     CommonModule,
     DataModule,
     FormsModule,

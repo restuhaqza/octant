@@ -5,7 +5,6 @@ import {
   OnInit,
 } from '@angular/core';
 
-import '@cds/core/alert/register.js';
 import { Alert } from '../../../models/content';
 
 const alertLookup = {

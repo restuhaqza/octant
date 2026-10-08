@@ -10,8 +10,6 @@
 @import '~highlight.js/styles/github.css';
 @import '~overlayscrollbars/styles/overlayscrollbars.css';
 @import '~@ng-select/ng-select/themes/default.theme.css';
-@import '~@cds/core/styles/theme.dark.min.css';
-@import '~@cds/core/global.css';
 @import '~jsoneditor/dist/jsoneditor.min.css';
 
 // Avoid Datagrid's header sticky position.
@@ -43,7 +41,7 @@ cds-modal-content app-alert {
 
 // TODO: Migrate text to use cds color.
 cds-modal-content app-view-text {
-  color: var(--cds-global-typography-color-500);
+  color: var(--cds-alias-typography-color-500);
 }
 
 app-helper cds-icon {

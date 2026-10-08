@@ -2,13 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActionField, ActionForm } from '../../models/content';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import trackByIndex from 'src/app/util/trackBy/trackByIndex';
-
-import '@cds/core/checkbox/register.js';
-import '@cds/core/input/register.js';
-import '@cds/core/textarea/register.js';
-import '@cds/core/input/register.js';
-import '@cds/core/radio/register.js';
-import '@cds/core/select/register.js';
 import { Choice } from '../../models/form-helper';
 
 @Component({

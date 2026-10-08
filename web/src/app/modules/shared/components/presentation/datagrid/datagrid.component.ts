@@ -21,8 +21,6 @@ import {
   TableView,
   View,
 } from 'src/app/modules/shared/models/content';
-import '@cds/core/button/register.js';
-import '@cds/core/modal/register';
 import trackByIndex from 'src/app/util/trackBy/trackByIndex';
 import trackByIdentity from 'src/app/util/trackBy/trackByIdentity';
 import { TimestampComparator } from '../../../../../util/timestamp-comparator';

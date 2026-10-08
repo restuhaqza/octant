@@ -10,8 +10,6 @@ import {
   View,
   ModalView,
 } from '../../../models/content';
-import '@cds/core/button/register';
-import '@cds/core/modal/register';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 import { parse } from 'marked';
 import { DomSanitizer } from '@angular/platform-browser';

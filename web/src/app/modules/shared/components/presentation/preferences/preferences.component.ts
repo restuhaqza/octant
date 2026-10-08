@@ -6,7 +6,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import '@cds/core/modal/register.js';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import {
   Condition,

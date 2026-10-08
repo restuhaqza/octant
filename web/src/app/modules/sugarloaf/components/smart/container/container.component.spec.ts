@@ -29,7 +29,7 @@ import { FilterTextPipe } from '../../../pipes/filtertext/filtertext.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
 import { WebsocketServiceMock } from '../../../../../data/services/websocket/mock';
-import { ClarityIcons } from '@clr/icons';
+import { ClarityIcons } from '@clr/angular/icon';
 import { ThemeSwitchButtonComponent } from '../theme-switch/theme-switch-button.component';
 import { QuickSwitcherComponent } from '../quick-switcher/quick-switcher.component';
 

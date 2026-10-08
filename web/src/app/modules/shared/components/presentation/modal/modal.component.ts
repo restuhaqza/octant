@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import '@cds/core/button/register.js';
-import '@cds/core/modal/register';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 import {
   ActionForm,

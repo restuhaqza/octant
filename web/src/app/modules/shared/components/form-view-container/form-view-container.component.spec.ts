@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { FormViewContainerComponent } from './form-view-container.component';
-import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -11,8 +11,6 @@ import {
 } from '@angular/forms';
 import { ActionForm } from '../../models/content';
 import { FormHelper } from '../../models/form-helper';
-import { CdsModule } from '@cds/angular';
-import '@cds/core/radio/register.js';
 
 @Component({
   standalone: false,
@@ -36,7 +34,8 @@ describe('FormViewContainerComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [TestWrapperComponent, FormViewContainerComponent],
-        imports: [CdsModule, ReactiveFormsModule, FormsModule],
+        imports: [ReactiveFormsModule, FormsModule],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
         providers: [{ provide: FormBuilder, useValue: formBuilder }],
       }).compileComponents();
     })
