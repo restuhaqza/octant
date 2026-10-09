@@ -2,16 +2,20 @@
   "compilerOptions": {
     "sourceMap": true,
     "declaration": false,
+    "strict": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "experimentalDecorators": true,
-    "target": "es5",
+    "skipLibCheck": true,
+    "target": "es2022",
     "types": [
       "node"
     ],
     "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
+      "es2022",
       "dom"
     ]
   },

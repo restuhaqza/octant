@@ -13,6 +13,7 @@ import { PodStatus } from '../../../models/pod-status';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-pod-status',
   templateUrl: './pod-status.component.html',
   styleUrls: ['./pod-status.component.scss'],

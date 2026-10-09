@@ -15,11 +15,12 @@ import {
   loadTechnologyIconSet,
   loadChartIconSet,
   ClarityIcons,
-} from '@cds/core/icon';
+} from '@clr/angular/icon';
 import { IconView, Tooltip } from '../../../models/content';
 import { isSvg } from '../../../../../util/isSvg';
 
 @Component({
+  standalone: false,
   selector: 'app-view-icon',
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],

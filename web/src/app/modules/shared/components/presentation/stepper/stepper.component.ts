@@ -12,6 +12,7 @@ interface Choice {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],

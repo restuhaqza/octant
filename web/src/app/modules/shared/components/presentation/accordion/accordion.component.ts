@@ -9,6 +9,7 @@ import { AccordionRow, AccordionView } from '../../../models/content';
 import { ViewService } from '../../../services/view/view.service';
 
 @Component({
+  standalone: false,
   selector: 'app-view-accordion',
   templateUrl: './accordion.component.html',
   styleUrls: ['./accordion.component.scss'],

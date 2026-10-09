@@ -14,6 +14,7 @@ export interface HoverStatus {
 }
 
 @Component({
+  standalone: false,
   selector: '[app-heptagon-grid-row]',
   template: `
     <svg:g

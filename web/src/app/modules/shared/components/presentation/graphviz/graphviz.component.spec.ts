@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 import { GraphvizView } from '../../../models/content';
 
 @Component({
+  standalone: false,
   template: '<app-view-graphviz [view]="view"></app-view-graphviz>',
 })
 class TestWrapperComponent {

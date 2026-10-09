@@ -23,6 +23,7 @@ interface Tab {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-object-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],

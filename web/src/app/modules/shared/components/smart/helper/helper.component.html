@@ -2,7 +2,7 @@
   <clr-dropdown>
     <div cds-layout="horizontal gap:sm">
       <button class="dropdown-button" clrDropdownTrigger>
-        <cds-icon shape="help"></cds-icon>
+        <clr-icon shape="help"></clr-icon>
       </button>
     </div>
     <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
@@ -50,11 +50,14 @@
   </clr-dropdown>
 </div>
 
-<cds-modal size="md" id="build-modal" [closable]="true" hidden (closeChange)="toggleBuildInfo()">
-  <cds-modal-header>
-    <h3 cds-text="title" cds-first-focus tabindex="-1">Build Information</h3>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal
+  [(clrModalOpen)]="buildInfoOpen"
+  [clrModalClosable]="true"
+  clrModalSize="md"
+  id="build-modal"
+>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Build Information</h3>
+  <div class="modal-body">
     <table class="table table-vertical table-noborder">
       <tbody>
       <tr>
@@ -71,17 +74,20 @@
       </tr>
       </tbody>
     </table>
-  </cds-modal-content>
-  <cds-modal-actions>
-    <cds-button (click)="toggleBuildInfo()">Close</cds-button>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="toggleBuildInfo()">Close</button>
+  </div>
+</clr-modal>
 
-<cds-modal size="lg" id="release-modal" [closable]="true" hidden (closeChange)="toggleReleases()">
-  <cds-modal-header>
-    <h3 cds-text="title" cds-first-focus tabindex="-1">Octant Release Information</h3>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal
+  [(clrModalOpen)]="releasesOpen"
+  [clrModalClosable]="true"
+  clrModalSize="lg"
+  id="release-modal"
+>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Octant Release Information</h3>
+  <div class="modal-body">
     <ng-container *ngIf="releaseInfo.config.value; else loading">
       <p class="release-info">
         <app-view-text [view]="releaseInfo"></app-view-text>
@@ -94,30 +100,29 @@
         </span>
       </div>
     </ng-template>
-  </cds-modal-content>
-  <cds-modal-actions>
-    <cds-button (click)="toggleReleases()">Close</cds-button>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="toggleReleases()">Close</button>
+  </div>
+</clr-modal>
 
-<cds-modal size="md" id="shortcut-modal" [closable]="true" hidden (closeChange)="toggleShortcut()">
-  <cds-modal-header>
-    <h3 cds-text="title" cds-first-focus tabindex="-1">Keyboard Shortcuts</h3>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal
+  [(clrModalOpen)]="shortcutOpen"
+  [clrModalClosable]="true"
+  clrModalSize="md"
+  id="shortcut-modal"
+>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Keyboard Shortcuts</h3>
+  <div class="modal-body">
     <clr-stack-view>
       <clr-stack-block
         [clrSbExpandable]="false"
         [clrSbExpanded]="true"
         [clrStackViewLevel]="1"
-        [clrStackViewSetsize]="2"
-        [clrStackViewPosinset]="1"
       >
         <clr-stack-label>Global</clr-stack-label>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Keyboard shortcut list</clr-stack-label>
           <clr-stack-content>
@@ -126,8 +131,6 @@
         </clr-stack-block>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Quick switcher menu</clr-stack-label>
           <clr-stack-content>
@@ -136,8 +139,6 @@
         </clr-stack-block>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Apply YAML</clr-stack-label>
           <clr-stack-content>
@@ -146,8 +147,6 @@
         </clr-stack-block>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Toggle Theme</clr-stack-label>
           <clr-stack-content>
@@ -156,8 +155,6 @@
         </clr-stack-block>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Toggle Navigation</clr-stack-label>
           <clr-stack-content>
@@ -166,8 +163,6 @@
         </clr-stack-block>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Show/Hide Labels</clr-stack-label>
           <clr-stack-content>
@@ -179,14 +174,10 @@
         [clrSbExpandable]="false"
         [clrSbExpanded]="true"
         [clrStackViewLevel]="1"
-        [clrStackViewSetsize]="2"
-        [clrStackViewPosinset]="1"
       >
         <clr-stack-label>YAML</clr-stack-label>
         <clr-stack-block
           [clrStackViewLevel]="2"
-          [clrStackViewSetsize]="0"
-          [clrStackViewPosinset]="1"
         >
           <clr-stack-label>Command palette</clr-stack-label>
           <clr-stack-content>
@@ -195,8 +186,8 @@
         </clr-stack-block>
       </clr-stack-block>
     </clr-stack-view>
-  </cds-modal-content>
-  <cds-modal-actions>
-    <cds-button action="outline" (click)="toggleShortcut()">Close</cds-button>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="toggleShortcut()">Close</button>
+  </div>
+</clr-modal>

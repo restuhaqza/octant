@@ -6,6 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Filter } from '../../../shared/services/label-filter/label-filter.service';
 
 @Pipe({
+  standalone: false,
   name: 'filtertext',
 })
 export class FilterTextPipe implements PipeTransform {

@@ -4,7 +4,7 @@
  *
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Navigation } from '../../../models/navigation';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
@@ -26,6 +26,7 @@ import {
 } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './container.component.html',
   styleUrls: ['./container.component.scss'],
@@ -41,6 +42,7 @@ export class ContainerComponent implements OnInit, OnDestroy {
 
   private subscriptionPreferencesOpened: Subscription;
   private localKubeConfigPath: Subscription;
+  private historySubscription: Subscription;
 
   isElectron = false;
 
@@ -56,7 +58,8 @@ export class ContainerComponent implements OnInit, OnDestroy {
     private electronService: ElectronService,
     private iconService: IconService,
     private helperService: HelperService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private cdr: ChangeDetectorRef
   ) {
     iconService.load({
       iconName: 'octant-logo',
@@ -71,6 +74,7 @@ export class ContainerComponent implements OnInit, OnDestroy {
       this.preferencesService.preferencesOpened.subscribe(opened => {
         this.preferences = this.preferencesService.getPreferences(); // TODO: merge with server side prefs (currently broken)
         this.preferencesOpened = opened;
+        this.cdr.markForCheck();
       });
 
     this.websocketService.open();
@@ -79,16 +83,27 @@ export class ContainerComponent implements OnInit, OnDestroy {
       .subscribe(path => {
         this.preferencesService.setKubeConfigPath(path);
         this.preferences = this.preferencesService.getPreferences();
+        this.cdr.markForCheck();
       });
 
-    this.historyService.history.subscribe(history => {
-      this.updateHistoryDropdownConfig(history);
-    });
+    this.historySubscription = this.historyService.history.subscribe(
+      history => {
+        this.updateHistoryDropdownConfig(history);
+        this.cdr.markForCheck();
+      }
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptionPreferencesOpened.unsubscribe();
-    this.localKubeConfigPath.unsubscribe();
+    if (this.subscriptionPreferencesOpened) {
+      this.subscriptionPreferencesOpened.unsubscribe();
+    }
+    if (this.localKubeConfigPath) {
+      this.localKubeConfigPath.unsubscribe();
+    }
+    if (this.historySubscription) {
+      this.historySubscription.unsubscribe();
+    }
   }
 
   preferencesChanged(update: any) {

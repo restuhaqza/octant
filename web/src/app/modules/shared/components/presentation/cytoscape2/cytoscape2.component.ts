@@ -23,6 +23,7 @@ cytoscape.use(coseBilkent);
 cytoscape('layout', 'octant', octant);
 
 @Component({
+  standalone: false,
   selector: 'app-cytoscape2',
   template: '<div #cy class="cy"></div>',
   styles: [

@@ -10,6 +10,7 @@ import {
 } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-overflow-selectors',
   templateUrl: './overflow-selectors.component.html',
   styleUrls: ['./overflow-selectors.component.scss'],

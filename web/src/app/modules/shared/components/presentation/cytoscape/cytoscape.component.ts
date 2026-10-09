@@ -23,6 +23,7 @@ cytoscape.use(dagre);
 nodeHtmlLabel(cytoscape);
 
 @Component({
+  standalone: false,
   selector: 'app-cytoscape',
   template: '<div #cy class="cy"></div>',
   styleUrls: ['./cytoscape.component.scss'],

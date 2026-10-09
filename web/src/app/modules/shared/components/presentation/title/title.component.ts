@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TitleView } from '../../../models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-view-title',
   templateUrl: './title.component.html',
   styleUrls: ['./title.component.scss'],

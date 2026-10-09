@@ -8,10 +8,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DonutChartComponent } from './donut-chart.component';
 import { DonutChartView } from '../../../models/content';
 import { SharedModule } from '../../../shared.module';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 
 describe('DonutChartComponent', () => {
   let component: DonutChartComponent;
@@ -20,7 +17,7 @@ describe('DonutChartComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [DonutChartComponent, OverlayScrollbarsComponent],
+        declarations: [DonutChartComponent],
         imports: [SharedModule, OverlayscrollbarsModule],
       }).compileComponents();
     })

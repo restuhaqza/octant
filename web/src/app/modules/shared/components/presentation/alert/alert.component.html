@@ -1,7 +1,14 @@
-<cds-alert-group type="{{type}}" status="{{status}}" *ngIf="showAlert">
-  <cds-alert [closable]="closable" (closeChange)="close()">
-    {{message}}
-  </cds-alert>
-  <app-button-group [view]="buttonGroup" *ngIf="buttonGroup">
-  </app-button-group>
-</cds-alert-group>
+<ng-container *ngIf="showAlert">
+  <clr-alert
+    [clrAlertType]="status"
+    [clrAlertClosable]="closable"
+    [clrAlertLightweight]="type === 'light'"
+    [clrAlertAppLevel]="type === 'banner'"
+    (clrAlertClosedChange)="close()"
+  >
+    <clr-alert-item>
+      <span class="alert-text">{{ message }}</span>
+    </clr-alert-item>
+  </clr-alert>
+  <app-button-group [view]="buttonGroup" *ngIf="buttonGroup"></app-button-group>
+</ng-container>

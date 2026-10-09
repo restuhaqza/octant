@@ -5,7 +5,6 @@ import {
   OnInit,
 } from '@angular/core';
 
-import '@cds/core/alert/register.js';
 import { Alert } from '../../../models/content';
 
 const alertLookup = {
@@ -16,6 +15,7 @@ const alertLookup = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],

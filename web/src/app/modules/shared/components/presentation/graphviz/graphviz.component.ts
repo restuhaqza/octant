@@ -15,6 +15,7 @@ import { D3GraphvizService } from '../../../services/d3/d3graphviz.service';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-graphviz',
   template: ` <div class="graphviz" #viewer></div> `,
   styleUrls: ['./graphviz.component.scss'],

@@ -7,6 +7,7 @@ import { YAMLView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-yaml',
   templateUrl: './yaml.component.html',
   styleUrls: ['./yaml.component.scss'],

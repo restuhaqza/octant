@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 import { Injectable } from '@angular/core';
+import { ClarityIcons } from '@clr/angular/icon';
 
 export interface IconAble {
   iconName?: string;
@@ -19,11 +20,12 @@ export class IconService {
       return '';
     }
 
-    // tslint:disable:no-string-literal
-    const clarityIcons = window['ClarityIcons'];
-
-    if (!clarityIcons.has(item.iconName)) {
-      clarityIcons.add({ [item.iconName]: item.iconSource });
+    // Clarity 18 dropped the global `window.ClarityIcons` helpers (`has`/`add`)
+    // in favour of the `ClarityIcons` class exported from `@clr/angular`
+    // (`getIconShape`/`addIcons`). Using the old globals threw and left the
+    // shape unregistered, so `clr-icon` fell back to the "unknown" icon.
+    if (!ClarityIcons.getIconShape(item.iconName) && item.iconSource) {
+      ClarityIcons.addIcons([item.iconName, item.iconSource]);
     }
 
     return item.iconName;

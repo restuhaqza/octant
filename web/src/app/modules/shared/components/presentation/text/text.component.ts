@@ -7,14 +7,14 @@ import {
   OnInit,
   SecurityContext,
 } from '@angular/core';
-import '@cds/core/button/register';
-import { ClarityIcons, clipboardIcon } from '@cds/core/icon';
+import { ClarityIcons, clipboardIcon } from '@clr/angular/icon';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TextView } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 import { parse } from 'marked';
 
 @Component({
+  standalone: false,
   selector: 'app-view-text',
   templateUrl: './text.component.html',
   styleUrls: ['./text.component.scss'],

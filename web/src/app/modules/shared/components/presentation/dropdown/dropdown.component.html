@@ -2,21 +2,21 @@
   <clr-dropdown [clrCloseMenuOnItemClick]="false">
     <button *ngIf="type == 'button'" class="btn btn-outline-primary source" clrDropdownTrigger>
       {{title}}
-      <clr-icon shape="caret down"></clr-icon>
+      <clr-icon shape="angle" direction="down"></clr-icon>
     </button>
     <div *ngIf="type == 'link'" class="source">
       <a [routerLink]="[url]" class="dropdown-link">
         {{ title }}
       </a>
-      <clr-icon shape="caret down" class="dropdown-link-icon" clrDropdownTrigger></clr-icon>
+      <clr-icon shape="angle" direction="down" class="dropdown-link-icon" clrDropdownTrigger></clr-icon>
     </div>
     <div *ngIf="type == 'icon'" class="source" clrDropdownTrigger>
-      <clr-icon [attr.shape]="title"></clr-icon>
-      <clr-icon *ngIf="showToggleIcon" shape="caret down"></clr-icon>
+      <clr-icon [shape]="title"></clr-icon>
+      <clr-icon *ngIf="showToggleIcon" shape="angle" direction="down"></clr-icon>
     </div>
     <div *ngIf="type == 'label'" class="source" clrDropdownTrigger>
       {{title}}
-      <clr-icon shape="caret down"></clr-icon>
+      <clr-icon shape="angle" direction="down"></clr-icon>
     </div>
     <ng-template [(clrIfOpen)]="isOpen">
       <clr-dropdown-menu class="dropdown-wrapper"  [ngStyle]="dropdownMenuStyle" [clrPosition]="position">

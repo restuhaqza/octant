@@ -12,7 +12,7 @@ import {
   waitForAsync,
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ClarityModule, ClrPopoverToggleService } from '@clr/angular';
+import { ClarityModule, ClrPopoverService } from '@clr/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContainerComponent } from './container.component';
@@ -29,7 +29,7 @@ import { FilterTextPipe } from '../../../pipes/filtertext/filtertext.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
 import { WebsocketServiceMock } from '../../../../../data/services/websocket/mock';
-import { ClarityIcons } from '@clr/icons';
+import { ClarityIcons } from '@clr/angular/icon';
 import { ThemeSwitchButtonComponent } from '../theme-switch/theme-switch-button.component';
 import { QuickSwitcherComponent } from '../quick-switcher/quick-switcher.component';
 
@@ -37,7 +37,7 @@ import { UploaderComponent } from '../uploader/uploader.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { windowProvider, WindowToken } from '../../../../../window';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { ApplyYAMLComponent } from '../apply-yaml/apply-yaml.component';
 
 describe('AppComponent', () => {
@@ -51,7 +51,7 @@ describe('AppComponent', () => {
           { provide: WebsocketService, useClass: WebsocketServiceMock },
           { provide: WindowToken, useFactory: windowProvider },
           { provide: window, useValue: ClarityIcons },
-          ClrPopoverToggleService,
+          ClrPopoverService,
         ],
         imports: [
           BrowserModule,
@@ -63,6 +63,7 @@ describe('AppComponent', () => {
           ReactiveFormsModule,
           BrowserAnimationsModule,
           SharedModule,
+          OverlayscrollbarsModule,
         ],
         declarations: [
           ApplyYAMLComponent,
@@ -80,7 +81,6 @@ describe('AppComponent', () => {
           ThemeSwitchButtonComponent,
           QuickSwitcherComponent,
           UploaderComponent,
-          OverlayScrollbarsComponent,
         ],
       }).compileComponents();
     })

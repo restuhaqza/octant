@@ -1,7 +1,19 @@
-<cds-form-group [layout]="layout">
-  <cds-file>
-    <label>{{label}}</label>
-    <input #fileInput type="file" [multiple]="multiple" (change)="inputFileChanged($event)"/>
-    <cds-control-message *ngIf="status" [status]="status">{{statusMessage}}</cds-control-message>
-  </cds-file>
-</cds-form-group>
+<div clrForm [clrLayout]="layout">
+  <div
+    [class.clr-error]="status === 'error'"
+    [class.clr-success]="status === 'success'"
+  >
+    <clr-file-input-container>
+      <label>{{ label }}</label>
+      <input
+        #fileInput
+        type="file"
+        clrFileInput
+        [multiple]="multiple"
+        (change)="inputFileChanged($event)"
+      />
+    </clr-file-input-container>
+    <clr-control-error *ngIf="status === 'error'">{{ statusMessage }}</clr-control-error>
+    <clr-control-success *ngIf="status === 'success'">{{ statusMessage }}</clr-control-success>
+  </div>
+</div>

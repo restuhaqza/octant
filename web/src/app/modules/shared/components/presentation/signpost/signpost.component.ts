@@ -5,6 +5,7 @@ import { parse } from 'marked';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-signpost',
   templateUrl: './signpost.component.html',
   styleUrls: ['./signpost.component.scss'],

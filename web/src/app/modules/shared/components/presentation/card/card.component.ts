@@ -11,6 +11,7 @@ import { FormComponent } from '../form/form.component';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],

@@ -6,6 +6,7 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
+  standalone: false,
   selector: '[appView]',
 })
 export class ViewHostDirective {

@@ -4,7 +4,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { ipcRenderer, webFrame } from 'electron';
+import { ipcRenderer, webFrame, webUtils } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import { PreferencesService } from '../preferences/preferences.service';
@@ -15,6 +15,7 @@ import { PreferencesService } from '../preferences/preferences.service';
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
   webFrame: typeof webFrame;
+  webUtils: typeof webUtils;
   childProcess: typeof childProcess;
   fs: typeof fs;
 
@@ -23,6 +24,7 @@ export class ElectronService {
     if (this.isElectron()) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
+      this.webUtils = window.require('electron').webUtils;
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
 
@@ -72,5 +74,20 @@ export class ElectronService {
       default:
         return 'unknown';
     }
+  }
+
+  /**
+   * Returns the OS path for a File picked in the renderer. Electron removed the
+   * `File.path` property in v32; `webUtils.getPathForFile` replaces it.
+   */
+  getPathForFile(file: File): string {
+    if (!this.isElectron()) {
+      return undefined;
+    }
+    if (this.webUtils && this.webUtils.getPathForFile) {
+      return this.webUtils.getPathForFile(file);
+    }
+    // Fallback for older Electron versions that still expose File.path.
+    return (file as File & { path?: string }).path;
   }
 }

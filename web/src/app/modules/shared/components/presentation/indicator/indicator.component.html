@@ -1,10 +1,10 @@
 <ng-container *ngIf="status && iconShape">
   <ng-container *ngIf="!detail; else signpost">
-    <cds-icon shape="{{iconShape}}" status="{{currentStatus}}" size="16" solid></cds-icon>
+    <clr-icon shape="{{iconShape}}" status="{{currentStatus}}" size="16" solid></clr-icon>
   </ng-container>
   <ng-template #signpost>
     <clr-signpost>
-      <cds-icon shape="{{iconShape}}" status="{{currentStatus}}" size="16" clrSignpostTrigger solid></cds-icon>
+      <clr-icon shape="{{iconShape}}" status="{{currentStatus}}" size="16" clrSignpostTrigger solid></clr-icon>
       <span style="margin-right: 4px;"></span>
       <clr-signpost-content *clrIfOpen>
         <app-view-container [view]="detail"></app-view-container>

@@ -3,10 +3,7 @@
 //
 
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import {
-  OverlayScrollbarsComponent,
-  OverlayscrollbarsModule,
-} from 'overlayscrollbars-ngx';
+import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 import { EditorComponent } from '../components/smart/editor/editor.component';
 import { SliderService } from './slider.service';
 
@@ -16,7 +13,8 @@ describe('SliderService', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [OverlayScrollbarsComponent, EditorComponent],
+        declarations: [EditorComponent],
+        imports: [OverlayscrollbarsModule],
         providers: [OverlayscrollbarsModule],
       });
       service = TestBed.inject(SliderService);

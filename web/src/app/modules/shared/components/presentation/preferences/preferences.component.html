@@ -1,8 +1,11 @@
-<cds-modal size="lg" id="preferences-modal" [closable]="true" hidden (closeChange)="onCancel()">
-  <cds-modal-header>
-    <h4 cds-text="title" cds-first-focus tabindex="-1">Preferences</h4>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal
+  [(clrModalOpen)]="isOpen"
+  [clrModalClosable]="true"
+  clrModalSize="lg"
+  id="preferences-modal"
+>
+  <h4 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Preferences</h4>
+  <div class="modal-body">
     <form [formGroup]="form" class="clr-form">
       <clr-tabs clrLayout="vertical">
         <clr-tab
@@ -86,11 +89,11 @@
         </clr-tab>
       </clr-tabs>
     </form>
-  </cds-modal-content>
-  <cds-modal-actions>
-    <cds-button action="outline" (click)="onReset()">Reset</cds-button>
-    <cds-button class="btn-cancel" action="outline" (click)="onCancel()">Cancel</cds-button>
-    <cds-button (click)="onSubmit()">Ok</cds-button>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="onReset()">Reset</button>
+    <button type="button" class="btn btn-outline btn-cancel" (click)="onCancel()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Ok</button>
+  </div>
+</clr-modal>
 

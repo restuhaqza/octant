@@ -8,10 +8,8 @@
 @import './sass/mixins';
 @import './sass/variables';
 @import '~highlight.js/styles/github.css';
-@import '~overlayscrollbars/css/OverlayScrollbars.css';
+@import '~overlayscrollbars/styles/overlayscrollbars.css';
 @import '~@ng-select/ng-select/themes/default.theme.css';
-@import '~@cds/core/styles/theme.dark.min.css';
-@import '~@cds/core/global.css';
 @import '~jsoneditor/dist/jsoneditor.min.css';
 
 // Avoid Datagrid's header sticky position.
@@ -33,20 +31,20 @@
   }
 }
 
-app-view-card cds-alert-group {
+app-view-card clr-alert {
   margin-bottom: 10px;
 }
 
-cds-modal-content app-alert {
+.modal-body app-alert {
   width: 100%;
 }
 
 // TODO: Migrate text to use cds color.
-cds-modal-content app-view-text {
-  color: var(--cds-global-typography-color-500);
+.modal-body app-view-text {
+  color: var(--cds-alias-typography-color-500);
 }
 
-app-helper cds-icon {
+app-helper clr-icon {
   color: var(--clr-header-font-color);
 }
 

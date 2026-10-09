@@ -10,8 +10,6 @@ import {
   View,
   ModalView,
 } from '../../../models/content';
-import '@cds/core/button/register';
-import '@cds/core/modal/register';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 import { parse } from 'marked';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -19,6 +17,7 @@ import { ActionService } from '../../../services/action/action.service';
 import { ModalService } from '../../../services/modal/modal.service';
 
 @Component({
+  standalone: false,
   selector: 'app-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
@@ -36,6 +35,7 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
   block = null;
 
   modalView: View;
+  isConfirmationModalOpen = false;
 
   constructor(
     private actionService: ActionService,
@@ -77,6 +77,38 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
     }
   }
 
+  /**
+   * Maps the CDS button configuration (`style`/`status`/`size`/`block`) onto
+   * Clarity v18's `.btn` CSS classes.
+   */
+  get buttonClasses(): string {
+    const classes: string[] = [];
+    const status =
+      this.status && this.status !== 'primary' ? `-${this.status}` : '';
+
+    switch (this.style) {
+      case 'solid':
+        classes.push(status ? `btn${status}` : 'btn-primary');
+        break;
+      case 'flat':
+        classes.push(status ? `btn-link${status}` : 'btn-link');
+        break;
+      default:
+        classes.push(status ? `btn-outline${status}` : 'btn-outline');
+        break;
+    }
+
+    if (this.size === 'sm') {
+      classes.push('btn-sm');
+    }
+
+    if (this.block) {
+      classes.push('btn-block');
+    }
+
+    return classes.join(' ');
+  }
+
   onClick(payload: {}, confirmation?: Confirmation, modal?: View) {
     if (modal) {
       this.modalService.openModal();
@@ -109,19 +141,18 @@ export class ButtonComponent extends AbstractViewComponent<ButtonView> {
       SecurityContext.HTML,
       parse(confirmation.body)
     );
-    this.toggleModal();
+    this.isConfirmationModalOpen = true;
     this.payload = payload;
   }
 
   private resetModal() {
-    this.toggleModal();
+    this.isConfirmationModalOpen = false;
     this.modalBody = '';
     this.modalTitle = '';
     this.payload = {};
   }
 
   toggleModal(): void {
-    const modal = document.getElementById('confirmation-modal');
-    modal.hidden = !modal.hidden;
+    this.isConfirmationModalOpen = !this.isConfirmationModalOpen;
   }
 }

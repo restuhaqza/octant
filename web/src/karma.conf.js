@@ -16,8 +16,6 @@ module.exports = function (config) {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-coverage'),
-      require('karma-electron'),
-      require('karma-electron-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-spec-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
@@ -44,7 +42,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome', 'Electron'],
+    browsers: ['Chrome'],
     singleRun: false,
     restartOnFileChange: true,
     customLaunchers: {
@@ -55,15 +53,6 @@ module.exports = function (config) {
           '--no-sandbox',
           '--disable-extensions'
         ],
-      },
-      ElectronDebug: {
-        base: 'Electron',
-        browserWindowOptions: {
-          webPreferences: {
-            nodeIntegration: true,
-            allowRunningInsecureContent: true
-          }
-        }
       }
     },
   });

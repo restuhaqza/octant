@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import '@cds/core/icon/register.js';
-import { ClarityIcons, clusterIcon } from '@cds/core/icon';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ClarityIcons, clusterIcon } from '@clr/angular/icon';
 import {
   ContextDescription,
   KubeContextService,
@@ -12,6 +11,7 @@ import {
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-context-selector',
   templateUrl: './context-selector.component.html',
   styleUrls: ['./context-selector.component.scss'],
@@ -20,25 +20,38 @@ export class ContextSelectorComponent implements OnInit, OnDestroy {
   contexts: ContextDescription[];
   selected: string;
 
-  private kubeContextSubscription: Subscription;
+  private subscriptions = new Subscription();
 
-  constructor(private kubeContext: KubeContextService) {
+  constructor(
+    private kubeContext: KubeContextService,
+    private cdr: ChangeDetectorRef
+  ) {
     ClarityIcons.addIcons(clusterIcon);
   }
 
   ngOnInit() {
-    this.kubeContextSubscription = this.kubeContext
-      .contexts()
-      .subscribe(contexts => (this.contexts = contexts));
-    this.kubeContextSubscription = this.kubeContext
-      .selected()
-      .subscribe(selected => (this.selected = selected));
+    // Angular 22 makes ChangeDetectionStrategy.OnPush the default, so this
+    // component's view is only re-checked when it is marked dirty. Contexts and
+    // the selection are pushed from the websocket (outside a normal
+    // change-detection cycle) into plain fields, so without markForCheck() the
+    // header keeps rendering "No contexts!". Mirror the migrated async-fed
+    // components (e.g. NamespaceComponent) and mark the view for check.
+    this.subscriptions.add(
+      this.kubeContext.contexts().subscribe(contexts => {
+        this.contexts = contexts;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.kubeContext.selected().subscribe(selected => {
+        this.selected = selected;
+        this.cdr.markForCheck();
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    if (this.kubeContextSubscription) {
-      this.kubeContextSubscription.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
   contextClass(context: ContextDescription) {

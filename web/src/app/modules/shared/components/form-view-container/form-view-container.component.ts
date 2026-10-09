@@ -1,17 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActionField, ActionForm } from '../../models/content';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import uniqueId from 'lodash/uniqueId';
 import trackByIndex from 'src/app/util/trackBy/trackByIndex';
-
-import '@cds/core/checkbox/register.js';
-import '@cds/core/input/register.js';
-import '@cds/core/textarea/register.js';
-import '@cds/core/input/register.js';
-import '@cds/core/radio/register.js';
-import '@cds/core/select/register.js';
 import { Choice } from '../../models/form-helper';
 
 @Component({
+  standalone: false,
   selector: 'app-form-view-container',
   templateUrl: './form-view-container.component.html',
   styleUrls: ['./form-view-container.component.scss'],
@@ -23,6 +18,10 @@ export class FormViewContainerComponent implements OnInit {
   formGroupContainer: FormGroup;
 
   formArray: FormArray;
+
+  // Unique per component instance so native radio grouping does not collide when
+  // two forms with the same field names are rendered on one page (finding 6).
+  readonly radioGroupName = uniqueId('form-radio-');
 
   trackByFn = trackByIndex;
 

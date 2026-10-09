@@ -3,6 +3,7 @@ import { ElectronService } from '../../../modules/shared/services/electron/elect
 import { ThemeService } from '../../../modules/shared/services/theme/theme.service';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.sass'],

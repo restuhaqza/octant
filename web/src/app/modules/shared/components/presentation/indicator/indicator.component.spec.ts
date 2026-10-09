@@ -5,11 +5,11 @@ import {
   statusLookup,
   iconLookup,
 } from './indicator.component';
-import { CdsModule } from '@cds/angular';
 import { Component } from '@angular/core';
 import { View } from '../../../models/content';
 
 @Component({
+  standalone: false,
   template:
     '<app-indicator [status]="status" [detail]="detail"></app-indicator>',
 })
@@ -28,7 +28,6 @@ describe('IndicatorComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [WrapperComponent, IndicatorComponent],
-        imports: [CdsModule],
       }).compileComponents();
     })
   );
@@ -55,8 +54,8 @@ describe('IndicatorComponent', () => {
       });
 
       it(`shows ${name} indicator`, () => {
-        const e = element.querySelector(`app-indicator cds-icon`);
-        expect(e.getAttribute('ng-reflect-shape')).toBe(iconLookup[v]);
+        const e = element.querySelector(`app-indicator clr-icon`) as any;
+        expect(e.getAttribute('shape')).toBe(iconLookup[v]);
       });
     });
   });
@@ -69,7 +68,7 @@ describe('IndicatorComponent', () => {
     });
 
     it('does not show an indicator', () => {
-      expect(element.querySelector('app-indicator cds-icon')).toBeNull();
+      expect(element.querySelector('app-indicator clr-icon')).toBeNull();
     });
   });
 });

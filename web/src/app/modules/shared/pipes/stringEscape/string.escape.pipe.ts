@@ -2,6 +2,7 @@ import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
+  standalone: false,
   name: 'escapepipe',
 })
 export class StringEscapePipe implements PipeTransform {

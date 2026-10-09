@@ -5,6 +5,7 @@ import { TableFilter, TableRow, TextView } from '../../../models/content';
 import trackByIdentity from 'src/app/util/trackBy/trackByIdentity';
 
 @Component({
+  standalone: false,
   selector: 'app-content-filter',
   templateUrl: './content-filter.component.html',
   styleUrls: ['./content-filter.component.scss'],

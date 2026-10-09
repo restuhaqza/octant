@@ -6,6 +6,7 @@ import { TimelineView } from '../../../models/content';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TimelineComponent } from './timeline.component';
 @Component({
+  standalone: false,
   template: '<app-view-timeline [view]="view"></app-view-timeline>',
 })
 class TestWrapperComponent {

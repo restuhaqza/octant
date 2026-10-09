@@ -21,8 +21,6 @@ import {
   TableView,
   View,
 } from 'src/app/modules/shared/models/content';
-import '@cds/core/button/register.js';
-import '@cds/core/modal/register';
 import trackByIndex from 'src/app/util/trackBy/trackByIndex';
 import trackByIdentity from 'src/app/util/trackBy/trackByIdentity';
 import { TimestampComparator } from '../../../../../util/timestamp-comparator';
@@ -38,6 +36,7 @@ import { PreferencesService } from '../../../services/preferences/preferences.se
 import { Subscription } from 'rxjs';
 
 @Component({
+  standalone: false,
   selector: 'app-view-datagrid',
   templateUrl: './datagrid.component.html',
   styleUrls: ['./datagrid.component.scss'],

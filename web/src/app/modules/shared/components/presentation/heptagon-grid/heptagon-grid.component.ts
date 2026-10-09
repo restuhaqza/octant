@@ -10,6 +10,7 @@ import { Point } from '../../../models/point';
 import { HoverStatus } from '../heptagon-grid-row/heptagon-grid-row.component';
 
 @Component({
+  standalone: false,
   selector: 'app-heptagon-grid',
   template: `
     <svg [attr.viewBox]="viewBox()">

@@ -7,16 +7,17 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ComponentFactoryResolver,
   ComponentRef,
   EventEmitter,
   Inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   Type,
   ViewChild,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { View } from '../../models/content';
 import { ViewHostDirective } from '../../directives/view-host/view-host.directive';
 import {
@@ -32,12 +33,16 @@ interface Viewer {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-view-container',
   template: `<ng-container appView></ng-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ViewContainerComponent implements OnInit, AfterViewInit {
+export class ViewContainerComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild(ViewHostDirective, { static: true }) appView: ViewHostDirective;
+  private viewValue: View;
   @Input() set view(v: View) {
     if (v && v.metadata) {
       const cur = JSON.stringify(v);
@@ -46,6 +51,10 @@ export class ViewContainerComponent implements OnInit, AfterViewInit {
         this.loadView(v);
       }
     }
+    this.viewValue = v;
+  }
+  get view(): View {
+    return this.viewValue;
   }
   @Input() enableDebug = false;
   @Output() viewInit: EventEmitter<void> = new EventEmitter<void>();
@@ -53,9 +62,9 @@ export class ViewContainerComponent implements OnInit, AfterViewInit {
   private start: number;
   public componentRef: ComponentRef<Viewer>;
   private previous: string;
+  private viewInitSub: Subscription;
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
     @Inject(DYNAMIC_COMPONENTS_MAPPING)
     private componentMappings: ComponentMapping
   ) {}
@@ -67,15 +76,17 @@ export class ViewContainerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.view === null) {
+    if (!this.enableDebug || !this.view) {
       return;
     }
 
-    if (this.enableDebug) {
-      console.log(
-        `${this.view.metadata.type}: ${new Date().getTime() - this.start}`
-      );
-    }
+    console.log(
+      `${this.view?.metadata?.type}: ${new Date().getTime() - this.start}`
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.viewInitSub?.unsubscribe();
   }
 
   loadView(view: View) {
@@ -90,15 +101,40 @@ export class ViewContainerComponent implements OnInit, AfterViewInit {
         component = MissingComponentComponent;
       }
 
-      const componentFactory =
-        this.componentFactoryResolver.resolveComponentFactory(component);
       const viewContainerRef = this.appView.viewContainerRef;
       viewContainerRef.clear();
 
-      this.componentRef =
-        viewContainerRef.createComponent<Viewer>(componentFactory);
+      // Drop the previous view's hook before it is destroyed (and before a new
+      // one is created) so a type change does not leave a dangling subscriber
+      // and an in-place update does not stack a fresh one.
+      this.viewInitSub?.unsubscribe();
+      this.viewInitSub = undefined;
+
+      this.componentRef = viewContainerRef.createComponent<Viewer>(component);
     }
-    this.componentRef.instance.view = view;
-    this.componentRef.instance.viewInit.subscribe(_ => this.viewInit.emit());
+
+    if (this.componentRef.componentType === MissingComponentComponent) {
+      // The fallback is not a Viewer: it declares no `view` input and no
+      // `viewInit` output. Keep the direct assignment (used by the type-change
+      // check above) and surface the unknown type in its template.
+      this.componentRef.instance.view = view;
+      this.componentRef.setInput('name', view.metadata.type);
+      return;
+    }
+
+    // Subscribe exactly once per created component: loadView() runs on every
+    // in-place update, so subscribing unconditionally here would leak a
+    // subscriber per update and make `viewInit` fire once per update.
+    if (!this.viewInitSub) {
+      this.viewInitSub = this.componentRef.instance.viewInit.subscribe(_ =>
+        this.viewInit.emit()
+      );
+    }
+
+    // setInput() marks the dynamically created (possibly OnPush) view dirty.
+    // A direct `instance.view = view` assignment does not, because the
+    // component is created imperatively instead of bound through a template,
+    // so in-place refreshes for the same contentPath left the leaf view stale.
+    this.componentRef.setInput('view', view);
   }
 }

@@ -7,6 +7,7 @@ import { LoadingView, View } from 'src/app/modules/shared/models/content';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-loading',
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss'],

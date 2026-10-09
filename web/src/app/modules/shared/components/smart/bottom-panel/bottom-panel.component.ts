@@ -19,6 +19,7 @@ export enum PanelState {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-bottom-panel',
   templateUrl: './bottom-panel.component.html',
   styleUrls: ['./bottom-panel.component.scss'],

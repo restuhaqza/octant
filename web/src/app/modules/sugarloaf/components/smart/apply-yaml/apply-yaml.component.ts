@@ -4,16 +4,18 @@ SPDX-License-Identifier: Apache-2.0
 */
 
 import { Component, HostListener, OnInit } from '@angular/core';
-import '@cds/core/modal/register';
-import { ClarityIcons, uploadIcon } from '@cds/core/icon';
+import { ClarityIcons, uploadIcon } from '@clr/angular/icon';
 import { EditorView } from 'src/app/modules/shared/models/content';
 
 @Component({
+  standalone: false,
   selector: 'app-apply-yaml',
   templateUrl: './apply-yaml.component.html',
   styleUrls: ['./apply-yaml.component.scss'],
 })
 export class ApplyYAMLComponent implements OnInit {
+  isOpen = false;
+
   editorView: EditorView = {
     config: {
       value: '',
@@ -45,7 +47,6 @@ export class ApplyYAMLComponent implements OnInit {
   }
 
   toggleModal() {
-    const yamlModal = document.getElementById('apply-yaml-modal');
-    yamlModal.hidden = !yamlModal.hidden;
+    this.isOpen = !this.isOpen;
   }
 }

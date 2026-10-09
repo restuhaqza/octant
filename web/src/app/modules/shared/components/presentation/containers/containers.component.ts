@@ -10,6 +10,7 @@ import {
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 
 @Component({
+  standalone: false,
   selector: 'app-view-containers',
   templateUrl: './containers.component.html',
   styleUrls: ['./containers.component.scss'],

@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { ContentService } from '../../../services/content/content.service';
 
 @Component({
+  standalone: false,
   selector: 'app-octant-tooltip',
   templateUrl: './octant-tooltip.html',
   styleUrls: ['./octant-tooltip.scss'],

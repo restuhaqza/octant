@@ -15,6 +15,7 @@ export interface SegmentDescriptor {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-view-donut-chart',
   templateUrl: './donut-chart.component.html',
   styleUrls: ['./donut-chart.component.scss'],

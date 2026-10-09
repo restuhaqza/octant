@@ -10,6 +10,7 @@ import { PodStatus } from '../../../models/pod-status';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 @Component({
+  standalone: false,
   selector: 'app-heptagon-grid',
   template: ``,
 })

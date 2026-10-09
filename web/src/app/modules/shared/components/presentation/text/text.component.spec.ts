@@ -7,8 +7,9 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TextView } from '../../../models/content';
 import { TextComponent } from './text.component';
 import { Status } from '../indicator/indicator.component';
-import { ClarityModule, ClrPopoverToggleService } from '@clr/angular';
+import { ClarityModule, ClrPopoverService } from '@clr/angular';
 @Component({
+  standalone: false,
   template: '<app-view-text [view]="view"></app-view-text>',
 })
 class TestWrapperComponent {
@@ -23,7 +24,7 @@ describe('TextComponent', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          providers: [ClrPopoverToggleService],
+          providers: [ClrPopoverService],
           declarations: [TestWrapperComponent, TextComponent],
           imports: [ClarityModule],
         }).compileComponents();
