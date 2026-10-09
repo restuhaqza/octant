@@ -31,3 +31,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_root: 'web'
           build_script_name: 'build-electron'
+          # Never publish from this workflow; release assets are attached by the
+          # preflight-checks release job. electron-builder's default
+          # onTagOrDraft policy otherwise attempts a publish (403).
+          args: --publish never

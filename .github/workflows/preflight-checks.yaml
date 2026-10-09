@@ -129,6 +129,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           package_root: 'web'
           build_script_name: 'build-electron'
+          # The binaries are attached to the release by the `release` job below
+          # (via the uploaded artifacts). Without this, electron-builder's
+          # default onTagOrDraft policy tries to publish and fails with 403.
+          args: --publish never
       - uses: actions/upload-artifact@v4
         if: startsWith(github.ref, 'refs/tags/v')
         with:
