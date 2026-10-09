@@ -229,9 +229,13 @@ func mockClusterClientReturningNamespace(controller *gomock.Controller, namespac
 	dynamicClient.EXPECT().Resource(gomock.Any()).Return(nri).AnyTimes()
 	ri := clusterFake.NewMockResourceInterface(controller)
 	nri.EXPECT().Namespace(gomock.Any()).Return(ri).AnyTimes()
-	ri.EXPECT().List(gomock.Any(), gomock.Any()).Return(&unstructured.UnstructuredList{}, nil)
+	// The dynamic informers list and watch on a background goroutine, so these
+	// are not guaranteed to have run by the time the namespaces event arrives.
+	// They are incidental to this test (which asserts the cluster client is
+	// used); requiring them exactly once made the test flaky.
+	ri.EXPECT().List(gomock.Any(), gomock.Any()).Return(&unstructured.UnstructuredList{}, nil).AnyTimes()
 
-	ri.EXPECT().Watch(gomock.Any(), gomock.Any()).Return(watch.NewFake(), nil)
+	ri.EXPECT().Watch(gomock.Any(), gomock.Any()).Return(watch.NewFake(), nil).AnyTimes()
 
 	discoveryClient := clusterFake.NewMockDiscoveryInterface(controller)
 	// The overview module probes discovery for the Gateway API while generating
