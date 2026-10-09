@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ClarityIcons, clusterIcon } from '@clr/angular/icon';
 import {
   ContextDescription,
@@ -17,28 +17,38 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./context-selector.component.scss'],
 })
 export class ContextSelectorComponent implements OnInit, OnDestroy {
-  contexts: ContextDescription[];
-  selected: string;
+  contexts: ContextDescription[] = [];
+  selected = '';
 
-  private kubeContextSubscription: Subscription;
+  private subscriptions = new Subscription();
 
-  constructor(private kubeContext: KubeContextService) {
+  constructor(
+    private kubeContext: KubeContextService,
+    private cdr: ChangeDetectorRef
+  ) {
     ClarityIcons.addIcons(clusterIcon);
   }
 
   ngOnInit() {
-    this.kubeContextSubscription = this.kubeContext
-      .contexts()
-      .subscribe(contexts => (this.contexts = contexts));
-    this.kubeContextSubscription = this.kubeContext
-      .selected()
-      .subscribe(selected => (this.selected = selected));
+    // Contexts and the selection are pushed from the websocket outside a normal
+    // change-detection cycle, so the view is not repainted on its own. Mark the
+    // view for check after each emission, mirroring ContentComponent.
+    this.subscriptions.add(
+      this.kubeContext.contexts().subscribe(contexts => {
+        this.contexts = contexts;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.kubeContext.selected().subscribe(selected => {
+        this.selected = selected;
+        this.cdr.markForCheck();
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    if (this.kubeContextSubscription) {
-      this.kubeContextSubscription.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
   contextClass(context: ContextDescription) {
