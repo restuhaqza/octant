@@ -9,6 +9,7 @@ package dash
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -232,8 +233,19 @@ func mockClusterClientReturningNamespace(controller *gomock.Controller, namespac
 
 	ri.EXPECT().Watch(gomock.Any(), gomock.Any()).Return(watch.NewFake(), nil)
 
+	discoveryClient := clusterFake.NewMockDiscoveryInterface(controller)
+	// The overview module probes discovery for the Gateway API while generating
+	// navigation. Report it as unavailable so the extra navigation call does not
+	// hit an unexpected mock (it runs on a runner goroutine and would otherwise
+	// fail after the test has completed).
+	discoveryClient.EXPECT().
+		ServerResourcesForGroupVersion(gomock.Any()).
+		Return(nil, errors.New("not found")).
+		AnyTimes()
+
 	clusterClient := clusterFake.NewMockClientInterface(controller)
 	clusterClient.EXPECT().NamespaceClient().Return(nsClient, nil).MinTimes(1)
+	clusterClient.EXPECT().DiscoveryClient().Return(discoveryClient, nil).AnyTimes()
 	clusterClient.EXPECT().DynamicClient().Return(dynamicClient, nil)
 	clusterClient.EXPECT().RESTClient()
 	clusterClient.EXPECT().RESTConfig()
