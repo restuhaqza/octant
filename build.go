@@ -338,7 +338,11 @@ func goFmt(update bool) {
 }
 
 func webDeps(opts ...string) {
-	args := append([]string{"ci"}, opts...)
+	// The lockfile is resolved with --legacy-peer-deps: @storybook/angular@6.3.8
+	// declares a peer of rxjs ^6 while the app is on rxjs 7, so a plain
+	// `npm ci` aborts on the peer conflict. Keep this in sync with the flag the
+	// sandbox/CI installs already use.
+	args := append([]string{"ci", "--legacy-peer-deps"}, opts...)
 	cmd := newCmd("npm", nil, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
