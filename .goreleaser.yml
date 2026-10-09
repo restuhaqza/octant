@@ -50,6 +50,8 @@ archives:
       linux: Linux
       windows: Windows
       amd64: 64bit
+      arm: ARM
+      arm64: ARM64
     files:
       - README.md
 checksum:
