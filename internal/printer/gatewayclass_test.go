@@ -53,7 +53,7 @@ func Test_GatewayClassListHandler(t *testing.T) {
 			{
 				"Name": component.NewLink("", "gateway-class", "/gateway-class",
 					genObjectStatus(component.TextStatusOK, []string{
-						"gateway.networking.k8s.io/v1 GatewayClass is OK",
+						"GatewayClass is OK",
 					})),
 				"Controller": component.NewText("example.com/controller"),
 				"Accepted":   component.NewText("True"),

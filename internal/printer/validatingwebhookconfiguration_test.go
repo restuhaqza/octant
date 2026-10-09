@@ -48,7 +48,7 @@ func Test_ValidatingWebhookConfigurationListHandler(t *testing.T) {
 	expected.Add(component.TableRow{
 		"Name": component.NewLink("", object.Name, "/path",
 			genObjectStatus(component.TextStatusOK, []string{
-				"admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration is OK",
+				"0 webhook(s) configured",
 			})),
 		"Age": component.NewTimestamp(now),
 		component.GridActionKey: gridActionsFactory([]component.GridAction{

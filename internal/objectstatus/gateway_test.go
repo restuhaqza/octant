@@ -202,6 +202,178 @@ func Test_httpRoute(t *testing.T) {
 	}
 }
 
+func Test_gatewayClass(t *testing.T) {
+	accepted := testutil.CreateGatewayClass("gateway-class")
+	accepted.Status.Conditions = []metav1.Condition{
+		{Type: string(gatewayv1.GatewayClassConditionStatusAccepted), Status: metav1.ConditionTrue},
+	}
+
+	rejected := testutil.CreateGatewayClass("gateway-class")
+	rejected.Status.Conditions = []metav1.Condition{
+		{
+			Type:    string(gatewayv1.GatewayClassConditionStatusAccepted),
+			Status:  metav1.ConditionFalse,
+			Reason:  "InvalidParameters",
+			Message: "bad params",
+		},
+	}
+
+	properties := []component.Property{
+		{Label: "Controller", Value: component.NewText("example.com/controller")},
+		{Label: "Description", Value: component.NewText("<none>")},
+	}
+
+	cases := []struct {
+		name     string
+		object   runtime.Object
+		expected ObjectStatus
+		isErr    bool
+	}{
+		{
+			name:   "accepted",
+			object: accepted,
+			expected: ObjectStatus{
+				Details:    []component.Component{component.NewText("GatewayClass is OK")},
+				Properties: properties,
+			},
+		},
+		{
+			name:   "rejected",
+			object: rejected,
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusError,
+				Details:    []component.Component{component.NewText("Not accepted: (InvalidParameters) bad params")},
+				Properties: properties,
+			},
+		},
+		{
+			name:   "no conditions",
+			object: testutil.CreateGatewayClass("gateway-class"),
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusWarning,
+				Details:    []component.Component{component.NewText("No accepted condition for this gateway class")},
+				Properties: properties,
+			},
+		},
+		{
+			name:   "nil object",
+			object: nil,
+			isErr:  true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := gatewayClass(context.Background(), tc.object, nil, nil)
+			if tc.isErr {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tc.expected, got)
+		})
+	}
+}
+
+func Test_grpcRoute(t *testing.T) {
+	route := testutil.CreateGRPCRoute("grpc-route")
+	route.Spec.Hostnames = []gatewayv1.Hostname{"example.com"}
+	route.Spec.ParentRefs = []gatewayv1.ParentReference{
+		{Name: "gateway"},
+	}
+	route.Status.Parents = []gatewayv1.RouteParentStatus{
+		{
+			ParentRef: gatewayv1.ParentReference{Name: "gateway"},
+			Conditions: []metav1.Condition{
+				{Type: string(gatewayv1.RouteConditionAccepted), Status: metav1.ConditionTrue},
+			},
+		},
+	}
+
+	unattached := testutil.CreateGRPCRoute("grpc-route")
+	unattached.Spec.Hostnames = []gatewayv1.Hostname{"example.com"}
+
+	rejected := testutil.CreateGRPCRoute("grpc-route")
+	rejected.Status.Parents = []gatewayv1.RouteParentStatus{
+		{
+			ParentRef: gatewayv1.ParentReference{Name: "gateway"},
+			Conditions: []metav1.Condition{
+				{
+					Type:    string(gatewayv1.RouteConditionAccepted),
+					Status:  metav1.ConditionFalse,
+					Reason:  "NoMatchingParent",
+					Message: "not allowed",
+				},
+			},
+		},
+	}
+
+	baseProperties := []component.Property{
+		{Label: "Hostnames", Value: component.NewText("example.com")},
+	}
+
+	cases := []struct {
+		name     string
+		object   runtime.Object
+		expected ObjectStatus
+		isErr    bool
+	}{
+		{
+			name:   "accepted",
+			object: route,
+			expected: ObjectStatus{
+				Details: []component.Component{component.NewText(`Accepted by parent "gateway"`)},
+				Properties: append(baseProperties,
+					component.Property{Label: "Parents", Value: component.NewText("1")},
+					component.Property{Label: "Rules", Value: component.NewText("0")},
+				),
+			},
+		},
+		{
+			name:   "unattached",
+			object: unattached,
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusWarning,
+				Details:    []component.Component{component.NewText("Route is not attached to any parent")},
+				Properties: append(baseProperties,
+					component.Property{Label: "Parents", Value: component.NewText("0")},
+					component.Property{Label: "Rules", Value: component.NewText("0")},
+				),
+			},
+		},
+		{
+			name:   "rejected",
+			object: rejected,
+			expected: ObjectStatus{
+				NodeStatus: component.NodeStatusError,
+				Details:    []component.Component{component.NewText(`Not accepted by parent "gateway": (NoMatchingParent) not allowed`)},
+				Properties: []component.Property{
+					{Label: "Hostnames", Value: component.NewText("*")},
+					{Label: "Parents", Value: component.NewText("0")},
+					{Label: "Rules", Value: component.NewText("0")},
+				},
+			},
+		},
+		{
+			name:   "nil object",
+			object: nil,
+			isErr:  true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, err := grpcRoute(context.Background(), tc.object, nil, nil)
+			if tc.isErr {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tc.expected, got)
+		})
+	}
+}
+
 func init() {
 	_ = gatewayv1.Install(scheme.Scheme)
 }

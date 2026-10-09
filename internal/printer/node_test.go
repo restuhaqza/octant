@@ -44,8 +44,8 @@ func TestNodeListHandler(t *testing.T) {
 		{
 			"Age": component.NewTimestamp(node.CreationTimestamp.Time),
 			"Name": component.NewLink("", "node-1", "/node",
-				genObjectStatus(component.TextStatusOK, []string{
-					"v1 Node is OK",
+				genObjectStatus(component.TextStatusWarning, []string{
+					"Node has not reported a Ready condition",
 				})),
 			"Labels":  component.NewLabels(make(map[string]string)),
 			"Version": component.NewText("1.15.1"),

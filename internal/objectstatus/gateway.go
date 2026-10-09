@@ -122,6 +122,96 @@ func httpRoute(_ context.Context, object runtime.Object, _ store.Store, _ link.I
 	return status, nil
 }
 
+// gatewayClass creates status for a gateway.networking.k8s.io/v1 GatewayClass.
+func gatewayClass(_ context.Context, object runtime.Object, _ store.Store, _ link.Interface) (ObjectStatus, error) {
+	if object == nil {
+		return ObjectStatus{}, errors.Errorf("gateway class is nil")
+	}
+
+	gatewayClass := &gatewayv1.GatewayClass{}
+	if err := scheme.Scheme.Convert(object, gatewayClass, 0); err != nil {
+		return ObjectStatus{}, errors.Wrap(err, "convert object to gateway class")
+	}
+
+	var status ObjectStatus
+
+	switch condition := findCondition(gatewayClass.Status.Conditions, string(gatewayv1.GatewayClassConditionStatusAccepted)); {
+	case condition == nil:
+		status.SetWarning()
+		status.AddDetail("No accepted condition for this gateway class")
+	case condition.Status == metav1.ConditionFalse:
+		status.SetError()
+		status.AddDetailf("Not accepted: (%s) %s", condition.Reason, condition.Message)
+	case condition.Status == metav1.ConditionUnknown:
+		status.SetWarning()
+		status.AddDetailf("Acceptance unknown: (%s) %s", condition.Reason, condition.Message)
+	default:
+		status.AddDetail("GatewayClass is OK")
+	}
+
+	description := "<none>"
+	if gatewayClass.Spec.Description != nil && *gatewayClass.Spec.Description != "" {
+		description = *gatewayClass.Spec.Description
+	}
+
+	status.AddProperty("Controller", component.NewText(string(gatewayClass.Spec.ControllerName)))
+	status.AddProperty("Description", component.NewText(description))
+
+	return status, nil
+}
+
+// grpcRoute creates status for a gateway.networking.k8s.io/v1 GRPCRoute.
+func grpcRoute(_ context.Context, object runtime.Object, _ store.Store, _ link.Interface) (ObjectStatus, error) {
+	if object == nil {
+		return ObjectStatus{}, errors.Errorf("grpc route is nil")
+	}
+
+	route := &gatewayv1.GRPCRoute{}
+	if err := scheme.Scheme.Convert(object, route, 0); err != nil {
+		return ObjectStatus{}, errors.Wrap(err, "convert object to grpc route")
+	}
+
+	var status ObjectStatus
+
+	if len(route.Status.Parents) == 0 {
+		status.SetWarning()
+		status.AddDetail("Route is not attached to any parent")
+	} else {
+		for _, parent := range route.Status.Parents {
+			name := string(parent.ParentRef.Name)
+
+			switch condition := findCondition(parent.Conditions, string(gatewayv1.RouteConditionAccepted)); {
+			case condition == nil:
+				status.SetWarning()
+				status.AddDetailf("No accepted condition for parent %q", name)
+			case condition.Status == metav1.ConditionFalse:
+				status.SetError()
+				status.AddDetailf("Not accepted by parent %q: (%s) %s", name, condition.Reason, condition.Message)
+			case condition.Status == metav1.ConditionUnknown:
+				status.SetWarning()
+				status.AddDetailf("Acceptance unknown for parent %q: (%s) %s", name, condition.Reason, condition.Message)
+			default:
+				status.AddDetailf("Accepted by parent %q", name)
+			}
+
+			if condition := findCondition(parent.Conditions, string(gatewayv1.RouteConditionResolvedRefs)); condition != nil && condition.Status == metav1.ConditionFalse {
+				status.SetError()
+				status.AddDetailf("Unresolved refs for parent %q: (%s) %s", name, condition.Reason, condition.Message)
+			}
+		}
+	}
+
+	if len(status.Details) == 0 {
+		status.AddDetail("GRPCRoute is OK")
+	}
+
+	status.AddProperty("Hostnames", component.NewText(formatRouteHostnames(route.Spec.Hostnames)))
+	status.AddProperty("Parents", component.NewText(fmt.Sprintf("%d", len(route.Spec.ParentRefs))))
+	status.AddProperty("Rules", component.NewText(fmt.Sprintf("%d", len(route.Spec.Rules))))
+
+	return status, nil
+}
+
 func findCondition(conditions []metav1.Condition, conditionType string) *metav1.Condition {
 	for i := range conditions {
 		if conditions[i].Type == conditionType {

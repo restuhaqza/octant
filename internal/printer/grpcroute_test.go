@@ -68,8 +68,8 @@ func Test_GRPCRouteListHandler(t *testing.T) {
 		[]component.TableRow{
 			{
 				"Name": component.NewLink("", "grpc-route", "/grpc-route",
-					genObjectStatus(component.TextStatusOK, []string{
-						"gateway.networking.k8s.io/v1 GRPCRoute is OK",
+					genObjectStatus(component.TextStatusWarning, []string{
+						"Route is not attached to any parent",
 					})),
 				"Hostnames": component.NewText("example.com"),
 				"Parents":   component.NewText("Gateway namespace/gateway"),
