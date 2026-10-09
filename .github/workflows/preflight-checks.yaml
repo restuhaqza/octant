@@ -143,18 +143,30 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [bundle_assets, verify_tag]
     runs-on: ubuntu-latest
-    container: goreleaser/goreleaser:v1.0.0
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.24.x
       - uses: actions/download-artifact@v4
         with:
           name: bundle
           path: web/dist
       - name: Run GoReleaser
-        run: |
-          goreleaser --skip-publish
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          # The config predates the GoReleaser v2 rewrite (it still uses
+          # `replacements`), so stay on the last v1 that accepts it. Running on
+          # the runner instead of the old goreleaser container is required: that
+          # image shipped Go 1.20, which cannot parse go.mod's `go 1.24.0`, and
+          # its musl is too old for the Node runtime GitHub injects.
+          version: v1.18.2
+          args: release --skip-publish --clean
+        env:
+          GOFLAGS: -mod=vendor
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: binary-artifacts
@@ -176,20 +188,20 @@ jobs:
           merge-multiple: true
           path: web/release
       - name: Create release
-        # actions/upload-release-asset@v1 does not support glob
         run: |
           set -x
+          tag="${GITHUB_REF_NAME}"
           assets=()
           for asset in ./dist/*; do
-            if [[ $asset == *.txt ]] || [[ $asset == *.tar.gz ]] || [[ $asset == *.rpm ]] || [[ $asset == *.deb ]] || [[ $asset == *.zip ]]
-              then
-                assets+=("-a" "$asset")
-            fi
+            case "$asset" in
+              *.txt|*.tar.gz|*.rpm|*.deb|*.zip) assets+=("$asset") ;;
+            esac
           done
           for asset in ./web/release/Octant*; do
             shasum -a 256 "$asset" | awk '{sub(/.*\//," ",$2)} 1' >> ./dist/checksums.txt
-            assets+=("-a" "$asset")
+            assets+=("$asset")
           done
-          hub release create "${assets[@]}" -m "${GITHUB_REF:10}" "${GITHUB_REF:10}" --draft
+          # `hub` is no longer installed on the ubuntu runners; use the GitHub CLI.
+          gh release create "$tag" --draft --title "$tag" "${assets[@]}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
