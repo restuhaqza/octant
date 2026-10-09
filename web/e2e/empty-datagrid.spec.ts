@@ -26,19 +26,13 @@ test.describe('empty datagrid', () => {
     ).toBeVisible();
   });
 
-  // Known regression: the "No items to display." fallback no longer renders.
-  // The fork replaced the `#emptyPlaceholder` template in
-  // web/src/app/modules/shared/components/presentation/datagrid/datagrid.component.html
-  // with an HTML comment, so `emptyContent: ''` yields an empty placeholder.
-  // Un-skip (test.fixme -> test) once the fallback text is restored.
-  test.fixme(
-    'shows the "No items to display." fallback when emptyContent is blank',
-    async ({ page }) => {
-      await openApp(page, 'empty');
+  test('shows the "No items to display." fallback when emptyContent is blank', async ({
+    page,
+  }) => {
+    await openApp(page, 'empty');
 
-      await expect(
-        page.locator('.datagrid-placeholder-content')
-      ).toHaveText('No items to display.');
-    }
-  );
+    await expect(page.locator('.datagrid-placeholder-content')).toHaveText(
+      'No items to display.'
+    );
+  });
 });

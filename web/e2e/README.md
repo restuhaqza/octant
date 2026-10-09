@@ -29,8 +29,8 @@ Octant process and no network access are required.
 ```bash
 cd web
 
-# 1. install deps (peer conflicts with storybook/rxjs require this flag)
-npm ci --legacy-peer-deps
+# 1. install deps (web/.npmrc pins legacy-peer-deps for the storybook/rxjs peer)
+npm ci
 
 # 2. install the Playwright browser
 npx playwright install chromium
@@ -90,12 +90,13 @@ trimmed to keep the harness fast:
 Node 24 + `npm ci` + `npx playwright install --with-deps chromium` +
 `npm run build` + `npx playwright test`.
 
-## Known limitation
+## Coverage
 
-The spec `e2e/empty-datagrid.spec.ts` checks that an empty datagrid renders
-Clarity's empty placeholder region with no data rows (passing). A second,
-`test.fixme`-marked assertion for the literal fallback text
-`"No items to display."` is intentionally skipped: at this commit the fork's
-`datagrid.component.html` replaced the `#emptyPlaceholder` template body with an
-HTML comment, so a blank `emptyContent` renders **no** text at all. Change
-`test.fixme` back to `test` once the fallback text is restored.
+All specs are active:
+
+- `app-shell.spec.ts` — header + vertical navigation render from pushed messages.
+- `content-datagrid.spec.ts` — a pushed `content` message renders a datagrid.
+- `empty-datagrid.spec.ts` — the empty placeholder region, plus the
+  `"No items to display."` fallback for a blank `emptyContent`.
+- `notifications.spec.ts` — an `event.octant.dev/alert` renders a notifier toast
+  and increments the notification-center badge.
