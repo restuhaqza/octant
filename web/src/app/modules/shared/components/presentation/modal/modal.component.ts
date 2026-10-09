@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AbstractViewComponent } from '../../abstract-view/abstract-view.component';
 import {
   ActionForm,
@@ -44,7 +50,8 @@ export class ModalComponent
 
   constructor(
     private actionService: ActionService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -52,6 +59,7 @@ export class ModalComponent
   ngOnInit() {
     this.modalSubscription = this.modalService.isOpened.subscribe(isOpened => {
       this.opened = isOpened;
+      this.cdr.markForCheck();
     });
   }
 

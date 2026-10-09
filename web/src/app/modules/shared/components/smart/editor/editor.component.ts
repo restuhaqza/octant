@@ -3,7 +3,13 @@ Copyright (c) 2020 the Octant contributors. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0
 */
 
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { EditorView, SelectFileView } from '../../../models/content';
 import { NamespaceService } from '../../../services/namespace/namespace.service';
 import { ActionService } from '../../../services/action/action.service';
@@ -70,7 +76,8 @@ export class EditorComponent
   constructor(
     private namespaceService: NamespaceService,
     private themeService: ThemeService,
-    private actionService: ActionService
+    private actionService: ActionService,
+    private cdr: ChangeDetectorRef
   ) {
     super();
 
@@ -86,9 +93,10 @@ export class EditorComponent
   }
 
   ngOnInit() {
-    this.subscriptionTheme = this.themeService.themeType.subscribe(() =>
-      this.syncMonacoTheme()
-    );
+    this.subscriptionTheme = this.themeService.themeType.subscribe(() => {
+      this.syncMonacoTheme();
+      this.cdr.markForCheck();
+    });
   }
 
   inputFileChanged(files: any) {
@@ -98,6 +106,7 @@ export class EditorComponent
       reader.onload = e => {
         this.editorValue = e.target.result as string;
         this.isModified = true;
+        this.cdr.markForCheck();
       };
       reader.readAsText(files[0]);
     }

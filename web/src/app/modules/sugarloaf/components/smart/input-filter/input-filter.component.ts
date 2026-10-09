@@ -3,6 +3,7 @@
 //
 
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -31,7 +32,8 @@ export class InputFilterComponent implements OnInit, OnDestroy {
 
   constructor(
     private eRef: ElementRef,
-    private labelFilterService: LabelFilterService
+    private labelFilterService: LabelFilterService,
+    private cdr: ChangeDetectorRef
   ) {
     ClarityIcons.addIcons(angleIcon);
     ClarityIcons.addIcons(timesIcon);
@@ -41,6 +43,7 @@ export class InputFilterComponent implements OnInit, OnDestroy {
     this.labelFilterSubscription = this.labelFilterService.filters.subscribe(
       filters => {
         this.filters = filters;
+        this.cdr.markForCheck();
       }
     );
   }

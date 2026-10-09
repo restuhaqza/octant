@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+} from '@angular/core';
 import { ClarityIcons, helpIcon } from '@clr/angular/icon';
 import { Subscription } from 'rxjs';
 import { HelperService } from '../../../services/helper/helper.service';
@@ -26,22 +32,34 @@ export class HelperComponent implements OnInit, OnDestroy {
   buildInfoOpen = false;
   releasesOpen = false;
   shortcutOpen = false;
-  private buildInfoSubscription: Subscription;
+  private subscriptions = new Subscription();
 
-  constructor(private helperService: HelperService) {
+  constructor(
+    private helperService: HelperService,
+    private cdr: ChangeDetectorRef
+  ) {
     ClarityIcons.addIcons(helpIcon);
   }
 
   ngOnInit() {
-    this.buildInfoSubscription = this.helperService
-      .buildVersion()
-      .subscribe(version => (this.version = version));
-    this.buildInfoSubscription = this.helperService
-      .buildCommit()
-      .subscribe(commit => (this.commit = commit));
-    this.buildInfoSubscription = this.helperService
-      .buildTime()
-      .subscribe(time => (this.time = time));
+    this.subscriptions.add(
+      this.helperService.buildVersion().subscribe(version => {
+        this.version = version;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.helperService.buildCommit().subscribe(commit => {
+        this.commit = commit;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.helperService.buildTime().subscribe(time => {
+        this.time = time;
+        this.cdr.markForCheck();
+      })
+    );
   }
 
   openIssue(): void {
@@ -77,9 +95,7 @@ export class HelperComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.buildInfoSubscription) {
-      this.buildInfoSubscription.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
   toggleBuildInfo(): void {

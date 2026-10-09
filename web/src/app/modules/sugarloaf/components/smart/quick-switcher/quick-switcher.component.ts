@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -59,7 +60,8 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private namespaceService: NamespaceService,
     private router: Router,
-    private el: ElementRef
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
   ) {
     // wait a bit before reacting to user input
     this.inputChanged
@@ -72,11 +74,13 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
       this.namespaceService.availableNamespaces.subscribe(namespaces => {
         this.namespaceDestinations =
           this.buildNamespaceDestinations(namespaces);
+        this.cdr.markForCheck();
       });
     this.navigationSubscription = this.navigationService.current.subscribe(
       navigation => {
         this.navigation = navigation;
         this.destinations = this.buildDestinations(navigation);
+        this.cdr.markForCheck();
       }
     );
   }
