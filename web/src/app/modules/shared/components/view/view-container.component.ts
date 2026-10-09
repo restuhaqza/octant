@@ -94,7 +94,21 @@ export class ViewContainerComponent implements OnInit, AfterViewInit {
 
       this.componentRef = viewContainerRef.createComponent<Viewer>(component);
     }
-    this.componentRef.instance.view = view;
+
+    if (this.componentRef.componentType === MissingComponentComponent) {
+      // The fallback is not a Viewer: it declares no `view` input and no
+      // `viewInit` output. Keep the direct assignment (used by the type-change
+      // check above) and surface the unknown type in its template.
+      this.componentRef.instance.view = view;
+      this.componentRef.setInput('name', view.metadata.type);
+      return;
+    }
+
+    // setInput() marks the dynamically created (possibly OnPush) view dirty.
+    // A direct `instance.view = view` assignment does not, because the
+    // component is created imperatively instead of bound through a template,
+    // so in-place refreshes for the same contentPath left the leaf view stale.
+    this.componentRef.setInput('view', view);
     this.componentRef.instance.viewInit.subscribe(_ => this.viewInit.emit());
   }
 }

@@ -46,6 +46,49 @@ describe('ViewContainerComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should mark the created view for check on an in-place update', () => {
+    const firstView: TextView = {
+      config: { value: 'first value' },
+      metadata: { type: 'text', title: [], accessor: 'accessor' },
+    };
+
+    const secondView: TextView = {
+      config: { value: 'second value' },
+      metadata: { type: 'text', title: [], accessor: 'accessor' },
+    };
+
+    component.view = firstView;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('first value');
+
+    // Same contentPath (same view type) -> the dynamically created component
+    // is updated in place rather than recreated. Its view must still be marked
+    // for check, otherwise the OnPush leaf goes stale.
+    component.view = secondView;
+    expect(
+      (component.componentRef.instance as unknown as TextComponent).value
+    ).toBe('second value');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('second value');
+    expect(fixture.nativeElement.textContent).not.toContain('first value');
+  });
+
+  it('should use the missing-component fallback for unknown view types', () => {
+    const unknownView = {
+      config: {},
+      metadata: { type: 'notARealViewType', title: [], accessor: 'accessor' },
+    } as unknown as TextView;
+
+    expect(() => {
+      component.view = unknownView;
+      fixture.detectChanges();
+    }).not.toThrow();
+
+    expect(fixture.nativeElement.textContent).toContain(
+      'notARealViewType not implemented'
+    );
+  });
+
   it('should recreate component when different type', () => {
     const textView: TextView = {
       config: { value: 'some text' },
