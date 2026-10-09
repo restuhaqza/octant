@@ -17,8 +17,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./context-selector.component.scss'],
 })
 export class ContextSelectorComponent implements OnInit, OnDestroy {
-  contexts: ContextDescription[] = [];
-  selected = '';
+  contexts: ContextDescription[];
+  selected: string;
 
   private subscriptions = new Subscription();
 
@@ -30,9 +30,12 @@ export class ContextSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Contexts and the selection are pushed from the websocket outside a normal
-    // change-detection cycle, so the view is not repainted on its own. Mark the
-    // view for check after each emission, mirroring ContentComponent.
+    // Angular 22 makes ChangeDetectionStrategy.OnPush the default, so this
+    // component's view is only re-checked when it is marked dirty. Contexts and
+    // the selection are pushed from the websocket (outside a normal
+    // change-detection cycle) into plain fields, so without markForCheck() the
+    // header keeps rendering "No contexts!". Mirror the migrated async-fed
+    // components (e.g. NamespaceComponent) and mark the view for check.
     this.subscriptions.add(
       this.kubeContext.contexts().subscribe(contexts => {
         this.contexts = contexts;
