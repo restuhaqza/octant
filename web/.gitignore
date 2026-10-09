@@ -61,3 +61,9 @@ Thumbs.db
 #compodoc documentation file
 /documentation.json
 /storybook-static
+
+# Playwright e2e output
+/playwright-report
+/test-results
+/blob-report
+/playwright/.cache

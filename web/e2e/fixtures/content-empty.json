@@ -1,0 +1,55 @@
+{
+  "content": {
+    "extensionComponent": null,
+    "title": [
+      {
+        "metadata": {
+          "type": "text"
+        },
+        "config": {
+          "value": "Deployments"
+        }
+      }
+    ],
+    "viewComponents": [
+      {
+        "metadata": {
+          "type": "table",
+          "title": [
+            {
+              "metadata": {
+                "type": "text"
+              },
+              "config": {
+                "value": "Deployments"
+              }
+            }
+          ]
+        },
+        "config": {
+          "columns": [
+            {
+              "name": "Name",
+              "accessor": "Name"
+            },
+            {
+              "name": "Status",
+              "accessor": "Status"
+            },
+            {
+              "name": "Age",
+              "accessor": "Age"
+            }
+          ],
+          "rows": [],
+          "emptyContent": "",
+          "loading": false,
+          "filters": {}
+        }
+      }
+    ]
+  },
+  "namespace": "default",
+  "contentPath": "overview/namespace/default/workloads/deployments",
+  "queryParams": {}
+}

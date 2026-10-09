@@ -1,0 +1,14 @@
+{
+  "contexts": [
+    {
+      "name": "e2e-cluster"
+    },
+    {
+      "name": "e2e-secondary"
+    },
+    {
+      "name": "e2e-local"
+    }
+  ],
+  "currentContext": "e2e-cluster"
+}
