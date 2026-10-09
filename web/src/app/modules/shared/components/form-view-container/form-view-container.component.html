@@ -1,94 +1,109 @@
-<cds-form-group layout="vertical">
-  <ng-container  *ngFor="let field of form?.fields; trackBy: trackByFn">
-    <ng-container *ngIf="field.config.type ==='layout'; else withoutLayout ">
-      <div class="horizontal-layout">
-        <h6 *ngIf="field.config.label" slot="label">{{ field.config.label }}</h6>
-        <ng-container *ngFor="let f of field.config.configuration.fields; trackBy: trackByFn">
-          <ng-container *ngTemplateOutlet="formInputs; context: { field: f }"></ng-container>
-        </ng-container>
-      </div>
-    </ng-container>
-    <ng-template #withoutLayout>
-      <ng-container *ngTemplateOutlet="formInputs; context: { field: field }"></ng-container>
-    </ng-template>
+<ng-container *ngFor="let field of form?.fields; trackBy: trackByFn">
+  <ng-container *ngIf="field.config.type ==='layout'; else withoutLayout ">
+    <div class="horizontal-layout">
+      <h6 *ngIf="field.config.label">{{ field.config.label }}</h6>
+      <ng-container *ngFor="let f of field.config.configuration.fields; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="formInputs; context: { field: f }"></ng-container>
+      </ng-container>
+    </div>
   </ng-container>
-</cds-form-group>
+  <ng-template #withoutLayout>
+    <ng-container *ngTemplateOutlet="formInputs; context: { field: field }"></ng-container>
+  </ng-template>
+</ng-container>
 
 <ng-template #formInputs let-field="field">
   <ng-container *ngIf="formGroupContainer" [formGroup]="formGroupContainer" [ngSwitch]="field?.config?.type">
 
     <ng-container *ngSwitchCase="'checkbox'">
-      <cds-checkbox-group [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
-        <cds-checkbox *ngFor="let opt of fieldChoices(field); trackBy: trackByFn">
+      <clr-checkbox-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
+        <clr-checkbox-wrapper *ngFor="let opt of fieldChoices(field); trackBy: trackByFn">
           <input
             type="checkbox"
+            clrCheckbox
             [formArrayName]="field.config.name"
             [value]="opt.value"
             [checked]="opt.checked"
             (change)="onCheck($event, field.config.name)"
           />
           <label>{{ opt.label }}</label>
-        </cds-checkbox>
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-checkbox-group>
+        </clr-checkbox-wrapper>
+      </clr-checkbox-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'radio'">
-      <cds-radio-group>
-        <label [for]="field.config.name">{{ field.config.label }}</label>
-        <cds-radio *ngFor="let opt of fieldChoices(field); trackBy: trackByFn">
+      <clr-radio-container>
+        <label>{{ field.config.label }}</label>
+        <clr-radio-wrapper *ngFor="let opt of fieldChoices(field); trackBy: trackByFn">
           <input
             type="radio"
+            clrRadio
+            [attr.name]="radioGroupName + '-' + field.config.name"
             [formArrayName]="field.config.name"
             [value]="opt.value"
             [checked]="opt.checked"
             (change)="onCheck($event, field.config.name)"
           />
           <label>{{ opt.label }}</label>
-        </cds-radio>
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-radio-group>
+        </clr-radio-wrapper>
+      </clr-radio-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'text'">
-      <cds-input [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
+      <clr-input-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
         <input
           type="text"
+          clrInput
           [formControlName]="field.config.name"
           [placeholder]="field.config.placeholder ? field.config.placeholder : ''"
         />
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-input>
+      </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'number'">
-      <cds-input [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
+      <clr-input-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
         <input
           type="number"
+          clrInput
           [formControlName]="field.config.name"
         />
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-input>
+      </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'password'">
-      <cds-input [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
+      <clr-input-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
         <input
           type="password"
+          clrInput
           [formControlName]="field.config.name"
         />
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-input>
+      </clr-input-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'select'">
-      <cds-select [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
+      <clr-select-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
         <select
+          clrSelect
           [formArrayName]="field.config.name"
           [attr.multiple]="field.config.configuration.multiple"
           (change)="onSelect($event, field.config.name)"
@@ -101,16 +116,20 @@
             {{ opt.label }}
           </option>
         </select>
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-select>
+      </clr-select-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'textarea'">
-      <cds-textarea [style.width.%]="field.config.width">
-        <label [for]="field.config.name">{{ field.config.label }}</label>
-        <textarea [formControlName]="field.config.name"></textarea>
-        <cds-control-message *ngIf="isInvalid(field.config.name)" status="error">{{ field.config.error }}</cds-control-message>
-      </cds-textarea>
+      <clr-textarea-container [style.width.%]="field.config.width">
+        <label>{{ field.config.label }}</label>
+        <textarea clrTextarea [formControlName]="field.config.name"></textarea>
+      </clr-textarea-container>
+      <div class="clr-error" *ngIf="isInvalid(field.config.name)">
+        <clr-control-error>{{ field.config.error }}</clr-control-error>
+      </div>
     </ng-container>
 
     <ng-container *ngSwitchCase="'hidden'"></ng-container>

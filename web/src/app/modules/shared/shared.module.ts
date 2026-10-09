@@ -2,7 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TextComponent } from './components/presentation/text/text.component';
 import { ClarityModule } from '@clr/angular';
-import { CdsModule } from '@cds/angular';
+import { ClrModalModule } from '@clr/angular/modal';
+import { ClrInputModule } from '@clr/angular/forms/input';
+import { ClrTextareaModule } from '@clr/angular/forms/textarea';
+import { ClrSelectModule } from '@clr/angular/forms/select';
+import { ClrRadioModule } from '@clr/angular/forms/radio';
+import { ClrCheckboxModule } from '@clr/angular/forms/checkbox';
+import { ClrFileInputModule } from '@clr/angular/forms/file-input';
+import { ClrAlertModule } from '@clr/angular/emphasis/alert';
 import { TitleComponent } from './components/presentation/title/title.component';
 import { AccordionComponent } from './components/presentation/accordion/accordion.component';
 import { AlertComponent } from './components/presentation/alert/alert.component';
@@ -92,10 +99,8 @@ import { IconComponent } from './components/presentation/icon/icon.component';
 import { FormViewContainerComponent } from './components/form-view-container/form-view-container.component';
 import { SignpostComponent } from './components/presentation/signpost/signpost.component';
 import { JoinPipe } from './pipes/join/join.pipe';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AccordionComponent,
     AlertComponent,
@@ -181,7 +186,14 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   ],
   imports: [
     ClarityModule,
-    CdsModule,
+    ClrModalModule,
+    ClrInputModule,
+    ClrTextareaModule,
+    ClrSelectModule,
+    ClrRadioModule,
+    ClrCheckboxModule,
+    ClrFileInputModule,
+    ClrAlertModule,
     CommonModule,
     DataModule,
     FormsModule,

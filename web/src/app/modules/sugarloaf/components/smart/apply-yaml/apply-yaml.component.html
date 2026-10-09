@@ -3,11 +3,14 @@
   <span>Apply YAML</span>
 </div>
 
-<cds-modal size="xl" id="apply-yaml-modal" [closable]="true" hidden (closeChange)="toggleModal()">
-  <cds-modal-header>
-    <h3 cds-text="title" cds-first-focus tabindex="-1">Apply YAML</h3>
-  </cds-modal-header>
-  <cds-modal-content>
+<clr-modal
+  [(clrModalOpen)]="isOpen"
+  [clrModalClosable]="true"
+  clrModalSize="xl"
+  id="apply-yaml-modal"
+>
+  <h3 class="modal-title" cds-text="title" clrFocusOnViewInit tabindex="-1">Apply YAML</h3>
+  <div class="modal-body">
     <app-view-editor [view]="editorView"></app-view-editor>
-  </cds-modal-content>
-</cds-modal>
+  </div>
+</clr-modal>

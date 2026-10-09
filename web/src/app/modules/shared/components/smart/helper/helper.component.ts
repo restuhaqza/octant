@@ -1,7 +1,11 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import '@cds/core/button/register.js';
-import '@cds/core/modal/register';
-import { ClarityIcons, helpIcon } from '@clr/angular';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+} from '@angular/core';
+import { ClarityIcons, helpIcon } from '@clr/angular/icon';
 import { Subscription } from 'rxjs';
 import { HelperService } from '../../../services/helper/helper.service';
 import { TextView } from '../../../models/content';
@@ -25,22 +29,37 @@ export class HelperComponent implements OnInit, OnDestroy {
       isMarkdown: true,
     },
   };
-  private buildInfoSubscription: Subscription;
+  buildInfoOpen = false;
+  releasesOpen = false;
+  shortcutOpen = false;
+  private subscriptions = new Subscription();
 
-  constructor(private helperService: HelperService) {
+  constructor(
+    private helperService: HelperService,
+    private cdr: ChangeDetectorRef
+  ) {
     ClarityIcons.addIcons(helpIcon);
   }
 
   ngOnInit() {
-    this.buildInfoSubscription = this.helperService
-      .buildVersion()
-      .subscribe(version => (this.version = version));
-    this.buildInfoSubscription = this.helperService
-      .buildCommit()
-      .subscribe(commit => (this.commit = commit));
-    this.buildInfoSubscription = this.helperService
-      .buildTime()
-      .subscribe(time => (this.time = time));
+    this.subscriptions.add(
+      this.helperService.buildVersion().subscribe(version => {
+        this.version = version;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.helperService.buildCommit().subscribe(commit => {
+        this.commit = commit;
+        this.cdr.markForCheck();
+      })
+    );
+    this.subscriptions.add(
+      this.helperService.buildTime().subscribe(time => {
+        this.time = time;
+        this.cdr.markForCheck();
+      })
+    );
   }
 
   openIssue(): void {
@@ -63,13 +82,13 @@ export class HelperComponent implements OnInit, OnDestroy {
       .then(response => response.text())
       .then(data => {
         this.releaseInfo.config.value = data;
+        this.cdr.markForCheck();
       });
   }
 
   toggleReleases(): void {
     this.getReleaseInfo(this.version);
-    const releaseModal = document.getElementById('release-modal');
-    releaseModal.hidden = !releaseModal.hidden;
+    this.releasesOpen = !this.releasesOpen;
   }
 
   showDocs(): void {
@@ -77,19 +96,15 @@ export class HelperComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.buildInfoSubscription) {
-      this.buildInfoSubscription.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
   toggleBuildInfo(): void {
-    const buildModal = document.getElementById('build-modal');
-    buildModal.hidden = !buildModal.hidden;
+    this.buildInfoOpen = !this.buildInfoOpen;
   }
 
   toggleShortcut(): void {
-    const shortcutModal = document.getElementById('shortcut-modal');
-    shortcutModal.hidden = !shortcutModal.hidden;
+    this.shortcutOpen = !this.shortcutOpen;
   }
 
   @HostListener('window:keydown', ['$event'])

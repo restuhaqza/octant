@@ -11,12 +11,21 @@
     <div class="select-wrapper">
       <app-view-select-file  *ngIf="!metadata" [view]= "selectFileView" (fileChanged)="inputFileChanged($event)"></app-view-select-file>
     </div>
-    <cds-button size="sm" action="outline" (click)="reset()" [disabled]="!isModified" >
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      (click)="reset()"
+      [disabled]="!isModified"
+    >
       Reset
-    </cds-button>
-    <cds-button size="sm" action="outline" (click)="submit()" [disabled]="isUpdateEnabled()"
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      (click)="submit()"
+      [disabled]="isUpdateEnabled()"
     >
       {{ submitLabel }}
-    </cds-button>
+    </button>
   </div>
 </div>

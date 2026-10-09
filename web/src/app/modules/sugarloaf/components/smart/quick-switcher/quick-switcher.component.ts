@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import '@cds/core/modal/register.js';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Navigation, NavigationChild } from '../../../models/navigation';
@@ -51,7 +51,7 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
   inputChanged: Subject<string> = new Subject<string>();
 
   activeIndex = 0;
-  styledShadowDom = false;
+  isOpen = false;
 
   private navigationSubscription: Subscription;
   private namespaceSubscription: Subscription;
@@ -60,7 +60,8 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private namespaceService: NamespaceService,
     private router: Router,
-    private el: ElementRef
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
   ) {
     // wait a bit before reacting to user input
     this.inputChanged
@@ -73,11 +74,13 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
       this.namespaceService.availableNamespaces.subscribe(namespaces => {
         this.namespaceDestinations =
           this.buildNamespaceDestinations(namespaces);
+        this.cdr.markForCheck();
       });
     this.navigationSubscription = this.navigationService.current.subscribe(
       navigation => {
         this.navigation = navigation;
         this.destinations = this.buildDestinations(navigation);
+        this.cdr.markForCheck();
       }
     );
   }
@@ -221,16 +224,6 @@ export class QuickSwitcherComponent implements OnInit, OnDestroy {
   }
 
   toggleQuickSwitcher(): void {
-    const qcModal = document.getElementById('quick-switcher-modal');
-    qcModal.hidden = !qcModal.hidden;
-
-    // Add styling to prevent modal from moving as number of results update
-    if (!this.styledShadowDom) {
-      const style = document.createElement('style');
-      style.innerHTML =
-        '.modal-dialog { position: fixed !important; top: 4rem; }';
-      qcModal.shadowRoot.appendChild(style);
-      this.styledShadowDom = true;
-    }
+    this.isOpen = !this.isOpen;
   }
 }

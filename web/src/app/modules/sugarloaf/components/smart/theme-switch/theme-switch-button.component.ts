@@ -1,7 +1,13 @@
 // Copyright (c) 2019 VMware, Inc. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 //
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { ThemeService } from '../../../../shared/services/theme/theme.service';
 import { Subscription } from 'rxjs';
 
@@ -19,7 +25,10 @@ export class ThemeSwitchButtonComponent implements OnInit, OnDestroy {
 
   private onThemeChange: () => void;
 
-  constructor(private themeService: ThemeService) {
+  constructor(
+    private themeService: ThemeService,
+    private cdr: ChangeDetectorRef
+  ) {
     // we want a new instance of the handler for each component instance
     this.onThemeChange = () => {
       this.lightThemeEnabled = this.themeService.isLightThemeEnabled();
@@ -28,9 +37,10 @@ export class ThemeSwitchButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscriptionTheme = this.themeService.themeType.subscribe(() =>
-      this.onThemeChange()
-    );
+    this.subscriptionTheme = this.themeService.themeType.subscribe(() => {
+      this.onThemeChange();
+      this.cdr.markForCheck();
+    });
   }
 
   ngOnDestroy() {

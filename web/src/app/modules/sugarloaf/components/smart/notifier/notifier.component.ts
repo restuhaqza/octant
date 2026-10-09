@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import findLast from 'lodash/findLast';
 import { Subscription } from 'rxjs';
 import { Alert } from 'src/app/modules/shared/models/content';
@@ -26,7 +26,10 @@ export class NotifierComponent implements OnInit, OnDestroy {
   success: string;
   alertConfig: Alert;
 
-  constructor(private notifierService: NotifierService) {}
+  constructor(
+    private notifierService: NotifierService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.signalSubscription =
@@ -61,6 +64,7 @@ export class NotifierComponent implements OnInit, OnDestroy {
           : '';
 
         this.setAlert();
+        this.cdr.markForCheck();
       });
   }
 

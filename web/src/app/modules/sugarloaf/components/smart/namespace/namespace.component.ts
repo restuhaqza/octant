@@ -36,7 +36,7 @@ export class NamespaceComponent implements OnInit, OnDestroy {
   showDropdown: boolean;
   nsLimit = this.defaultNsLimit;
 
-  private namespaceSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   constructor(
     private namespaceService: NamespaceService,
@@ -45,40 +45,46 @@ export class NamespaceComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.namespaceSubscription =
+    this.subscriptions.add(
       this.namespaceService.activeNamespace.subscribe((namespace: string) => {
         this.currentNamespace = namespace;
         this.cdr.detectChanges();
-      });
+      })
+    );
 
-    this.namespaceSubscription =
+    this.subscriptions.add(
       this.namespaceService.availableNamespaces.subscribe(
         (namespaces: string[]) => {
           this.namespaces = namespaces;
           this.cdr.detectChanges();
         }
-      );
+      )
+    );
 
-    this.navigationService.modules.subscribe(modules => {
-      this.modules = modules;
-      this.cdr.detectChanges();
-    });
+    this.subscriptions.add(
+      this.navigationService.modules.subscribe(modules => {
+        this.modules = modules;
+        this.cdr.detectChanges();
+      })
+    );
 
-    this.navigationService.selectedItem.subscribe(selection => {
-      this.selectedItem = selection;
-      this.showDropdown = this.hasDropdown();
-      this.cdr.detectChanges();
-    });
-    this.navigationService.activeUrl.subscribe(url => {
-      this.activeUrl = url;
-      this.cdr.detectChanges();
-    });
+    this.subscriptions.add(
+      this.navigationService.selectedItem.subscribe(selection => {
+        this.selectedItem = selection;
+        this.showDropdown = this.hasDropdown();
+        this.cdr.detectChanges();
+      })
+    );
+    this.subscriptions.add(
+      this.navigationService.activeUrl.subscribe(url => {
+        this.activeUrl = url;
+        this.cdr.detectChanges();
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    if (this.namespaceSubscription) {
-      this.namespaceSubscription.unsubscribe();
-    }
+    this.subscriptions.unsubscribe();
   }
 
   namespaceClass(namespace: string) {

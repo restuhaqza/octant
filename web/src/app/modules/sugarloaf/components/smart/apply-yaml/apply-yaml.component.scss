@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-cds-modal-content {
+.modal-body {
   overflow-y: hidden;
 
   app-view-editor {
@@ -28,7 +28,7 @@ cds-modal-content {
     }
   }
 
-  cds-icon {
+  clr-icon {
     margin-right: 0.2rem;
   }
 }

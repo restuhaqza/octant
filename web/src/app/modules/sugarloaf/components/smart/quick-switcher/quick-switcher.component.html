@@ -1,14 +1,14 @@
-<cds-modal
-  size="md"
+<clr-modal
+  [(clrModalOpen)]="isOpen"
+  [clrModalClosable]="false"
+  clrModalSize="md"
   class="quick-switcher-modal"
   id="quick-switcher-modal"
-  [closable]="false"
-  [hidden]="true"
   (keyup.enter)="onEnter()"
   (keyup)="onKeyUp($event)"
   (keydown)="onKeyDown($event)"
-  (closeChange)="toggleQuickSwitcher()">
-  <cds-modal-content>
+>
+  <div class="modal-body">
     <input
       class="filter-input"
       clrInput
@@ -43,10 +43,10 @@
         </tbody>
       </overlay-scrollbars>
     </table>
-  </cds-modal-content>
-  <cds-modal-actions>
+  </div>
+  <div class="modal-footer">
     <div cds-layout="horizontal gap:sm align:left">
       <pre>{{ helperText}}<code>!</code></pre>
     </div>
-  </cds-modal-actions>
-</cds-modal>
+  </div>
+</clr-modal>

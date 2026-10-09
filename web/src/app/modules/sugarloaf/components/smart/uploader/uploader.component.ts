@@ -2,9 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
-import { Subscription } from 'rxjs';
 import { WindowToken } from '../../../../../window';
 
 @Component({
@@ -12,12 +16,15 @@ import { WindowToken } from '../../../../../window';
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss'],
+  // The upload/loading overlay is toggled by a websocket push that has no
+  // DOM event or @Input to piggyback on. This is a simple root shell component
+  // with no RxJS subscription lifecycle, so opt into eager checking instead of
+  // threading a ChangeDetectorRef through each handler.
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
-export class UploaderComponent implements OnInit, OnDestroy {
+export class UploaderComponent implements OnInit {
   inputValue: string;
   showModal: boolean;
-
-  private contentSubscription: Subscription;
 
   constructor(
     private websocketService: WebsocketService,
@@ -35,12 +42,6 @@ export class UploaderComponent implements OnInit, OnDestroy {
     this.websocketService.sendMessage('action.octant.dev/loading', {
       loading: true,
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.contentSubscription) {
-      this.contentSubscription.unsubscribe();
-    }
   }
 
   upload() {

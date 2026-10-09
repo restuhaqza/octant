@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
   Filter,
@@ -24,13 +24,15 @@ export class FiltersComponent implements OnInit, OnDestroy {
   constructor(
     private labelFilter: LabelFilterService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.labelFilterSubscription = this.labelFilter.filters.subscribe(
       filters => {
         this.filters = filters;
+        this.cdr.markForCheck();
         const filterParams = filters.map(filter =>
           encodeURIComponent(`${filter.key}:${filter.value}`)
         );

@@ -31,7 +31,7 @@ ngx-monaco-editor {
 .controls {
   display: flex;
 
-  cds-button {
+  > .btn {
     margin-left: 16px;
   }
 

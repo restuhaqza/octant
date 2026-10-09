@@ -5,7 +5,6 @@ import {
   statusLookup,
   iconLookup,
 } from './indicator.component';
-import { CdsModule } from '@cds/angular';
 import { Component } from '@angular/core';
 import { View } from '../../../models/content';
 
@@ -29,7 +28,6 @@ describe('IndicatorComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [WrapperComponent, IndicatorComponent],
-        imports: [CdsModule],
       }).compileComponents();
     })
   );

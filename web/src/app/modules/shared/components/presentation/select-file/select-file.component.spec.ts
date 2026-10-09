@@ -29,4 +29,28 @@ describe('SelectFileComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('shows the error status message with a clr-error ancestor', () => {
+    component.status = 'error';
+    component.statusMessage = 'bad file';
+    fixture.detectChanges();
+
+    const error = fixture.nativeElement.querySelector(
+      '.clr-error clr-control-error'
+    );
+    expect(error).not.toBeNull();
+    expect(error.textContent).toContain('bad file');
+  });
+
+  it('shows the success status message with a clr-success ancestor', () => {
+    component.status = 'success';
+    component.statusMessage = 'good file';
+    fixture.detectChanges();
+
+    const success = fixture.nativeElement.querySelector(
+      '.clr-success clr-control-success'
+    );
+    expect(success).not.toBeNull();
+    expect(success.textContent).toContain('good file');
+  });
 });

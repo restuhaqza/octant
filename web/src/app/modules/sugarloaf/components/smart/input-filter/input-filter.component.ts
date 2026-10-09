@@ -3,6 +3,7 @@
 //
 
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -13,7 +14,7 @@ import {
   Filter,
   LabelFilterService,
 } from '../../../../shared/services/label-filter/label-filter.service';
-import { ClarityIcons, angleIcon, timesIcon } from '@clr/angular';
+import { ClarityIcons, angleIcon, timesIcon } from '@clr/angular/icon';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -31,7 +32,8 @@ export class InputFilterComponent implements OnInit, OnDestroy {
 
   constructor(
     private eRef: ElementRef,
-    private labelFilterService: LabelFilterService
+    private labelFilterService: LabelFilterService,
+    private cdr: ChangeDetectorRef
   ) {
     ClarityIcons.addIcons(angleIcon);
     ClarityIcons.addIcons(timesIcon);
@@ -41,6 +43,7 @@ export class InputFilterComponent implements OnInit, OnDestroy {
     this.labelFilterSubscription = this.labelFilterService.filters.subscribe(
       filters => {
         this.filters = filters;
+        this.cdr.markForCheck();
       }
     );
   }

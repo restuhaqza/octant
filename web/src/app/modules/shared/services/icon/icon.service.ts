@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 import { Injectable } from '@angular/core';
-import { ClarityIcons } from '@clr/angular';
+import { ClarityIcons } from '@clr/angular/icon';
 
 export interface IconAble {
   iconName?: string;

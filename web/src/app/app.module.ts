@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   Injectable,
   NgModule,
+  provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { RouteReuseStrategy, RouterModule } from '@angular/router';
@@ -17,6 +18,18 @@ import { highlightProvider } from './modules/shared/highlight';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { ComponentReuseStrategy } from './modules/shared/component-reuse.strategy';
 import { windowProvider, WindowToken } from './window';
+import {
+  loadChartIconSet,
+  loadCommerceIconSet,
+  loadCoreIconSet,
+  loadEssentialIconSet,
+  loadMediaIconSet,
+  loadMiniIconSet,
+  loadSocialIconSet,
+  loadTechnologyIconSet,
+  loadTextEditIconSet,
+  loadTravelIconSet,
+} from '@clr/angular/icon';
 
 @Injectable()
 export class UnstripTrailingSlashLocation extends Location {
@@ -38,11 +51,33 @@ export class UnstripTrailingSlashLocation extends Location {
     AppRoutingModule,
   ],
   providers: [
-    // Angular 20+ defaults to zoneless change detection. Octant still relies on
-    // zone.js (see polyfills.ts) and its components mutate plain (non-signal)
-    // state, so async updates (websocket content, timers) would otherwise not
-    // trigger change detection and the UI would stay stuck on "Loading".
+    // Angular 22 defaults to zoneless change detection *and* makes
+    // ChangeDetectionStrategy.OnPush the default for components. Octant still
+    // relies on zone.js (see polyfills.ts) and its components mutate plain
+    // (non-signal) state, so async updates (websocket content, timers) would
+    // otherwise not trigger change detection and the UI would stay stuck on
+    // "Loading". Opting back into zone-based change detection restores the
+    // automatic *trigger*, but the OnPush default still applies to components
+    // that don't set `changeDetection`, so components which render async state
+    // pushed from a service must mark their own view (see `markForCheck()`
+    // subscriptions and `ChangeDetectionStrategy.Eager` in the smart
+    // components).
     provideZoneChangeDetection(),
+    // Clarity 18 no longer ships global icon collections. Octant receives icon
+    // shape names from the server and renders them with Clarity's ClrIcon, so
+    // register every built-in collection once at startup.
+    provideAppInitializer(() => {
+      loadCoreIconSet();
+      loadEssentialIconSet();
+      loadTechnologyIconSet();
+      loadMediaIconSet();
+      loadChartIconSet();
+      loadCommerceIconSet();
+      loadMiniIconSet();
+      loadSocialIconSet();
+      loadTextEditIconSet();
+      loadTravelIconSet();
+    }),
     {
       provide: Location,
       useClass: UnstripTrailingSlashLocation,
