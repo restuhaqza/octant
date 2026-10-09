@@ -4,6 +4,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -46,7 +47,8 @@ export class TerminalComponent
 
   constructor(
     private terminalService: TerminalOutputService,
-    private wss: WebsocketService
+    private wss: WebsocketService,
+    private cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -155,6 +157,7 @@ export class TerminalComponent
         if (exitMessage && exitMessage.length !== 0) {
           this.selectedContainer = undefined;
           this.terminalService.selectedContainer = this.selectedContainer;
+          this.cdr.markForCheck();
         }
       });
       this.terminalStream.scrollback.subscribe((scrollback: string) => {

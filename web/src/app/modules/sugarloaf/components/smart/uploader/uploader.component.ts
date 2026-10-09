@@ -6,11 +6,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   Inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { WebsocketService } from '../../../../../data/services/websocket/websocket.service';
-import { Subscription } from 'rxjs';
 import { WindowToken } from '../../../../../window';
 
 @Component({
@@ -24,11 +22,9 @@ import { WindowToken } from '../../../../../window';
   // threading a ChangeDetectorRef through each handler.
   changeDetection: ChangeDetectionStrategy.Eager,
 })
-export class UploaderComponent implements OnInit, OnDestroy {
+export class UploaderComponent implements OnInit {
   inputValue: string;
   showModal: boolean;
-
-  private contentSubscription: Subscription;
 
   constructor(
     private websocketService: WebsocketService,
@@ -46,12 +42,6 @@ export class UploaderComponent implements OnInit, OnDestroy {
     this.websocketService.sendMessage('action.octant.dev/loading', {
       loading: true,
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.contentSubscription) {
-      this.contentSubscription.unsubscribe();
-    }
   }
 
   upload() {

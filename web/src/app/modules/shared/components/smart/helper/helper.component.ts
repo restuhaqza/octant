@@ -82,6 +82,7 @@ export class HelperComponent implements OnInit, OnDestroy {
       .then(response => response.text())
       .then(data => {
         this.releaseInfo.config.value = data;
+        this.cdr.markForCheck();
       });
   }
 
