@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -14,6 +15,7 @@ import {
   Preferences,
 } from '../../../models/preference';
 import trackByIdentity from 'src/app/util/trackBy/trackByIdentity';
+import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 interface StringDict {
@@ -59,7 +61,7 @@ const elements = (preferences: Preferences): PreferenceElement[] => {
   templateUrl: './preferences.component.html',
   styleUrls: ['./preferences.component.scss'],
 })
-export class PreferencesComponent implements OnChanges {
+export class PreferencesComponent implements OnChanges, OnDestroy {
   isOpenValue: boolean;
 
   @Input()
@@ -96,6 +98,8 @@ export class PreferencesComponent implements OnChanges {
 
   trackByIdentity = trackByIdentity;
 
+  private formSub: Subscription;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -121,11 +125,18 @@ export class PreferencesComponent implements OnChanges {
 
     this.form = this.fb.group(this.controls);
 
-    this.form.valueChanges
+    // A fresh form is built on every change, so drop the previous stream first;
+    // otherwise each rebuild leaves an orphaned subscription behind.
+    this.formSub?.unsubscribe();
+    this.formSub = this.form.valueChanges
       .pipe(startWith(this.form.getRawValue()))
       .subscribe((update: StringDict) => {
         this.onValueChanged(update);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.formSub?.unsubscribe();
   }
 
   onCancel() {

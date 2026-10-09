@@ -5,10 +5,12 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { View } from 'src/app/modules/shared/models/content';
 import { SliderService } from 'src/app/modules/shared/slider/slider.service';
 import { ViewService } from '../../../services/view/view.service';
@@ -28,7 +30,7 @@ interface Tab {
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
 })
-export class TabsComponent implements OnChanges, OnInit {
+export class TabsComponent implements OnChanges, OnInit, OnDestroy {
   @Input() title: View[];
   @Input() views: View[];
   @Input() titleComponents: View[];
@@ -43,6 +45,8 @@ export class TabsComponent implements OnChanges, OnInit {
   closingTab: boolean;
   view: View;
   trackByIndex = trackByIndex;
+
+  private activeTabSub: Subscription;
 
   constructor(
     private router: Router,
@@ -81,9 +85,14 @@ export class TabsComponent implements OnChanges, OnInit {
       }
 
       if (this.extView && this.tabs.length > 0) {
-        this.sliderService.activeTab.subscribe(index => {
-          this.activeTabIndex = index;
-        });
+        // ngOnChanges runs on every input change, so subscribing unconditionally
+        // would stack a new subscriber on the shared BehaviorSubject each time.
+        // Subscribe once and drop the hook in ngOnDestroy.
+        if (!this.activeTabSub) {
+          this.activeTabSub = this.sliderService.activeTab.subscribe(index => {
+            this.activeTabIndex = index;
+          });
+        }
 
         // Initial load if there are existing tabs
         if (this.activeTabIndex === null) {
@@ -167,6 +176,10 @@ export class TabsComponent implements OnChanges, OnInit {
     this.sliderService.activeTab.next(this.activeTabIndex);
     this.activeTab = this.tabs[this.activeTabIndex].accessor;
     this.setMarker(this.activeTab);
+  }
+
+  ngOnDestroy(): void {
+    this.activeTabSub?.unsubscribe();
   }
 
   private setMarker(tabAccessor: string) {
