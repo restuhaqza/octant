@@ -65,7 +65,6 @@ export class DatagridComponent
   identifyColumn = trackByIdentity;
   identifyAction = trackByIdentity;
 
-  loading: boolean;
   loading$: Observable<boolean>;
   sub: Subscription;
 
@@ -89,8 +88,6 @@ export class DatagridComponent
   update() {
     this.title = this.viewService.viewTitleAsText(this.view);
 
-    this.loading = true;
-
     const done = new BehaviorSubject(false);
     this.loading$ = this.loadingService.withDelay(done, 250, 1000);
 
@@ -98,7 +95,6 @@ export class DatagridComponent
       this.rowsWithMetadata = this.getRowsWithMetadata(this.v.config.rows);
       this.placeholder = this.v.config.emptyContent;
       this.lastUpdated = new Date();
-      this.loading = this.v.config.loading;
       done.next(true);
       done.complete();
       this.cdr.markForCheck();

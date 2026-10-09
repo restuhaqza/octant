@@ -7,13 +7,13 @@
     <app-button-group [view]="buttonGroup"></app-button-group>
   </clr-dg-action-bar>
 </div>
-<clr-datagrid [clrDgLoading]="false">
+<clr-datagrid [clrDgLoading]="loading$ | async">
   <clr-dg-placeholder>
     <ng-container *ngIf="placeholder?.length > 0; else emptyPlaceholder">
       {{ placeholder }}
     </ng-container>
     <ng-template #emptyPlaceholder>
-      <!--      All content has been filtered out.-->
+      No items to display.
     </ng-template>
   </clr-dg-placeholder>
   <clr-dg-column

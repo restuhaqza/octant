@@ -4,18 +4,22 @@
     class="content-component"
     [class.loading-content]="!hasReceivedContent"
   >
-    <ng-container *ngIf="hasReceivedContent && !showSpinner; else loading">
+    <app-page-not-found *ngIf="notFound; else contentOrLoading"></app-page-not-found>
+
+    <ng-template #contentOrLoading>
+      <ng-container *ngIf="hasReceivedContent && !showSpinner; else loading">
         <app-object-tabs
           [title]="title"
           [views]="views"
           [titleComponents]="titleComponents"
         ></app-object-tabs>
-    </ng-container>
+      </ng-container>
 
-    <ng-template #loading>
-      <span class="spinner">
-        Loading...
-      </span>
+      <ng-template #loading>
+        <span class="spinner">
+          Loading...
+        </span>
+      </ng-template>
     </ng-template>
   </div>
 </overlay-scrollbars>

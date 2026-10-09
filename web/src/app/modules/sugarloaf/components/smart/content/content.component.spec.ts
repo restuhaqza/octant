@@ -84,4 +84,17 @@ describe('OverviewComponent', () => {
 
     expect(component).toBeTruthy();
   });
+
+  it('shows the not-found state when the current path has no content', () => {
+    const contentService = TestBed.inject(
+      ContentService
+    ) as unknown as ContentServiceMock;
+
+    contentService.current.next({
+      content: { extensionComponent: null, viewComponents: [], title: [] },
+      currentPath: component.currentPath,
+    });
+
+    expect(component.notFound).toBe(true);
+  });
 });

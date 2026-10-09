@@ -39,6 +39,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   hasTabs = false;
   hasReceivedContent = false;
+  notFound = false;
   title: View[] = null;
   views: View[] = null;
   titleComponents: View[] = null;
@@ -142,6 +143,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     this.title = null;
     this.views = null;
     this.titleComponents = null;
+    this.notFound = false;
   }
 
   private setContent = (contentResponse: ContentResponse) => {
@@ -154,10 +156,18 @@ export class ContentComponent implements OnInit, OnDestroy {
 
     const views = contentResponse.content.viewComponents;
     if (!views || views.length === 0) {
+      // A response that targets the current path but carries no views has
+      // nothing to render. Only treat it as not-found when the path is
+      // explicit, so the initial empty seed (currentPath '') during startup
+      // keeps showing the loading state.
       this.hasReceivedContent = false;
+      this.notFound =
+        !!contentResponse.currentPath &&
+        contentResponse.currentPath === this.currentPath;
       return;
     }
 
+    this.notFound = false;
     this.extView = contentResponse.content.extensionComponent;
     this.views = views;
     this.title = contentResponse.content.title;
