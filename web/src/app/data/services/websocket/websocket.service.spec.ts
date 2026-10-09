@@ -17,10 +17,15 @@ import { WindowToken } from '../../../window';
 import { OverlayscrollbarsModule } from 'overlayscrollbars-ngx';
 
 class NotifierServiceMock {
-  private signalsStream: BehaviorSubject<NotifierSignal[]>;
+  private signalsStream = new BehaviorSubject<NotifierSignal[]>([]);
+  private historyStream = new BehaviorSubject<NotifierSignal[]>([]);
 
   createSession = (): NotifierSession => {
-    return new NotifierSession(this.signalsStream, uniqueId('signalSession'));
+    return new NotifierSession(
+      this.signalsStream,
+      this.historyStream,
+      uniqueId('signalSession')
+    );
   };
 }
 

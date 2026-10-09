@@ -50,10 +50,6 @@
   }
 
   :host-context(body.electron) {
-    .notifier {
-      @include electron-header;
-    }
-
     .header {
       @include electron-header;
     }

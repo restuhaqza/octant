@@ -3,13 +3,32 @@
 //
 
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import findLast from 'lodash/findLast';
 import { Subscription } from 'rxjs';
 import { Alert } from 'src/app/modules/shared/models/content';
 import {
   NotifierService,
+  NotifierSignal,
   NotifierSignalType,
 } from 'src/app/modules/shared/notifier/notifier.service';
+
+export interface NotifierToast {
+  id: string;
+  alert: Alert;
+  time: string;
+}
+
+const alertStatus = (type: NotifierSignalType): string => {
+  switch (type) {
+    case NotifierSignalType.ERROR:
+      return 'danger';
+    case NotifierSignalType.WARNING:
+      return 'warning';
+    case NotifierSignalType.SUCCESS:
+      return 'success';
+    default:
+      return 'info';
+  }
+};
 
 @Component({
   standalone: false,
@@ -18,13 +37,13 @@ import {
   styleUrls: ['./notifier.component.scss'],
 })
 export class NotifierComponent implements OnInit, OnDestroy {
-  private signalSubscription: Subscription;
   loading = false;
-  error: string;
-  warning: string;
-  info: string;
-  success: string;
-  alertConfig: Alert;
+  toasts: NotifierToast[] = [];
+  history: NotifierToast[] = [];
+  historyOpen = false;
+
+  private signalsSubscription: Subscription;
+  private historySubscription: Subscription;
 
   constructor(
     private notifierService: NotifierService,
@@ -32,76 +51,60 @@ export class NotifierComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.signalSubscription =
-      this.notifierService.globalSignalsStream.subscribe(currentSignals => {
-        const lastLoadingSignal = findLast(currentSignals, {
-          type: NotifierSignalType.LOADING,
-        });
-        this.loading = !!lastLoadingSignal;
-
-        const lastWarningSignal = findLast(currentSignals, {
-          type: NotifierSignalType.WARNING,
-        });
-        this.warning = lastWarningSignal
-          ? (lastWarningSignal.data as string)
-          : '';
-
-        const lastErrorSignal = findLast(currentSignals, {
-          type: NotifierSignalType.ERROR,
-        });
-        this.error = lastErrorSignal ? (lastErrorSignal.data as string) : '';
-
-        const lastInfoSignal = findLast(currentSignals, {
-          type: NotifierSignalType.INFO,
-        });
-        this.info = lastInfoSignal ? (lastInfoSignal.data as string) : '';
-
-        const lastSuccessSignal = findLast(currentSignals, {
-          type: NotifierSignalType.SUCCESS,
-        });
-        this.success = lastSuccessSignal
-          ? (lastSuccessSignal.data as string)
-          : '';
-
-        this.setAlert();
+    this.signalsSubscription =
+      this.notifierService.globalSignalsStream.subscribe(signals => {
+        this.loading = signals.some(
+          signal => signal.type === NotifierSignalType.LOADING
+        );
+        this.toasts = signals
+          .filter(signal => signal.type !== NotifierSignalType.LOADING)
+          .map(signal => this.toToast(signal));
         this.cdr.markForCheck();
       });
+
+    this.historySubscription = this.notifierService.history.subscribe(
+      signals => {
+        this.history = signals.map(signal => this.toToast(signal));
+        this.cdr.markForCheck();
+      }
+    );
   }
 
-  ngOnDestroy(): void {
-    if (this.signalSubscription) {
-      this.signalSubscription.unsubscribe();
-    }
+  ngOnDestroy() {
+    this.signalsSubscription?.unsubscribe();
+    this.historySubscription?.unsubscribe();
   }
 
-  hasAlert(): boolean {
-    return !!(this.info || this.success || this.error || this.warning);
+  dismiss(toast: NotifierToast): void {
+    this.notifierService.removeSignalGlobally(toast.id);
   }
 
-  setAlert(): void {
-    let status: string, message: string;
-    let closable: boolean;
+  dismissAll(): void {
+    this.toasts.forEach(toast =>
+      this.notifierService.removeSignalGlobally(toast.id)
+    );
+  }
 
-    if (this.warning) {
-      status = 'warning';
-      message = this.warning;
-    } else if (this.error) {
-      status = 'error';
-      message = this.error;
-    } else if (this.success) {
-      status = 'success';
-      message = this.success;
-    } else {
-      status = 'info';
-      message = this.info;
-      closable = true;
-    }
+  toggleHistory(): void {
+    this.historyOpen = !this.historyOpen;
+  }
 
-    this.alertConfig = {
-      status: status,
-      type: 'banner',
-      message: message,
-      closable: !!closable,
+  clearHistory(): void {
+    this.notifierService.clearHistory();
+  }
+
+  identifyToast = (_index: number, toast: NotifierToast): string => toast.id;
+
+  private toToast(signal: NotifierSignal): NotifierToast {
+    return {
+      id: signal.id,
+      time: new Date(signal.timestamp).toLocaleTimeString(),
+      alert: {
+        status: alertStatus(signal.type),
+        type: 'light',
+        message: typeof signal.data === 'string' ? signal.data : '',
+        closable: true,
+      },
     };
   }
 }

@@ -2,6 +2,60 @@
   <div class="progress loop"><progress></progress></div>
 </ng-container>
 
-<ng-container *ngIf="!loading && hasAlert()">
-  <app-alert [alert]="alertConfig"></app-alert>
-</ng-container>
+<button
+  type="button"
+  class="btn btn-link notifier-toggle"
+  aria-label="Notifications"
+  [attr.aria-expanded]="historyOpen"
+  (click)="toggleHistory()"
+>
+  <clr-icon shape="bell"></clr-icon>
+  <span class="notifier-toggle__badge" *ngIf="history.length > 0">
+    {{ history.length }}
+  </span>
+</button>
+
+<div class="notifier-panel" *ngIf="historyOpen">
+  <div class="notifier-panel__header">
+    <span>Notifications</span>
+    <button
+      type="button"
+      class="btn btn-sm btn-link"
+      *ngIf="history.length > 0"
+      (click)="clearHistory()"
+    >
+      Clear
+    </button>
+  </div>
+
+  <p class="notifier-panel__empty" *ngIf="history.length === 0">
+    No notifications.
+  </p>
+
+  <ul class="notifier-panel__list">
+    <li
+      *ngFor="let item of history; trackBy: identifyToast"
+      class="notifier-panel__item"
+    >
+      <span class="notifier-panel__dot" [ngClass]="item.alert.status"></span>
+      <span class="notifier-panel__message">{{ item.alert.message }}</span>
+      <span class="notifier-panel__time">{{ item.time }}</span>
+    </li>
+  </ul>
+</div>
+
+<div class="notifier-toasts" *ngIf="!loading && toasts.length > 0">
+  <button
+    type="button"
+    class="btn btn-sm btn-link notifier-toasts__dismiss-all"
+    *ngIf="toasts.length > 1"
+    (click)="dismissAll()"
+  >
+    Dismiss all
+  </button>
+  <app-alert
+    *ngFor="let toast of toasts; trackBy: identifyToast"
+    [alert]="toast.alert"
+    (closed)="dismiss(toast)"
+  ></app-alert>
+</div>
