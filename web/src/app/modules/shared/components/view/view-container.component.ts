@@ -101,14 +101,14 @@ export class ViewContainerComponent
         component = MissingComponentComponent;
       }
 
-      const viewContainerRef = this.appView.viewContainerRef;
-      viewContainerRef.clear();
-
       // Drop the previous view's hook before it is destroyed (and before a new
       // one is created) so a type change does not leave a dangling subscriber
       // and an in-place update does not stack a fresh one.
       this.viewInitSub?.unsubscribe();
       this.viewInitSub = undefined;
+
+      const viewContainerRef = this.appView.viewContainerRef;
+      viewContainerRef.clear();
 
       this.componentRef = viewContainerRef.createComponent<Viewer>(component);
     }
