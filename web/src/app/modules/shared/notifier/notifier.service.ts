@@ -23,13 +23,20 @@ export interface NotifierSignal {
   sessionID: string;
   type: NotifierSignalType;
   data: boolean | string;
+  timestamp: number;
 }
+
+/**
+ * How many past notifications the notification center keeps.
+ */
+export const notifierHistoryLimit = 50;
 
 export class NotifierSession {
   id: string;
 
   constructor(
     private globalSignalsStream: BehaviorSubject<NotifierSignal[]>,
+    private historyStream: BehaviorSubject<NotifierSignal[]>,
     private uniqueIDPrefix: string
   ) {
     this.id = uniqueIDPrefix;
@@ -38,13 +45,24 @@ export class NotifierSession {
   pushSignal(type: NotifierSignalType, data: boolean | string): string {
     const currentSignals = this.globalSignalsStream.getValue();
     const newSignalID = uniqueId(this.uniqueIDPrefix);
-    const newSignal = {
+    const newSignal: NotifierSignal = {
       id: newSignalID,
       sessionID: this.uniqueIDPrefix,
       type,
       data,
+      timestamp: Date.now(),
     };
     this.globalSignalsStream.next([...currentSignals, newSignal]);
+
+    // Loading is a transient, non-actionable state; only keep the notifications
+    // a user may want to review later.
+    if (type !== NotifierSignalType.LOADING) {
+      const history = this.historyStream.getValue();
+      this.historyStream.next(
+        [newSignal, ...history].slice(0, notifierHistoryLimit)
+      );
+    }
+
     return newSignalID;
   }
 
@@ -88,10 +106,12 @@ export class NotifierService {
   globalSignalsStream: BehaviorSubject<NotifierSignal[]> = new BehaviorSubject(
     []
   );
+  history: BehaviorSubject<NotifierSignal[]> = new BehaviorSubject([]);
 
   constructor() {
     this.baseSignalSession = new NotifierSession(
       this.globalSignalsStream,
+      this.history,
       'baseSignal'
     );
   }
@@ -108,9 +128,32 @@ export class NotifierService {
     return this.baseSignalSession.removeSignals(ids);
   }
 
+  /**
+   * Removes a signal regardless of which session created it. Used by the
+   * notification UI to dismiss a toast whose origin session (for example the
+   * websocket connection) is not otherwise reachable.
+   */
+  removeSignalGlobally(id: string): boolean {
+    const currentSignals = this.globalSignalsStream.getValue();
+    const foundSignalIndex = findIndex(currentSignals, { id });
+    if (foundSignalIndex < 0) {
+      return false;
+    }
+
+    const newSignalList = [...currentSignals];
+    pullAt(newSignalList, foundSignalIndex);
+    this.globalSignalsStream.next(newSignalList);
+    return true;
+  }
+
+  clearHistory(): void {
+    this.history.next([]);
+  }
+
   createSession(): NotifierSession {
     return new NotifierSession(
       this.globalSignalsStream,
+      this.history,
       uniqueId('signalSession')
     );
   }

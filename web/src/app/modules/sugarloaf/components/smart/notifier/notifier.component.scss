@@ -2,9 +2,149 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+:host {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+:host-context(body) {
+  --notifier-surface: #fff;
+  --notifier-surface-text: #1b1b1b;
+  --notifier-surface-border: #ccc;
+  --notifier-surface-separator: #e8e8e8;
+}
+
+:host-context(body.dark) {
+  --notifier-surface: #1b2a32;
+  --notifier-surface-text: #e6e6e6;
+  --notifier-surface-border: #304250;
+  --notifier-surface-separator: #304250;
+}
+
 .progress {
   height: 5px;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  z-index: 1100;
+}
+
+.notifier-toggle {
+  position: relative;
+  padding: 0.25rem;
+  color: inherit;
+  // The toggle lives inside Electron's draggable header region.
+  -webkit-app-region: no-drag;
+
+  &__badge {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    min-width: 1rem;
+    padding: 0 0.25rem;
+    border-radius: 0.5rem;
+    background-color: var(--clr-color-danger-700, #c21d00);
+    color: #fff;
+    font-size: 0.6rem;
+    line-height: 1rem;
+    text-align: center;
+  }
+}
+
+.notifier-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 22rem;
+  max-height: 24rem;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid var(--notifier-surface-border, #ccc);
+  border-radius: 0.125rem;
+  background-color: var(--notifier-surface, #fff);
+  color: var(--notifier-surface-text, #1b1b1b);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+  text-align: left;
+  z-index: 1100;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.25rem 0.5rem;
+    font-weight: 600;
+  }
+
+  &__empty {
+    margin: 0.5rem 0.25rem;
+    opacity: 0.7;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.35rem 0.25rem;
+    border-top: 1px solid var(--notifier-surface-separator, #eee);
+  }
+
+  &__dot {
+    flex: 0 0 auto;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--clr-color-neutral-600, #737373);
+
+    &.danger {
+      background-color: var(--clr-color-danger-700, #c21d00);
+    }
+
+    &.warning {
+      background-color: var(--clr-color-warning-800, #ad6f0a);
+    }
+
+    &.success {
+      background-color: var(--clr-color-success-700, #2d7f3d);
+    }
+
+    &.info {
+      background-color: var(--clr-color-action-600, #0079ad);
+    }
+  }
+
+  &__message {
+    flex: 1;
+    word-break: break-word;
+  }
+
+  &__time {
+    flex: 0 0 auto;
+    font-size: 0.65rem;
+    opacity: 0.6;
+  }
+}
+
+.notifier-toasts {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 26rem;
+  max-width: calc(100vw - 2.5rem);
+  text-align: left;
+  z-index: 1050;
+
+  &__dismiss-all {
+    align-self: flex-end;
+  }
 }

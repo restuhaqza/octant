@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
 
 import { Alert } from '../../../models/content';
@@ -23,6 +25,7 @@ const alertLookup = {
 })
 export class AlertComponent implements OnInit {
   @Input() alert: Alert;
+  @Output() closed = new EventEmitter<void>();
   message = '';
   status = '';
   type = '';
@@ -45,5 +48,6 @@ export class AlertComponent implements OnInit {
 
   close(): void {
     this.showAlert = false;
+    this.closed.emit();
   }
 }
