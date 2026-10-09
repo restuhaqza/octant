@@ -73,6 +73,65 @@ describe('ViewContainerComponent', () => {
     expect(fixture.nativeElement.textContent).not.toContain('first value');
   });
 
+  it('should subscribe to the child viewInit hook only once across in-place updates', () => {
+    const makeText = (value: string): TextView => ({
+      config: { value },
+      metadata: { type: 'text', title: [], accessor: 'accessor' },
+    });
+
+    component.view = makeText('first');
+    fixture.detectChanges();
+
+    const child = component.componentRef.instance as unknown as TextComponent;
+    const emitSpy = spyOn(component.viewInit, 'emit');
+
+    // Several in-place refreshes for the same contentPath.
+    component.view = makeText('second');
+    component.view = makeText('third');
+    fixture.detectChanges();
+
+    child.viewInit.emit();
+
+    expect(emitSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should resubscribe after a component type change without leaking the old hook', () => {
+    const textView: TextView = {
+      config: { value: 'some text' },
+      metadata: { type: 'text', title: [], accessor: 'accessor' },
+    };
+
+    component.view = textView;
+    fixture.detectChanges();
+    const oldChild = component.componentRef
+      .instance as unknown as TextComponent;
+
+    const podStatusView: PodStatusView = {
+      metadata: { type: 'podStatus' },
+      config: {
+        pods: {
+          pod1: {
+            details: [textView],
+            status: 'ok',
+          },
+        },
+      },
+    };
+
+    component.view = podStatusView;
+    fixture.detectChanges();
+    const newChild = component.componentRef
+      .instance as unknown as PodStatusComponent;
+
+    const emitSpy = spyOn(component.viewInit, 'emit');
+
+    newChild.viewInit.emit();
+    // The previous, now-destroyed child must no longer feed the parent.
+    oldChild.viewInit.emit();
+
+    expect(emitSpy).toHaveBeenCalledTimes(1);
+  });
+
   it('should use the missing-component fallback for unknown view types', () => {
     const unknownView = {
       config: {},
