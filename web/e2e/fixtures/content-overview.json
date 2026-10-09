@@ -1,0 +1,623 @@
+{
+  "content": {
+    "title": [
+      {
+        "metadata": {
+          "type": "text"
+        },
+        "config": {
+          "value": "Overview"
+        }
+      }
+    ],
+    "viewComponents": [
+      {
+        "metadata": {
+          "type": "list",
+          "title": [
+            {
+              "metadata": {
+                "type": "text"
+              },
+              "config": {
+                "value": "Overview"
+              }
+            }
+          ]
+        },
+        "config": {
+          "items": [
+            {
+              "metadata": {
+                "type": "table",
+                "title": [
+                  {
+                    "metadata": {
+                      "type": "text"
+                    },
+                    "config": {
+                      "value": "Ingresses"
+                    }
+                  }
+                ]
+              },
+              "config": {
+                "columns": [
+                  {
+                    "name": "Name",
+                    "accessor": "Name"
+                  },
+                  {
+                    "name": "Labels",
+                    "accessor": "Labels"
+                  },
+                  {
+                    "name": "Hosts",
+                    "accessor": "Hosts"
+                  },
+                  {
+                    "name": "Address",
+                    "accessor": "Address"
+                  },
+                  {
+                    "name": "Ports",
+                    "accessor": "Ports"
+                  },
+                  {
+                    "name": "Age",
+                    "accessor": "Age"
+                  }
+                ],
+                "rows": [
+                  {
+                    "Address": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": ""
+                      }
+                    },
+                    "Age": {
+                      "metadata": {
+                        "type": "timestamp"
+                      },
+                      "config": {
+                        "timestamp": 1649924032
+                      }
+                    },
+                    "Hosts": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "localhost"
+                      }
+                    },
+                    "Labels": {
+                      "metadata": {
+                        "type": "labels"
+                      },
+                      "config": {
+                        "labels": {
+                          "name": "konga-dashboard"
+                        }
+                      }
+                    },
+                    "Name": {
+                      "config": {
+                        "value": "konga-dashboard",
+                        "ref": "/overview/namespace/default/discovery-and-load-balancing/ingresses/konga-dashboard",
+                        "status": 3,
+                        "statusDetail": {
+                          "metadata": {
+                            "type": "list"
+                          },
+                          "config": {
+                            "items": [
+                              {
+                                "metadata": {
+                                  "type": "text"
+                                },
+                                "config": {
+                                  "value": "Backend refers to service \"konga-dashboard\" which doesn't exist"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "type": "link",
+                        "title": [
+                          {
+                            "metadata": {
+                              "type": "text"
+                            },
+                            "config": {
+                              "value": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "Ports": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "80"
+                      }
+                    },
+                    "_action": {
+                      "metadata": {
+                        "type": "gridActions"
+                      },
+                      "config": {
+                        "actions": [
+                          {
+                            "name": "Delete",
+                            "actionPath": "action.octant.dev/deleteObject",
+                            "payload": {
+                              "apiVersion": "networking.k8s.io/v1",
+                              "kind": "Ingress",
+                              "name": "konga-dashboard",
+                              "namespace": "default"
+                            },
+                            "confirmation": {
+                              "title": "Delete Ingress",
+                              "body": "Are you sure you want to delete *Ingress* **konga-dashboard**? This action is permanent and cannot be recovered."
+                            },
+                            "type": "danger"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "emptyContent": "We couldn't find any ingresses!",
+                "loading": false,
+                "filters": {}
+              }
+            },
+            {
+              "metadata": {
+                "type": "table",
+                "title": [
+                  {
+                    "metadata": {
+                      "type": "text"
+                    },
+                    "config": {
+                      "value": "Services"
+                    }
+                  }
+                ]
+              },
+              "config": {
+                "columns": [
+                  {
+                    "name": "Name",
+                    "accessor": "Name"
+                  },
+                  {
+                    "name": "Labels",
+                    "accessor": "Labels"
+                  },
+                  {
+                    "name": "Type",
+                    "accessor": "Type"
+                  },
+                  {
+                    "name": "Cluster IP",
+                    "accessor": "Cluster IP"
+                  },
+                  {
+                    "name": "External IP",
+                    "accessor": "External IP"
+                  },
+                  {
+                    "name": "Ports",
+                    "accessor": "Ports"
+                  },
+                  {
+                    "name": "Age",
+                    "accessor": "Age"
+                  },
+                  {
+                    "name": "Selector",
+                    "accessor": "Selector"
+                  }
+                ],
+                "rows": [
+                  {
+                    "Age": {
+                      "metadata": {
+                        "type": "timestamp"
+                      },
+                      "config": {
+                        "timestamp": 1649917227
+                      }
+                    },
+                    "Cluster IP": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "10.245.0.1"
+                      }
+                    },
+                    "External IP": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "<none>"
+                      }
+                    },
+                    "Labels": {
+                      "metadata": {
+                        "type": "labels"
+                      },
+                      "config": {
+                        "labels": {
+                          "component": "apiserver",
+                          "provider": "kubernetes"
+                        }
+                      }
+                    },
+                    "Name": {
+                      "config": {
+                        "value": "kubernetes",
+                        "ref": "/overview/namespace/default/discovery-and-load-balancing/services/kubernetes",
+                        "status": 1,
+                        "statusDetail": {
+                          "metadata": {
+                            "type": "list"
+                          },
+                          "config": {
+                            "items": [
+                              {
+                                "metadata": {
+                                  "type": "text"
+                                },
+                                "config": {
+                                  "value": "Service is OK"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "type": "link",
+                        "title": [
+                          {
+                            "metadata": {
+                              "type": "text"
+                            },
+                            "config": {
+                              "value": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "Ports": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "443/TCP"
+                      }
+                    },
+                    "Selector": {
+                      "metadata": {
+                        "type": "selectors"
+                      },
+                      "config": {
+                        "selectors": null
+                      }
+                    },
+                    "Type": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "ClusterIP"
+                      }
+                    },
+                    "_action": {
+                      "metadata": {
+                        "type": "gridActions"
+                      },
+                      "config": {
+                        "actions": [
+                          {
+                            "name": "Delete",
+                            "actionPath": "action.octant.dev/deleteObject",
+                            "payload": {
+                              "apiVersion": "v1",
+                              "kind": "Service",
+                              "name": "kubernetes",
+                              "namespace": "default"
+                            },
+                            "confirmation": {
+                              "title": "Delete Service",
+                              "body": "Are you sure you want to delete *Service* **kubernetes**? This action is permanent and cannot be recovered."
+                            },
+                            "type": "danger"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "emptyContent": "We couldn't find any services!",
+                "loading": false,
+                "filters": {}
+              }
+            },
+            {
+              "metadata": {
+                "type": "table",
+                "title": [
+                  {
+                    "metadata": {
+                      "type": "text"
+                    },
+                    "config": {
+                      "value": "ConfigMaps"
+                    }
+                  }
+                ]
+              },
+              "config": {
+                "columns": [
+                  {
+                    "name": "Name",
+                    "accessor": "Name"
+                  },
+                  {
+                    "name": "Labels",
+                    "accessor": "Labels"
+                  },
+                  {
+                    "name": "Data",
+                    "accessor": "Data"
+                  },
+                  {
+                    "name": "Age",
+                    "accessor": "Age"
+                  }
+                ],
+                "rows": [
+                  {
+                    "Age": {
+                      "metadata": {
+                        "type": "timestamp"
+                      },
+                      "config": {
+                        "timestamp": 1649917231
+                      }
+                    },
+                    "Data": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "1"
+                      }
+                    },
+                    "Labels": {
+                      "metadata": {
+                        "type": "labels"
+                      },
+                      "config": {
+                        "labels": {}
+                      }
+                    },
+                    "Name": {
+                      "config": {
+                        "value": "kube-root-ca.crt",
+                        "ref": "/overview/namespace/default/config-and-storage/config-maps/kube-root-ca.crt",
+                        "status": 1,
+                        "statusDetail": {
+                          "metadata": {
+                            "type": "list"
+                          },
+                          "config": {
+                            "items": [
+                              {
+                                "metadata": {
+                                  "type": "text"
+                                },
+                                "config": {
+                                  "value": "v1 ConfigMap is OK"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "type": "link",
+                        "title": [
+                          {
+                            "metadata": {
+                              "type": "text"
+                            },
+                            "config": {
+                              "value": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "_action": {
+                      "metadata": {
+                        "type": "gridActions"
+                      },
+                      "config": {
+                        "actions": [
+                          {
+                            "name": "Delete",
+                            "actionPath": "action.octant.dev/deleteObject",
+                            "payload": {
+                              "apiVersion": "v1",
+                              "kind": "ConfigMap",
+                              "name": "kube-root-ca.crt",
+                              "namespace": "default"
+                            },
+                            "confirmation": {
+                              "title": "Delete ConfigMap",
+                              "body": "Are you sure you want to delete *ConfigMap* **kube-root-ca.crt**? This action is permanent and cannot be recovered."
+                            },
+                            "type": "danger"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "emptyContent": "We couldn't find any config maps!",
+                "loading": false,
+                "filters": {}
+              }
+            },
+            {
+              "metadata": {
+                "type": "table",
+                "title": [
+                  {
+                    "metadata": {
+                      "type": "text"
+                    },
+                    "config": {
+                      "value": "Service Accounts"
+                    }
+                  }
+                ]
+              },
+              "config": {
+                "columns": [
+                  {
+                    "name": "Name",
+                    "accessor": "Name"
+                  },
+                  {
+                    "name": "Labels",
+                    "accessor": "Labels"
+                  },
+                  {
+                    "name": "Secrets",
+                    "accessor": "Secrets"
+                  },
+                  {
+                    "name": "Age",
+                    "accessor": "Age"
+                  }
+                ],
+                "rows": [
+                  {
+                    "Age": {
+                      "metadata": {
+                        "type": "timestamp"
+                      },
+                      "config": {
+                        "timestamp": 1649917231
+                      }
+                    },
+                    "Labels": {
+                      "metadata": {
+                        "type": "labels"
+                      },
+                      "config": {
+                        "labels": {}
+                      }
+                    },
+                    "Name": {
+                      "config": {
+                        "value": "default",
+                        "ref": "/overview/namespace/default/config-and-storage/service-accounts/default",
+                        "status": 1,
+                        "statusDetail": {
+                          "metadata": {
+                            "type": "list"
+                          },
+                          "config": {
+                            "items": [
+                              {
+                                "metadata": {
+                                  "type": "text"
+                                },
+                                "config": {
+                                  "value": "v1 ServiceAccount is OK"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "type": "link",
+                        "title": [
+                          {
+                            "metadata": {
+                              "type": "text"
+                            },
+                            "config": {
+                              "value": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "Secrets": {
+                      "metadata": {
+                        "type": "text"
+                      },
+                      "config": {
+                        "value": "0"
+                      }
+                    },
+                    "_action": {
+                      "metadata": {
+                        "type": "gridActions"
+                      },
+                      "config": {
+                        "actions": [
+                          {
+                            "name": "Delete",
+                            "actionPath": "action.octant.dev/deleteObject",
+                            "payload": {
+                              "apiVersion": "v1",
+                              "kind": "ServiceAccount",
+                              "name": "default",
+                              "namespace": "default"
+                            },
+                            "confirmation": {
+                              "title": "Delete ServiceAccount",
+                              "body": "Are you sure you want to delete *ServiceAccount* **default**? This action is permanent and cannot be recovered."
+                            },
+                            "type": "danger"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "emptyContent": "We couldn't find any service accounts!",
+                "loading": false,
+                "filters": {}
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "contentPath": "overview/namespace/default",
+  "namespace": "default",
+  "queryParams": {}
+}

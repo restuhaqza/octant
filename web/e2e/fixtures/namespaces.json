@@ -1,0 +1,15 @@
+{
+  "namespaces": [
+    "cert-manager",
+    "e2e-app",
+    "default",
+    "elk",
+    "gateway",
+    "kube-node-lease",
+    "kube-public",
+    "kube-system",
+    "e2e-store",
+    "e2e-payments",
+    "e2e-utility"
+  ]
+}

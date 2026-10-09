@@ -1,0 +1,423 @@
+{
+  "defaultPath": "",
+  "sections": [
+    {
+      "module": "workloads",
+      "description": "Application module displays all known applications and their status",
+      "title": "Applications",
+      "path": "workloads/namespace/default",
+      "iconName": "application",
+      "isLoading": false
+    },
+    {
+      "module": "overview",
+      "description": "Namespace module shows all resources related to currently selected namespace\nUse dropdown at the top to change the selected namespace",
+      "title": "Namespace Overview",
+      "path": "overview/namespace/default",
+      "iconName": "dashboard",
+      "isLoading": false
+    },
+    {
+      "title": "Workloads",
+      "path": "overview/namespace/default/workloads",
+      "children": [
+        {
+          "title": "Cron Jobs",
+          "path": "overview/namespace/default/workloads/cron-jobs",
+          "isLoading": false
+        },
+        {
+          "title": "Daemon Sets",
+          "path": "overview/namespace/default/workloads/daemon-sets",
+          "isLoading": false
+        },
+        {
+          "title": "Deployments",
+          "path": "overview/namespace/default/workloads/deployments",
+          "isLoading": false
+        },
+        {
+          "title": "Jobs",
+          "path": "overview/namespace/default/workloads/jobs",
+          "isLoading": false
+        },
+        {
+          "title": "Pods",
+          "path": "overview/namespace/default/workloads/pods",
+          "isLoading": false
+        },
+        {
+          "title": "Replica Sets",
+          "path": "overview/namespace/default/workloads/replica-sets",
+          "isLoading": false
+        },
+        {
+          "title": "Replication Controllers",
+          "path": "overview/namespace/default/workloads/replication-controllers",
+          "isLoading": false
+        },
+        {
+          "title": "Stateful Sets",
+          "path": "overview/namespace/default/workloads/stateful-sets",
+          "isLoading": false
+        },
+        {
+          "title": "Pod Disruption Budgets",
+          "path": "overview/namespace/default/workloads/pod-disruption-budgets",
+          "isLoading": false
+        }
+      ],
+      "iconName": "applications",
+      "isLoading": false
+    },
+    {
+      "title": "Discovery and Load Balancing",
+      "path": "overview/namespace/default/discovery-and-load-balancing",
+      "children": [
+        {
+          "title": "Horizontal Pod Autoscalers",
+          "path": "overview/namespace/default/discovery-and-load-balancing/horizontal-pod-autoscalers",
+          "isLoading": false
+        },
+        {
+          "title": "Ingresses",
+          "path": "overview/namespace/default/discovery-and-load-balancing/ingresses",
+          "isLoading": false
+        },
+        {
+          "title": "Services",
+          "path": "overview/namespace/default/discovery-and-load-balancing/services",
+          "isLoading": false
+        },
+        {
+          "title": "Network Policies",
+          "path": "overview/namespace/default/discovery-and-load-balancing/network-policies",
+          "isLoading": false
+        }
+      ],
+      "iconName": "network-globe",
+      "isLoading": false
+    },
+    {
+      "title": "Gateway API",
+      "path": "overview/namespace/default/gateway-api",
+      "children": [
+        {
+          "title": "Gateways",
+          "path": "overview/namespace/default/gateway-api/gateways",
+          "isLoading": false
+        },
+        {
+          "title": "HTTP Routes",
+          "path": "overview/namespace/default/gateway-api/httproutes",
+          "isLoading": false
+        },
+        {
+          "title": "GRPC Routes",
+          "path": "overview/namespace/default/gateway-api/grpcroutes",
+          "isLoading": false
+        }
+      ],
+      "iconName": "network-globe",
+      "isLoading": false
+    },
+    {
+      "title": "Config and Storage",
+      "path": "overview/namespace/default/config-and-storage",
+      "children": [
+        {
+          "title": "Config Maps",
+          "path": "overview/namespace/default/config-and-storage/config-maps",
+          "isLoading": false
+        },
+        {
+          "title": "Persistent Volume Claims",
+          "path": "overview/namespace/default/config-and-storage/persistent-volume-claims",
+          "isLoading": false
+        },
+        {
+          "title": "Secrets",
+          "path": "overview/namespace/default/config-and-storage/secrets",
+          "isLoading": false
+        },
+        {
+          "title": "Service Accounts",
+          "path": "overview/namespace/default/config-and-storage/service-accounts",
+          "isLoading": false
+        },
+        {
+          "title": "Resource Quotas",
+          "path": "overview/namespace/default/config-and-storage/resource-quotas",
+          "isLoading": false
+        },
+        {
+          "title": "Limit Ranges",
+          "path": "overview/namespace/default/config-and-storage/limit-ranges",
+          "isLoading": false
+        },
+        {
+          "title": "Leases",
+          "path": "overview/namespace/default/config-and-storage/leases",
+          "isLoading": false
+        },
+        {
+          "title": "CSI Storage Capacities",
+          "path": "overview/namespace/default/config-and-storage/csi-storage-capacities",
+          "isLoading": false
+        }
+      ],
+      "iconName": "storage",
+      "isLoading": false
+    },
+    {
+      "title": "Custom Resources",
+      "path": "overview/namespace/default/custom-resources",
+      "iconName": "file-group",
+      "isLoading": false
+    },
+    {
+      "title": "RBAC",
+      "path": "overview/namespace/default/rbac",
+      "children": [
+        {
+          "title": "Roles",
+          "path": "overview/namespace/default/rbac/roles",
+          "isLoading": false
+        },
+        {
+          "title": "Role Bindings",
+          "path": "overview/namespace/default/rbac/role-bindings",
+          "isLoading": false
+        }
+      ],
+      "iconName": "assign-user",
+      "isLoading": false
+    },
+    {
+      "title": "Events",
+      "path": "overview/namespace/default/events",
+      "iconName": "event",
+      "isLoading": false
+    },
+    {
+      "module": "cluster-overview",
+      "description": "Cluster module is used to display all cluster related resources",
+      "title": "Cluster Overview",
+      "path": "cluster-overview",
+      "iconName": "cluster",
+      "isLoading": false
+    },
+    {
+      "title": "Namespaces",
+      "path": "cluster-overview/namespaces",
+      "iconName": "namespace",
+      "isLoading": false
+    },
+    {
+      "title": "Custom Resources",
+      "path": "cluster-overview/custom-resources",
+      "children": [
+        {
+          "title": "ciliumidentities.cilium.io",
+          "path": "cluster-overview/custom-resources/ciliumidentities.cilium.io",
+          "iconName": "internal:dna",
+          "isLoading": false
+        },
+        {
+          "title": "ciliumnodes.cilium.io",
+          "path": "cluster-overview/custom-resources/ciliumnodes.cilium.io",
+          "iconName": "internal:dna",
+          "isLoading": false
+        },
+        {
+          "title": "gatewayclasses.gateway.networking.k8s.io",
+          "path": "cluster-overview/custom-resources/gatewayclasses.gateway.networking.k8s.io",
+          "iconName": "internal:dna",
+          "isLoading": false
+        },
+        {
+          "title": "nodereadinessrules.readiness.node.x-k8s.io",
+          "path": "cluster-overview/custom-resources/nodereadinessrules.readiness.node.x-k8s.io",
+          "iconName": "internal:dna",
+          "isLoading": false
+        },
+        {
+          "title": "volumesnapshotclasses.snapshot.storage.k8s.io",
+          "path": "cluster-overview/custom-resources/volumesnapshotclasses.snapshot.storage.k8s.io",
+          "iconName": "internal:dna",
+          "isLoading": false
+        }
+      ],
+      "iconName": "file-group",
+      "isLoading": false
+    },
+    {
+      "title": "Custom Resource Definitions",
+      "path": "cluster-overview/custom-resource-definitions",
+      "iconName": "dna",
+      "isLoading": false
+    },
+    {
+      "title": "RBAC",
+      "path": "cluster-overview/rbac",
+      "children": [
+        {
+          "title": "Cluster Roles",
+          "path": "cluster-overview/rbac/cluster-roles",
+          "isLoading": false
+        },
+        {
+          "title": "Cluster Role Bindings",
+          "path": "cluster-overview/rbac/cluster-role-bindings",
+          "isLoading": false
+        }
+      ],
+      "iconName": "assign-user",
+      "isLoading": false
+    },
+    {
+      "title": "Webhooks",
+      "path": "cluster-overview/webhooks",
+      "children": [
+        {
+          "title": "Mutating Webhooks",
+          "path": "cluster-overview/webhooks/mutating-webhooks",
+          "isLoading": false
+        },
+        {
+          "title": "Validating Webhooks",
+          "path": "cluster-overview/webhooks/validating-webhooks",
+          "isLoading": false
+        }
+      ],
+      "iconName": "animation",
+      "isLoading": false
+    },
+    {
+      "title": "Workloads",
+      "path": "cluster-overview/workloads",
+      "children": [
+        {
+          "title": "Priority Classes",
+          "path": "cluster-overview/workloads/priority-classes",
+          "isLoading": false
+        },
+        {
+          "title": "Runtime Classes",
+          "path": "cluster-overview/workloads/runtime-classes",
+          "isLoading": false
+        }
+      ],
+      "iconName": "applications",
+      "isLoading": false
+    },
+    {
+      "title": "Discovery and Load Balancing",
+      "path": "cluster-overview/discovery-and-load-balancing",
+      "children": [
+        {
+          "title": "Ingress Classes",
+          "path": "cluster-overview/discovery-and-load-balancing/ingress-classes",
+          "isLoading": false
+        }
+      ],
+      "iconName": "network-globe",
+      "isLoading": false
+    },
+    {
+      "title": "Cluster",
+      "path": "cluster-overview/cluster",
+      "children": [
+        {
+          "title": "Flow Schemas",
+          "path": "cluster-overview/cluster/flow-schemas",
+          "isLoading": false
+        },
+        {
+          "title": "Priority Level Configurations",
+          "path": "cluster-overview/cluster/priority-level-configurations",
+          "isLoading": false
+        },
+        {
+          "title": "Validating Admission Policies",
+          "path": "cluster-overview/cluster/validating-admission-policies",
+          "isLoading": false
+        }
+      ],
+      "iconName": "cluster",
+      "isLoading": false
+    },
+    {
+      "title": "Nodes",
+      "path": "cluster-overview/nodes",
+      "iconName": "nodes",
+      "isLoading": false
+    },
+    {
+      "title": "Storage",
+      "path": "cluster-overview/storage",
+      "children": [
+        {
+          "title": "Persistent Volumes",
+          "path": "cluster-overview/storage/persistent-volumes",
+          "isLoading": false
+        },
+        {
+          "title": "Storage Classes",
+          "path": "cluster-overview/storage/storage-classes",
+          "isLoading": false
+        },
+        {
+          "title": "CSI Drivers",
+          "path": "cluster-overview/storage/csi-drivers",
+          "isLoading": false
+        },
+        {
+          "title": "CSI Nodes",
+          "path": "cluster-overview/storage/csi-nodes",
+          "isLoading": false
+        },
+        {
+          "title": "Volume Attachments",
+          "path": "cluster-overview/storage/volume-attachments",
+          "isLoading": false
+        }
+      ],
+      "iconName": "storage",
+      "isLoading": false
+    },
+    {
+      "title": "Port Forwards",
+      "path": "cluster-overview/port-forward",
+      "iconName": "router",
+      "isLoading": false
+    },
+    {
+      "title": "Upgrade Scanner",
+      "path": "cluster-overview/upgrade-scanner",
+      "iconName": "cluster",
+      "isLoading": false
+    },
+    {
+      "title": "Gateway API",
+      "path": "cluster-overview/gateway-api",
+      "children": [
+        {
+          "title": "Gateway Classes",
+          "path": "cluster-overview/gateway-api/gateway-classes",
+          "isLoading": false
+        }
+      ],
+      "iconName": "network-globe",
+      "isLoading": false
+    },
+    {
+      "module": "configuration",
+      "description": "Plugins module displays all registered plugins and their properties.\n\t\tTo find list of known plugins go to https://github.com/topics/octant-plugin",
+      "title": "Plugins",
+      "path": "configuration/plugins",
+      "iconName": "plugin",
+      "isLoading": false
+    }
+  ]
+}
