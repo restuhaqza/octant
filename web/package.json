@@ -33,6 +33,7 @@
     "electron:serve-tsc": "npx tsc -p tsconfig.serve.json",
     "electron:local": "npx tsc -p tsconfig.serve.json && npx ng build --base-href ./ && npx electron --local .",
     "electron:build": "npm run build-electron && npx electron-builder -p never",
+    "electron:package": "npx electron-builder -p never",
     "storybook": "start-storybook -p 6006 -s src/assets",
     "build-storybook": "node ./node_modules/@storybook/angular/bin/build.js build-storybook -c .storybook",
     "postinstall": "rimraf ./node_modules/cytoscape-node-html-label/dist/cytoscape-node-html-label.d.ts"

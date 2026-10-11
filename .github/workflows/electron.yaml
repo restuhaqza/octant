@@ -20,18 +20,11 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.24.x
-      - name: Build binary
+      # Builds the Go sidecar, the renderer, and the platform installers.
+      # On macOS this emits both Octant-<version>-arm64.dmg and
+      # Octant-<version>-universal.dmg. Nothing is published from this workflow.
+      - name: Build desktop installers
         env:
           GOFLAGS: -mod=vendor
         run: |
-          go run build.go build-electron
-      - name: Build electron
-        uses: samuelmeuli/action-electron-builder@v1.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          package_root: 'web'
-          build_script_name: 'build-electron'
-          # Never publish from this workflow; release assets are attached by the
-          # preflight-checks release job. electron-builder's default
-          # onTagOrDraft policy otherwise attempts a publish (403).
-          args: --publish never
+          go run build.go dist-electron

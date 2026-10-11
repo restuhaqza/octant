@@ -7,6 +7,7 @@
 /build
 /release
 /extraResources
+/.angular
 # Only exists if Bazel was run
 /bazel-out
 
@@ -56,6 +57,7 @@ Thumbs.db
 /main.js
 /main.js.map
 /electron/*.js
+/electron/*.js.map
 /src/coverage/*
 
 #compodoc documentation file
