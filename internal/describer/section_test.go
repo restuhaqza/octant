@@ -46,7 +46,7 @@ func TestSectionDescriber(t *testing.T) {
 			expected: component.ContentResponse{
 				Title: component.Title(component.NewText("section")),
 				Components: []component.Component{
-					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), nil),
+					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), []component.Component{component.NewText(`No section resources were found in namespace "default".`)}),
 				},
 			},
 		},
@@ -61,7 +61,7 @@ func TestSectionDescriber(t *testing.T) {
 			expected: component.ContentResponse{
 				Title: component.Title(component.NewText("section")),
 				Components: []component.Component{
-					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), nil),
+					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), []component.Component{component.NewText(`No section resources were found in namespace "default".`)}),
 				},
 			},
 		},
@@ -75,7 +75,56 @@ func TestSectionDescriber(t *testing.T) {
 			expected: component.ContentResponse{
 				Title: component.Title(component.NewText("section")),
 				Components: []component.Component{
-					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), nil),
+					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), []component.Component{component.NewText(`No section resources were found in namespace "default".`)}),
+				},
+			},
+		},
+		{
+			name: "with content",
+			d: NewSection(
+				"/section",
+				"section",
+				NewStubDescriber("/foo", component.NewList(nil, []component.Component{component.NewText("item")})),
+			),
+			expected: component.ContentResponse{
+				Title: component.Title(component.NewText("section")),
+				Components: []component.Component{
+					component.NewList(
+						append([]component.TitleComponent{}, component.NewText("section")),
+						[]component.Component{component.NewText("item")},
+					),
+				},
+			},
+		},
+		{
+			name: "nested empty section is silent when page has content",
+			d: NewSection(
+				"/section",
+				"section",
+				NewStubDescriber("/foo", component.NewList(nil, []component.Component{component.NewText("item")})),
+				NewSection("/child", "child", NewEmptyDescriber("/bar")),
+			),
+			expected: component.ContentResponse{
+				Title: component.Title(component.NewText("section")),
+				Components: []component.Component{
+					component.NewList(
+						append([]component.TitleComponent{}, component.NewText("section")),
+						[]component.Component{component.NewText("item")},
+					),
+				},
+			},
+		},
+		{
+			name: "nested empty section defers to page placeholder",
+			d: NewSection(
+				"/section",
+				"section",
+				NewSection("/child", "child", NewEmptyDescriber("/bar")),
+			),
+			expected: component.ContentResponse{
+				Title: component.Title(component.NewText("section")),
+				Components: []component.Component{
+					component.NewList(append([]component.TitleComponent{}, component.NewText("section")), []component.Component{component.NewText(`No section resources were found in namespace "default".`)}),
 				},
 			},
 		},
