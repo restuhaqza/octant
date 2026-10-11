@@ -4,10 +4,12 @@
 
 ## Current release:
 
-- [CHANGELOG-0.26.md][26]
+- [CHANGELOG-0.28.md][28]
 
 ## Older releases:
 
+- [CHANGELOG-0.27.md][27]
+- [CHANGELOG-0.26.md][26]
 - [CHANGELOG-0.25.md][25]
 - [CHANGELOG-0.24.md][24]
 - [CHANGELOG-0.23.md][23]
@@ -55,3 +57,5 @@
 [24]: https://github.com/restuhaqza/octant/blob/master/changelogs/CHANGELOG-0.24.md
 [25]: https://github.com/restuhaqza/octant/blob/master/changelogs/CHANGELOG-0.25.md
 [26]: https://github.com/restuhaqza/octant/blob/master/changelogs/CHANGELOG-0.26.md
+[27]: https://github.com/restuhaqza/octant/blob/master/changelogs/CHANGELOG-0.27.md
+[28]: https://github.com/restuhaqza/octant/blob/master/changelogs/CHANGELOG-0.28.md
