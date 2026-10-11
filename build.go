@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 /*
@@ -25,13 +26,20 @@ import (
 )
 
 var (
-	VERSION    = "v0.27.0"
-	GOPATH     = os.Getenv("GOPATH")
-	GIT_COMMIT = gitCommit()
-	BUILD_TIME = time.Now().UTC().Format(time.RFC3339)
-	LD_FLAGS   = fmt.Sprintf("-X \"main.buildTime=%s\" -X main.gitCommit=%s", BUILD_TIME, GIT_COMMIT)
-	GO_FLAGS   = fmt.Sprintf("-ldflags=%s", LD_FLAGS)
+	VERSION     = "v0.27.0"
+	GOPATH      = os.Getenv("GOPATH")
+	GIT_COMMIT  = gitCommit()
+	BUILD_TIME  = time.Now().UTC().Format(time.RFC3339)
+	LD_FLAGS    = fmt.Sprintf("-X \"main.buildTime=%s\" -X main.gitCommit=%s", BUILD_TIME, GIT_COMMIT)
+	GO_FLAGS    = fmt.Sprintf("-ldflags=%s", LD_FLAGS)
 	IMAGE_FLAGS = "exclude_graphdriver_devicemapper exclude_graphdriver_btrfs containers_image_openpgp"
+
+	// targetOS/targetArch select the platform of the compiled server binary.
+	// They default to the host and can be overridden with --target-os/--target-arch
+	// (e.g. to ship the macOS desktop sidecar as Apple Silicon while building on
+	// any runner). The build.go process itself always runs on the host.
+	targetOS   = runtime.GOOS
+	targetArch = runtime.GOARCH
 )
 
 func main() {
@@ -41,6 +49,11 @@ func main() {
 	}
 
 	rootCmd.Name()
+
+	rootCmd.PersistentFlags().StringVar(&targetOS, "target-os", runtime.GOOS,
+		"target GOOS for the compiled server binary (default: host OS)")
+	rootCmd.PersistentFlags().StringVar(&targetArch, "target-arch", runtime.GOARCH,
+		"target GOARCH for the compiled server binary (default: host arch)")
 
 	rootCmd.AddCommand(
 		&cobra.Command{
@@ -162,6 +175,13 @@ func main() {
 			},
 		},
 		&cobra.Command{
+			Use:   "dist-electron",
+			Short: "build desktop installers (macOS: arm64 + universal)",
+			Run: func(cmd *cobra.Command, args []string) {
+				distElectron()
+			},
+		},
+		&cobra.Command{
 			Use:   "run-dev",
 			Short: "run ci produced build",
 			Run: func(cmd *cobra.Command, args []string) {
@@ -272,10 +292,10 @@ func build() {
 	os.MkdirAll(newPath, 0755)
 
 	artifact := "octant"
-	if runtime.GOOS == "windows" {
+	if targetOS == "windows" {
 		artifact = "octant.exe"
 	}
-	runCmd("go", nil, "build", "-tags", "embedded " + IMAGE_FLAGS, "-mod=vendor", "-o", "build/"+artifact, GO_FLAGS, "-v", "./cmd/octant")
+	buildServerBinary(filepath.Join("build", artifact), "embedded "+IMAGE_FLAGS, targetArch)
 }
 
 // buildElectron builds an Octant binary without web assets
@@ -293,10 +313,105 @@ func buildElectron() {
 	os.MkdirAll(newPath, 0755)
 
 	artifact := "octant"
-	if runtime.GOOS == "windows" {
+	if targetOS == "windows" {
 		artifact = "octant.exe"
 	}
-	runCmd("go", nil, "build", "-tags", IMAGE_FLAGS, "-mod=vendor", "-o", "web/extraResources/"+artifact, GO_FLAGS, "-v", "./cmd/octant")
+	outPath := filepath.Join("web", "extraResources", artifact)
+	log.Printf("Building server sidecar for %s/%s -> %s\n", targetOS, targetArch, outPath)
+	buildServerBinary(outPath, IMAGE_FLAGS, targetArch)
+}
+
+// distElectron builds the desktop installers.
+//
+// On macOS it produces two independent artifacts so users can pick the smaller
+// native build or the one that also runs on Intel:
+//
+//	Octant-<version>-arm64.dmg      (Apple Silicon only, native sidecar)
+//	Octant-<version>-universal.dmg  (Apple Silicon + Intel, universal sidecar)
+//
+// electron-builder is invoked once per architecture with the matching Go
+// sidecar in web/extraResources, because a single run can only carry one
+// sidecar file.
+func distElectron() {
+	webDeps("--prefer-offline", "--no-audit")
+
+	cleanCmd := newCmd("npm", nil, "run", "clean")
+	cleanCmd.Stdout = os.Stdout
+	cleanCmd.Stderr = os.Stderr
+	cleanCmd.Stdin = os.Stdin
+	cleanCmd.Dir = "./web"
+	if err := cleanCmd.Run(); err != nil {
+		log.Fatalf("dist-electron: clean: %s", err)
+	}
+
+	// Compile the main process and build the renderer once; both
+	// electron-builder runs reuse dist/ and main.js.
+	runCmdIn("./web", "npm", nil, "run", "build-electron")
+
+	artifact := "octant"
+	if targetOS == "windows" {
+		artifact = "octant.exe"
+	}
+	sidecar := filepath.Join("web", "extraResources", artifact)
+
+	if targetOS == "darwin" {
+		log.Printf("Packaging macOS universal app (Apple Silicon + Intel)")
+		buildServerBinary(sidecar, IMAGE_FLAGS, "universal")
+		packageElectron("--mac", "--universal")
+
+		log.Printf("Packaging macOS arm64 app (Apple Silicon only)")
+		buildServerBinary(sidecar, IMAGE_FLAGS, "arm64")
+		packageElectron("--mac", "--arm64")
+		return
+	}
+
+	log.Printf("Packaging %s/%s app", targetOS, targetArch)
+	buildServerBinary(sidecar, IMAGE_FLAGS, targetArch)
+	packageElectron()
+}
+
+func packageElectron(args ...string) {
+	npmArgs := append([]string{"run", "electron:package", "--"}, args...)
+	runCmdIn("./web", "npm", nil, npmArgs...)
+}
+
+// buildServerBinary compiles cmd/octant for the requested GOARCH.
+//
+// When goarch is "universal" the amd64 and arm64 binaries are built separately
+// and merged into a single fat Mach-O with lipo. Universal is only meaningful
+// on darwin.
+func buildServerBinary(outPath string, tags string, goarch string) {
+	if goarch != "universal" {
+		runCmd("go", serverBuildEnv(targetOS, goarch), "build", "-tags", tags, "-mod=vendor", "-o", outPath, GO_FLAGS, "-v", "./cmd/octant")
+		return
+	}
+
+	if targetOS != "darwin" {
+		log.Fatalf("universal target is only supported on darwin, got %s", targetOS)
+	}
+
+	amd64Out := outPath + "-amd64"
+	arm64Out := outPath + "-arm64"
+	runCmd("go", serverBuildEnv(targetOS, "amd64"), "build", "-tags", tags, "-mod=vendor", "-o", amd64Out, GO_FLAGS, "-v", "./cmd/octant")
+	runCmd("go", serverBuildEnv(targetOS, "arm64"), "build", "-tags", tags, "-mod=vendor", "-o", arm64Out, GO_FLAGS, "-v", "./cmd/octant")
+	runCmd("lipo", nil, "-create", "-output", outPath, amd64Out, arm64Out)
+
+	for _, tmp := range []string{amd64Out, arm64Out} {
+		if err := os.Remove(tmp); err != nil {
+			log.Printf("warning: unable to remove %s: %s", tmp, err)
+		}
+	}
+}
+
+// serverBuildEnv returns the environment overrides used to compile the server
+// binary for the requested target platform. Cross-compiling works because the
+// build tags keep cgo out of the dependency tree.
+func serverBuildEnv(goos, goarch string) map[string]string {
+	return map[string]string{
+		"CGO_ENABLED": "0",
+		"GOOS":        goos,
+		"GOARCH":      goarch,
+	}
 }
 
 func runDev() {

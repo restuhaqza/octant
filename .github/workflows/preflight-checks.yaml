@@ -116,23 +116,16 @@ jobs:
         run: |
           go run build.go build
           ./build/octant version
+      # Builds the Go sidecar, the renderer, and the platform installers.
+      # On macOS this emits both Octant-<version>-arm64.dmg and
+      # Octant-<version>-universal.dmg. The `release` job below uploads the
+      # artifacts; nothing is published here.
       - if: startsWith(github.ref, 'refs/tags/v')
-        name: Build electron binary
+        name: Build desktop installers
         env:
           GOFLAGS: -mod=vendor
         run: |
-          go run build.go build-electron
-      - if: startsWith(github.ref, 'refs/tags/v')
-        name: Build electron
-        uses: samuelmeuli/action-electron-builder@v1.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          package_root: 'web'
-          build_script_name: 'build-electron'
-          # The binaries are attached to the release by the `release` job below
-          # (via the uploaded artifacts). Without this, electron-builder's
-          # default onTagOrDraft policy tries to publish and fails with 403.
-          args: --publish never
+          go run build.go dist-electron
       - uses: actions/upload-artifact@v4
         if: startsWith(github.ref, 'refs/tags/v')
         with:

@@ -62,3 +62,30 @@ There are 3 commands that can help keep PRs tested and linted properly:
 To build a production version of the UI, you can run `npm run build` yourself which will build the productionized assets to `dist/`.
 
 To build a full production binary (including the backend server), you can run `go run build.go ci` from the root directory.
+
+## Building the desktop app
+
+The desktop shell is packaged with Electron. From the repository root, this builds the Go sidecar, the renderer, and the installers:
+
+    go run build.go dist-electron
+
+On macOS it emits **two independent artifacts** so users can pick the smaller native build or the one that also runs on Intel:
+
+    Octant-<version>-arm64.dmg      # Apple Silicon only (native arm64 sidecar)
+    Octant-<version>-universal.dmg  # Apple Silicon + Intel (fat sidecar via lipo)
+
+Elsewhere it emits the platform's normal installer (`.nsis` on Windows, `.AppImage` on Linux).
+
+For a quick single-architecture build during development, `build-electron` packages one app using the Go sidecar for the host (or a `--target-arch`/`--target-os` you pass):
+
+    go run build.go build-electron --target-arch=arm64
+
+`--target-arch` accepts `amd64`, `arm64`, or `universal` (macOS only), and `--target-os` overrides GOOS. The sidecar has to match the packaged app, which is why `dist-electron` builds each one explicitly.
+
+### Code signing (macOS)
+
+electron-builder auto-discovers a signing identity from the login keychain. To pin a specific one (for example your personal Apple Development certificate), export `CSC_NAME` before building:
+
+    CSC_NAME='Apple Development: Your Name (TEAMID)' go run build.go dist-electron
+
+CI does not sign desktop builds; provide signing secrets there if you need distribution-signed artifacts.

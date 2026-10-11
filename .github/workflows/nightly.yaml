@@ -9,7 +9,7 @@ jobs:
     name: Build nightly
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -29,17 +29,14 @@ jobs:
         with:
           name: bundle
           path: web/dist
-      - name: Build electron binary
+      # Builds the Go sidecar, the renderer, and the platform installers.
+      # On macOS this emits both Octant-<version>-arm64.dmg and
+      # Octant-<version>-universal.dmg.
+      - name: Build desktop installers
         env:
           GOFLAGS: -mod=vendor
         run: |
-          go run build.go build-electron
-      - name: Build electron
-        uses: samuelmeuli/action-electron-builder@v1.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          package_root: 'web'
-          build_script_name: 'build-electron'
+          go run build.go dist-electron
       - uses: google-github-actions/upload-cloud-storage@main
         with:
           credentials: ${{ secrets.GOOGLE_APP_JSON }}
