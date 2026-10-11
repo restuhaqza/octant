@@ -172,6 +172,40 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
+/**
+ * GUI apps launched from Finder/LaunchServices inherit only the minimal launchd
+ * PATH. Kubeconfig exec plugins (doctl, aws, gcloud, ...) that the user
+ * installed (e.g. via Homebrew) are usually not on it, so the Go server would
+ * fail to load credentials. Prepend the common locations.
+ */
+function sidecarPath(): string {
+  const currentPath = process.env.PATH || '';
+
+  if (os.platform() === 'win32') {
+    return currentPath;
+  }
+
+  const home = os.homedir();
+  const extra = [
+    '/opt/homebrew/bin',
+    '/opt/homebrew/sbin',
+    '/usr/local/bin',
+    '/usr/local/sbin',
+    path.join(home, '.local', 'bin'),
+  ];
+
+  const seen = new Set<string>();
+  const parts: string[] = [];
+  for (const dir of [...extra, ...currentPath.split(path.delimiter)]) {
+    if (dir && !seen.has(dir)) {
+      seen.add(dir);
+      parts.push(dir);
+    }
+  }
+
+  return parts.join(path.delimiter);
+}
+
 const startBinary = (port: number) => {
   fs.mkdir(path.join(tmpPath), { recursive: true }, error => {
     if (error) {
@@ -207,6 +241,7 @@ const startBinary = (port: number) => {
       ...process.env,
       NODE_ENV: 'production',
       OCTANT_LISTENER_ADDR: 'localhost:' + port,
+      PATH: sidecarPath(),
     },
     detached: true,
     stdio: ['ignore', out, err],
